@@ -21,7 +21,7 @@ def feat():
 
 def summary_to_dict(obj):
     """ Converts the output of the summary() method of an object into a dict,
-    with string values for all fields except for integer values. """  
+    with string values for all fields except for integer values."""  
     output = io.StringIO()
     with redirect_stdout(output):
         obj.summary()
