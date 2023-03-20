@@ -1,4 +1,5 @@
 from dataclasses import dataclass, fields, asdict
+import io
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -35,10 +36,10 @@ class Features():
     
     def summary(self):
         ''' Generate a summary of the features '''
+        
         for field in fields(self):
             print(f'{field.name}: {getattr(self, field.name)}')
-
-
+        
 @dataclass
 class State():
     ''' Mutable states of the agents '''
