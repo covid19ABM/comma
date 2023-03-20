@@ -515,8 +515,8 @@ def make_population(parameters):
     hd = generate_health_difficulties_distribution(n_people=n_people, no=parameters['health_difficulties_false'], some=parameters['health_difficulties_some'], many=parameters['health_difficulties_many'])
     fd = generate_finance_difficulties_distribution(n_people=n_people, no=parameters['finance_difficulties_false'], some=parameters['finance_difficulties_some'], many=parameters['finance_difficulties_many'])
     spd = generate_single_parent_distribution(n_people=n_people, percentage=parameters['%_single_parent'])
-    hdd = generate_housing_difficulties_distribution(n_people=n_people, no=79, some=18, many=3)
-    pdd = generate_partner_difficulties_distribution(n_people=n_people, no=parameters['housing_difficulties_false'], some=parameters['housing_difficulties_some'], many=parameters['housing_difficulties_many'])
+    hdd = generate_housing_difficulties_distribution(n_people=n_people, no=parameters['housing_difficulties_false'], some=parameters['housing_difficulties_some'], many=parameters['housing_difficulties_many'])
+    pdd = generate_partner_difficulties_distribution(n_people=n_people, no=parameters['partner_difficulties_false'], some=parameters['partner_difficulties_some'], many=parameters['partner_difficulties_many'])
     people = []
 
     for i in range(n_people):
