@@ -65,7 +65,7 @@ def test_summary(feat):
 
 
 def test_fields(feat):
-    """ Tests the fields of the Features class.
+    """ Tests the fields of the Features class. 
     Verifies that the names of the fields in the Features class match the expected list of field names. """
     expected_fields = [
         'name', 'gender', 'age', 'education', 'employed', 'partnership_status',
