@@ -7,6 +7,7 @@ import random
 
 def generate_gender_distribution(n_people, percentage):
     ''' Generates gender distribution
+    
     Parameters
     ----------
     n_people : int
@@ -27,6 +28,7 @@ def generate_gender_distribution(n_people, percentage):
 
 def generate_age_distribution(n_people, n_age_groups, min_age, max_age, prob):
     ''' Generates age groups distribution in the population
+    
     Parameters
     ----------
     n_people : int
@@ -89,6 +91,7 @@ def generate_educational_attainment_distribution(n_people, low, medium, high):
 
 def generate_employment_distribution(n_people, yes, no_seeking, no_other):
     ''' Generate distribution of employment statuses in the population.
+    
     Parameters
     ----------
     n_people : int
@@ -117,6 +120,7 @@ def generate_employment_distribution(n_people, yes, no_seeking, no_other):
 
 def generate_partnership_statuts_distribution(n_people, single, married, live_in_partner, in_relationship_no_cohabitation, other):
     ''' Generate distribution of partnership statuses in the population.
+    
     Parameters
     ----------
     n_people : int
@@ -242,6 +246,7 @@ def generate_pre_existing_fatigue_distribution(n_people, percentage):
 
 def generate_child_distribution(n_people, percentage):
     ''' Generates proportion of people that had a child since 2013
+    
     Parameters
     ----------
     n_people : int
@@ -285,6 +290,7 @@ def generate_living_with_children_distribution(n_people, percentage):
 
 def generate_single_parent_distribution(n_people, percentage):
     ''' Generates proportion of people that are single parents
+    
     Parameters
     ----------
     n_people : int
