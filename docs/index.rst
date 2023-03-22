@@ -11,7 +11,6 @@ Welcome to Mental Health Modelling's documentation!
    :caption: Contents:
 
 
-
 Indices and tables
 ==================
 
