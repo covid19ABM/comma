@@ -8,11 +8,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import mhm.distributions as dist
+import mhm.utils as ut
 
 @dataclass
 class Features():
     ''' Features of the agents '''
-    __slots__ = ['name', 'gender', 'age', 'education', 'employed',
+    __slots__ = ['name', 'gender', 'age', 'age_group', 'education', 'employed',
                  'partnership_status', 'pre_existing_depression',
                  'pre_existing_burnout', 'pre_existing_addiction',
                  'pre_existing_chronic_fatigue', 'parenthood',
@@ -22,6 +23,7 @@ class Features():
     name: int
     gender: int
     age: int
+    age_group: int
     education: str
     employed: str
     partnership_status: str
@@ -103,12 +105,15 @@ def make_population(parameters):
     spd = dist.generate_single_parent_distribution(n_people=n_people, percentage=parameters['%_single_parent'])
     hdd = dist.generate_housing_difficulties_distribution(n_people=n_people, no=parameters['housing_difficulties_false'], some=parameters['housing_difficulties_some'], many=parameters['housing_difficulties_many'])
     pdd = dist.generate_partner_difficulties_distribution(n_people=n_people, no=parameters['partner_difficulties_false'], some=parameters['partner_difficulties_some'], many=parameters['partner_difficulties_many'])
+    ag = ut.label_age_range(ad)
+    
     people = []
 
     for i in range(n_people):
         features = Features(name=str(i),
                             gender=gd[i], 
-                            age=ad[i], 
+                            age=ad[i],
+                            age_group= ag[i],
                             education=ea[i], 
                             employed=ed[i], 
                             partnership_status=pd[i], 
@@ -132,28 +137,6 @@ def make_population(parameters):
     return people
 
 
-def make_features_dataframe(agent_list):
-    '''
-    Takes a list of agents, 
-    returns pandas dataframe of features.
-    
-    Parameters
-    ----------
-    agent_list : list
-        List of dataclasses of the type Agent
-
-    Returns
-    -------
-    df : pandas dataframe
-        Dataframe of the agents
-    '''
-    df = []
-    for p in agent_list:
-        df.append(asdict(p.features))
-    df = pd.DataFrame.from_dict(df)
-    return df
-
-
 def plot_agents_dist(agent_list, n_cols=5):
     ''' Plot population distributions 
     
@@ -167,7 +150,7 @@ def plot_agents_dist(agent_list, n_cols=5):
     fig : matplotlib figure
         Barplots of the Population distribution
     '''
-    dataframe = make_features_dataframe(agent_list=agent_list)
+    dataframe = ut.make_features_dataframe(agent_list=agent_list)
     n_rows = len(dataframe.columns) // n_cols + 1
     fig = plt.figure(figsize=(20, 20))
     for i, c in enumerate(dataframe.columns):
