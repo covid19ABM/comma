@@ -5,6 +5,7 @@ Functions to generate ad-hoc feature distributions.
 import numpy as np
 import random 
 
+
 def generate_gender_distribution(n_people, percentage):
     ''' Generates gender distribution
     
