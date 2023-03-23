@@ -10,7 +10,7 @@ from mhm.agent import Features
 @pytest.fixture
 def feat():
     """ Initialises a Feature object to use in the tests. """   
-    return Features(name=1, gender=1, age=30, education='Low',
+    return Features(name=1, gender=1, age=30, age_group=1, education='Low',
                     employed='Yes', partnership_status='In relationship, no cohabitation',
                     pre_existing_depression=0, pre_existing_burnout=1,
                     pre_existing_addiction=0, pre_existing_chronic_fatigue=0,
@@ -45,6 +45,7 @@ def test_summary(feat):
         'name': 1,
         'gender': 1,
         'age': 30,
+        'age_group': 1,
         'education': 'Low',
         'employed': 'Yes',
         'partnership_status': 'In relationship, no cohabitation',
@@ -68,7 +69,7 @@ def test_fields(feat):
     """ Tests the fields of the Features class. 
     Verifies that the names of the fields in the Features class match the expected list of field names. """
     expected_fields = [
-        'name', 'gender', 'age', 'education', 'employed', 'partnership_status',
+        'name', 'gender', 'age', 'age_group', 'education', 'employed', 'partnership_status',
         'pre_existing_depression', 'pre_existing_burnout', 'pre_existing_addiction',
         'pre_existing_chronic_fatigue', 'parenthood', 'living_with_child', 'single_parent',
         'housing_difficulties', 'finance_difficulties', 'pre_existing_health_issues',
