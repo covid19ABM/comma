@@ -1,0 +1,5 @@
+lockdown;go_to_work;maintain_physical_distance;stay_at_home;exercise;socialise;travel;seek_help;negative_coping;positive_coping;;;;;;;;;;;;;;;;;;;;;;;;;;;
+absent;1;0;0;1;1;1;1;0.0;1;;;;;;;;;;;;;;;;;;;;;;;;;;;
+easy;0.5;0.5;0.5;1;0.5;0.5;0.5;0.3;0.7;;;;;;;;;;;;;;;;;;;;;;;;;;;
+medium;0;1;1;1;0.5;0.5;0.5;0.5;0.5;;;;;;;;;;;;;;;;;;;;;;;;;;;
+hard;0;1;1;0.0;0.0;0.0;0.0;1;0.0;;;;;;;;;;;;;;;;;;;;;;;;;;;
