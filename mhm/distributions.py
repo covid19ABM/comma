@@ -400,7 +400,7 @@ def generate_housing_difficulties_distribution(n_people, no, some, many):
     return housing
 
 
-def generate_partner_difficulties_distribution(n_people, no, some, many):
+def generate_partner_difficulties_distribution(n_people, no, some, many, other):
     ''' Generate distribution of people that 
     experienced difficulties with their partner in the past year
     
@@ -413,7 +413,9 @@ def generate_partner_difficulties_distribution(n_people, no, some, many):
     some : float
         Probability of not having developed some partner difficulties in the past year.
     many : float
-        Probability of not having developed many partner difficulties in the past year. 
+        Probability of not having developed many partner difficulties in the past year.
+    other : float
+        Probability of having selected 'other' as part of the questionnaire
         
     Returns
     ----------
@@ -422,7 +424,8 @@ def generate_partner_difficulties_distribution(n_people, no, some, many):
     '''
     options = {'No': no, 
                'Some': some,
-               'Many': many}
+               'Many': many,
+               'Other': other}
    
     choices = list(options.keys())
     weights = list(options.values())

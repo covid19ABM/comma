@@ -104,7 +104,7 @@ def make_population(parameters):
     fd = dist.generate_finance_difficulties_distribution(n_people=n_people, no=parameters['finance_difficulties_false'], some=parameters['finance_difficulties_some'], many=parameters['finance_difficulties_many'])
     spd = dist.generate_single_parent_distribution(n_people=n_people, percentage=parameters['%_single_parent'])
     hdd = dist.generate_housing_difficulties_distribution(n_people=n_people, no=parameters['housing_difficulties_false'], some=parameters['housing_difficulties_some'], many=parameters['housing_difficulties_many'])
-    pdd = dist.generate_partner_difficulties_distribution(n_people=n_people, no=parameters['partner_difficulties_false'], some=parameters['partner_difficulties_some'], many=parameters['partner_difficulties_many'])
+    pdd = dist.generate_partner_difficulties_distribution(n_people=n_people, no=parameters['partner_difficulties_false'], some=parameters['partner_difficulties_some'], many=parameters['partner_difficulties_many'], other=parameters['partner_difficulties_other'])
     ag = ut.label_age_range(ad)
     
     people = []
