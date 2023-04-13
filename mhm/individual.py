@@ -6,18 +6,10 @@ import numpy as np
 
 class Individual:
     _features = pd.DataFrame()
+    _status = pd.DataFrame()
     
-    def __init__(self):
-        self.id: int = None
-        self.status: dict = None
-        
-    def setup(self, id: int):
-        """Setup id, status, etc. for an individual
-
-        Args:
-            id (int): _description_
-        """
-        self.id = id
+    def __init__(self, id: int):
+        self.id: int = id
         
     def get_features(self):
         """Get feature values of an individual
@@ -27,8 +19,8 @@ class Individual:
         """
         return self._features.iloc[self.id]
         
-    def action(self):
-        """Perform action and compute mental effect
+    def action(self, lockdown):
+        """Take action(s) and update status
         """
         pass
     
@@ -36,7 +28,7 @@ class Individual:
     def populate(size: int, seed: int = 0, **kwargs):
         """Create a population with an arbitrary number of features
         """
-        Individual._features.drop(Individual._features.index, inplace=True) # clear
+        Individual._features = pd.DataFrame() # clear
         
         np.random.seed(seed)
         for feature, distribution in kwargs.items():
