@@ -19,7 +19,7 @@ class Features():
                  'pre_existing_chronic_fatigue', 'parenthood',
                  'living_with_child', 'single_parent', 'housing_difficulties',
                  'finance_difficulties', 'pre_existing_health_issues',
-                 'partner_difficulties']
+                 'partner_difficulties', 'job_type']
     name: int
     gender: int
     age: int
@@ -38,6 +38,7 @@ class Features():
     finance_difficulties: str
     pre_existing_health_issues: str
     partner_difficulties: str
+    job_type: str
     
     def summary(self):
         ''' Generate a summary of the features '''
@@ -93,7 +94,7 @@ def make_population(parameters):
     ad = dist.generate_age_distribution(n_people=n_people, n_age_groups=parameters['n_age_groups'], min_age=parameters['min_age'], max_age=parameters['max_age'], prob=parameters['age_strata'])
     ea = dist.generate_educational_attainment_distribution(n_people=n_people, low=parameters['low_education'], medium=parameters['medium_education'], high=parameters['high_education'])
     ed = dist.generate_employment_distribution(n_people=n_people, yes=parameters['employed_true'], no_seeking=parameters['employed_false_seeking'], no_other=parameters['employed_false_other'])
-    pd = dist.generate_partnership_statuts_distribution(n_people=n_people, single=parameters['single'], married=parameters['married'], live_in_partner=parameters['live_in_partner'], in_relationship_no_cohabitation=parameters['in_relationship_no_cohabitation'], other=parameters['other_relationship'])
+    pd = dist.generate_partnership_status_distribution(n_people=n_people, single=parameters['single'], married=parameters['married'], live_in_partner=parameters['live_in_partner'], in_relationship_no_cohabitation=parameters['in_relationship_no_cohabitation'], other=parameters['other_relationship'])
     dd = dist.generate_pre_existing_depression_distribution(n_people=n_people, percentage=parameters['%_depression'])
     pad = dist.generate_pre_existing_addiction_distribution(n_people=n_people, percentage=parameters['%_addiction'])
     pfd = dist.generate_pre_existing_fatigue_distribution(n_people=n_people, percentage=parameters['%_fatigue'])
@@ -105,6 +106,8 @@ def make_population(parameters):
     spd = dist.generate_single_parent_distribution(n_people=n_people, percentage=parameters['%_single_parent'])
     hdd = dist.generate_housing_difficulties_distribution(n_people=n_people, no=parameters['housing_difficulties_false'], some=parameters['housing_difficulties_some'], many=parameters['housing_difficulties_many'])
     pdd = dist.generate_partner_difficulties_distribution(n_people=n_people, no=parameters['partner_difficulties_false'], some=parameters['partner_difficulties_some'], many=parameters['partner_difficulties_many'], other=parameters['partner_difficulties_other'])
+    jtd = dist.generate_jobType_distribution(n_people=n_people, whiteCollar=parameters['white_collar'], medicalProfessional=parameters['medical_professional'], keyWorker=parameters['key_worker'], other=parameters['other_job'])
+
     ag = ut.label_age_range(ad)
     
     people = []
@@ -127,7 +130,8 @@ def make_population(parameters):
                             single_parent=spd[i], 
                             housing_difficulties=hdd[i], 
                             finance_difficulties=fd[i], 
-                            partner_difficulties=pdd[i])
+                            partner_difficulties=pdd[i],
+                            job_type=jtd[i])
         
         state = State(employed=np.random.choice(2),
                       infected=0,

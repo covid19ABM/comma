@@ -90,6 +90,39 @@ def generate_educational_attainment_distribution(n_people, low, medium, high):
     return educational_attainment
 
 
+def generate_jobType_distribution(n_people, whiteCollar, keyWorker, medicalProfessional, other):
+    ''' Generate distribution of high, medium
+    and low educational attainments in the population.
+
+    Parameters
+    ----------
+    n_people : int
+        Size of the population.
+    whiteCollar : float
+        Probability of having a white collar type of job.
+    keyWorker : float
+        Probability of being a key worker.
+    medicalProfessional : float
+        Probability of being a medical professional.
+    other : float
+        The rest of the population
+
+    Returns
+    ----------
+    educational_attainment : list
+        List of type of educational attainments in the population.
+    '''
+    options = {'White collar': whiteCollar,
+               'Key worker': keyWorker,
+               'Medical professional': medicalProfessional,
+               'Other': other}
+
+    choices = list(options.keys())
+    weights = list(options.values())
+    educational_attainment = random.choices(choices, weights, k=n_people)
+    return educational_attainment
+
+
 def generate_employment_distribution(n_people, yes, no_seeking, no_other):
     ''' Generate distribution of employment statuses in the population.
     
@@ -119,7 +152,7 @@ def generate_employment_distribution(n_people, yes, no_seeking, no_other):
     return employment
 
 
-def generate_partnership_statuts_distribution(n_people, single, married, live_in_partner, in_relationship_no_cohabitation, other):
+def generate_partnership_status_distribution(n_people, single, married, live_in_partner, in_relationship_no_cohabitation, other):
     ''' Generate distribution of partnership statuses in the population.
     
     Parameters
