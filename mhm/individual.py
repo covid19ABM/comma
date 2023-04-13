@@ -5,19 +5,27 @@ import pandas as pd
 import numpy as np
 
 class Individual:
-    features = pd.DataFrame()
+    _features = pd.DataFrame()
     
     def __init__(self):
         self.id: int = None
         self.status: dict = None
         
     def setup(self, id: int):
-        """Setup an agent
+        """Setup id, status, etc. for an individual
 
         Args:
             id (int): _description_
         """
         self.id = id
+        
+    def get_features(self):
+        """Get feature values of an individual
+
+        Returns:
+            _type_: _description_
+        """
+        return self._features.iloc[self.id]
         
     def action(self):
         """Perform action and compute mental effect
@@ -28,10 +36,10 @@ class Individual:
     def populate(size: int, seed: int, **kwargs):
         """Create a population with an arbitrary number of features
         """
-        Individual.features.drop(Individual.features.index, inplace=True)
+        Individual._features.drop(Individual._features.index, inplace=True)
         np.random.seed(seed)
         for feature, distribution in kwargs.items():
-            Individual.features[feature] = np.random.choice(
+            Individual._features[feature] = np.random.choice(
                 distribution[0], size, p=distribution[1]
             )
         
