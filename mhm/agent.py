@@ -19,7 +19,7 @@ class Features():
                  'pre_existing_chronic_fatigue', 'parenthood',
                  'living_with_child', 'single_parent', 'housing_difficulties',
                  'finance_difficulties', 'pre_existing_health_issues',
-                 'partner_difficulties', 'job_type', 'area']
+                 'partner_difficulties', 'job_type', 'area', 'ses']
     name: int
     gender: int
     age: int
@@ -40,6 +40,7 @@ class Features():
     partner_difficulties: str
     job_type: str
     area: str
+    ses: str
     
     def summary(self):
         ''' Generate a summary of the features '''
@@ -109,6 +110,7 @@ def make_population(parameters):
     pdd = dist.generate_partner_difficulties_distribution(n_people=n_people, no=parameters['partner_difficulties_false'], some=parameters['partner_difficulties_some'], many=parameters['partner_difficulties_many'], other=parameters['partner_difficulties_other'])
     jtd = dist.generate_jobType_distribution(n_people=n_people, whiteCollar=parameters['white_collar'], medicalProfessional=parameters['medical_professional'], keyWorker=parameters['key_worker'], other=parameters['other_job'])
     ald = dist.generate_living_area_distribution(n_people=n_people, urban=parameters['urban'], rural=parameters['rural'])
+    sesd = dist.generate_SES_distribution(n_people=n_people, low=parameters['low_ses'], medium=parameters['medium_ses'], high=parameters['high_ses'])
     ag = ut.label_age_range(ad)
     
     people = []
@@ -133,7 +135,8 @@ def make_population(parameters):
                             finance_difficulties=fd[i], 
                             partner_difficulties=pdd[i],
                             job_type=jtd[i],
-                            area=ald[i])
+                            area=ald[i],
+                            ses=sesd[i])
         
         state = State(employed=np.random.choice(2),
                       infected=0,

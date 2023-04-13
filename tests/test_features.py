@@ -17,7 +17,7 @@ def feat():
                     parenthood=1, living_with_child=1, single_parent=0,
                     housing_difficulties='Some', finance_difficulties='Many',
                     pre_existing_health_issues='No', partner_difficulties='No',
-                    job_type='key_worker', area='rural')
+                    job_type='key_worker', area='rural', ses='low')
 
 
 def summary_to_dict(obj):
@@ -62,7 +62,8 @@ def test_summary(feat):
         'pre_existing_health_issues': 'No',
         'partner_difficulties': 'No',
         'job_type': 'key_worker',
-        'area': 'rural'
+        'area': 'rural',
+        'ses': 'low'
         }
     output = summary_to_dict(feat)
     assert output == expected_output
@@ -76,7 +77,7 @@ def test_fields(feat):
         'pre_existing_depression', 'pre_existing_burnout', 'pre_existing_addiction',
         'pre_existing_chronic_fatigue', 'parenthood', 'living_with_child', 'single_parent',
         'housing_difficulties', 'finance_difficulties', 'pre_existing_health_issues',
-        'partner_difficulties', 'job_type', 'area'
+        'partner_difficulties', 'job_type', 'area', 'ses'
     ]
     actual_fields = [f.name for f in fields(feat)]
     assert actual_fields == expected_fields

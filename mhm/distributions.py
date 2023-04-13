@@ -116,6 +116,35 @@ def generate_living_area_distribution(n_people, rural, urban):
     living_area = random.choices(choices, weights, k=n_people)
     return living_area
 
+def generate_SES_distribution(n_people, low, medium, high):
+    ''' Generate socio-economic status (SES) distribution per number of people
+
+    Parameters
+    ----------
+    n_people : int
+        Size of the population.
+    low : float
+        Probability of having a low SES
+    medium : float
+        Probability of having a medium SES
+    high : float
+        Probability of having a high SES
+
+
+    Returns
+    ----------
+    ses : list
+        List of SESs per individual
+    '''
+    options = {'low': low,
+               'medium': medium,
+               'high': high}
+
+    choices = list(options.keys())
+    weights = list(options.values())
+    ses = random.choices(choices, weights, k=n_people)
+    return ses
+
 
 def generate_jobType_distribution(n_people, whiteCollar, keyWorker, medicalProfessional, other):
     ''' Generate distribution of job types in the population.
