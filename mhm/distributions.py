@@ -90,9 +90,35 @@ def generate_educational_attainment_distribution(n_people, low, medium, high):
     return educational_attainment
 
 
+def generate_living_area_distribution(n_people, rural, urban):
+    ''' Generate distribution of people living in either rural or urban areas.
+
+    Parameters
+    ----------
+    n_people : int
+        Size of the population.
+    rural : float
+        Probability of living in a rural area.
+    urban : float
+        Probability of living in a urban area.
+
+
+    Returns
+    ----------
+    living_area : list
+        List of area types per number of individuals
+    '''
+    options = {'rural': rural,
+               'urban': urban}
+
+    choices = list(options.keys())
+    weights = list(options.values())
+    living_area = random.choices(choices, weights, k=n_people)
+    return living_area
+
+
 def generate_jobType_distribution(n_people, whiteCollar, keyWorker, medicalProfessional, other):
-    ''' Generate distribution of high, medium
-    and low educational attainments in the population.
+    ''' Generate distribution of job types in the population.
 
     Parameters
     ----------
@@ -109,18 +135,18 @@ def generate_jobType_distribution(n_people, whiteCollar, keyWorker, medicalProfe
 
     Returns
     ----------
-    educational_attainment : list
-        List of type of educational attainments in the population.
+    job_type : list
+        List of job types per number of individuals.
     '''
-    options = {'White collar': whiteCollar,
-               'Key worker': keyWorker,
-               'Medical professional': medicalProfessional,
-               'Other': other}
+    options = {'white_collar': whiteCollar,
+               'key_worker': keyWorker,
+               'medical_professional': medicalProfessional,
+               'other': other}
 
     choices = list(options.keys())
     weights = list(options.values())
-    educational_attainment = random.choices(choices, weights, k=n_people)
-    return educational_attainment
+    job_type = random.choices(choices, weights, k=n_people)
+    return job_type
 
 
 def generate_employment_distribution(n_people, yes, no_seeking, no_other):
