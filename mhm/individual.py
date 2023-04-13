@@ -33,10 +33,11 @@ class Individual:
         pass
     
     @staticmethod
-    def populate(size: int, seed: int, **kwargs):
+    def populate(size: int, seed: int = 0, **kwargs):
         """Create a population with an arbitrary number of features
         """
-        Individual._features.drop(Individual._features.index, inplace=True)
+        Individual._features.drop(Individual._features.index, inplace=True) # clear
+        
         np.random.seed(seed)
         for feature, distribution in kwargs.items():
             Individual._features[feature] = np.random.choice(
