@@ -30,9 +30,15 @@ class Individual:
         """
         Individual._features = pd.DataFrame() # clear
         
+        # add all features in kwargs to the feature matrix 
         np.random.seed(seed)
         for feature, distribution in kwargs.items():
             Individual._features[feature] = np.random.choice(
                 distribution[0], size, p=distribution[1]
             )
         
+        # one-hot encoding all the object columns
+        categorical_cols = Individual._features.select_dtypes(include=['object'])
+        encoded_cols = pd.get_dummies(categorical_cols).astype(int)
+        Individual._features.drop(categorical_cols.columns, axis=1, inplace=True)
+        Individual._features = pd.concat([Individual._features, encoded_cols], axis=1)
