@@ -16,9 +16,13 @@ class Individual:
     
     def get_status(self):
         return self._status.loc[self.id]
-    
+   
+    # TODO: lockdown as input can be combinition of different policies in the future.
+    #       Thus, should accept a list 
     def action(self, lockdown: str):
         """Take action(s) and update status
+        
+        Actions can be found from the hypothesis files.
         """
         assert lockdown in ['absent', 'easy', 'medium', 'hard'], \
             'Lockdown should be one of absent, easy, medium, and hard!'
