@@ -34,18 +34,15 @@ class Individual:
             cols = self.get_features().index
             return df[cols]
          
-        def get_actions(lockdown: str):
-            """Get actions based on input lockdown policy as string.
-            """
-            fpath_lockdown_params = '../hypotheses/lockdown_%s.csv' % lockdown
-            lockdown_params = read_params(fpath_lockdown_params)
-            n_actions, _ = lockdown_params.shape
-            action_probs = lockdown_params.dot(self.get_features())
-            action_probs = action_probs.apply(lambda x: 1 / (1 + np.exp(-x)))
-            actions = np.random.rand(n_actions) <= action_probs
-            return actions
-        
-        actions = get_actions(lockdown)
+        # get actions based on the lockdown input
+        fpath_lockdown_params = '../hypotheses/lockdown_%s.csv' % lockdown
+        lockdown_params = read_params(fpath_lockdown_params)
+        n_actions, _ = lockdown_params.shape
+        action_probs = lockdown_params.dot(self.get_features())
+        action_probs = action_probs.apply(lambda x: 1 / (1 + np.exp(-x)))
+        actions = np.random.rand(n_actions) <= action_probs
+       
+        # compute status by taking the actions 
         fpath_effect_mh = '../hypotheses/action_effects_on_mh.csv'
         fpath_effect_contacts = '../hypotheses/action_effects_on_contacts.csv'
         effect_mh_params = read_params(fpath_effect_mh)
