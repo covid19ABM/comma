@@ -4,6 +4,9 @@
 import pandas as pd
 import numpy as np
 
+# list of names of lockdown policies
+LOCKDOWN_POLICIES = ['absent', 'easy', 'medium', 'hard']
+
 class Individual:
     _features = pd.DataFrame()
     _status = pd.DataFrame()
@@ -16,37 +19,41 @@ class Individual:
     
     def get_status(self):
         return self._status.loc[self.id]
-   
-    # TODO: lockdown as input can be combinition of different policies in the future.
-    #       Thus, should accept a list 
-    def action(self, lockdown: str):
+        
+    def _read_params(self, fpath):
+        """Read parameter matrix with columns in feature matrix.
+        """
+        df = pd.read_csv(fpath, delimiter=';')
+        cols = self.get_features().index
+        return df[cols]
+        
+    def choose_actions_on_lockdown(self, lockdown: str, fpath_lockdown_params: str = None):
         """Take action(s) and update status
         
         Actions can be found from the hypothesis files.
         """
-        assert lockdown in ['absent', 'easy', 'medium', 'hard'], \
-            'Lockdown should be one of absent, easy, medium, and hard!'
+        assert lockdown in LOCKDOWN_POLICIES, 'Lockdown name incorrect!'
             
-        def read_params(fpath):
-            """Read parameter matrix with columns in feature matrix.
-            """
-            df = pd.read_csv(fpath, delimiter=';')
-            cols = self.get_features().index
-            return df[cols]
-         
         # get actions based on the lockdown input
-        fpath_lockdown_params = '../hypotheses/lockdown_%s.csv' % lockdown
-        lockdown_params = read_params(fpath_lockdown_params)
+        if fpath_lockdown_params is None: 
+            fpath_lockdown_params = '../hypotheses/lockdown_%s.csv' % lockdown 
+        lockdown_params = self._read_params(fpath_lockdown_params)
         n_actions, _ = lockdown_params.shape
         action_probs = lockdown_params.dot(self.get_features())
         action_probs = action_probs.apply(lambda x: 1 / (1 + np.exp(-x)))
         actions = np.random.rand(n_actions) <= action_probs
-       
-        # compute status by taking the actions 
-        fpath_effect_mh = '../hypotheses/action_effects_on_mh.csv'
-        fpath_effect_contacts = '../hypotheses/action_effects_on_contacts.csv'
-        effect_mh_params = read_params(fpath_effect_mh)
-        effect_contacts_params = read_params(fpath_effect_contacts)
+        return actions, action_probs
+    
+    def take_actions(self, actions: list, fpath_effect_mh: str = None, fpath_effect_contacts: str = None):
+        """Update the status by taking specific action(s).
+        """
+        if fpath_effect_mh is None:
+            fpath_effect_mh = '../hypotheses/action_effects_on_mh.csv'
+        if fpath_effect_contacts is None:
+            fpath_effect_contacts = '../hypotheses/action_effects_on_contacts.csv'
+            
+        effect_mh_params = self._read_params(fpath_effect_mh)
+        effect_contacts_params = self._read_params(fpath_effect_contacts)
         mh = effect_mh_params.dot(self.get_features()).dot(actions)
         n_contact = effect_contacts_params.dot(self.get_features()).dot(actions)
         self._status.loc[self.id] = (mh, n_contact) 
