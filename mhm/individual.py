@@ -3,6 +3,7 @@
 
 import pandas as pd
 import numpy as np
+import json
 
 # list of names of lockdown policies
 LOCKDOWN_POLICIES = ['absent', 'easy', 'medium', 'hard']
@@ -57,6 +58,21 @@ class Individual:
         mh = effect_mh_params.dot(self.get_features()).dot(actions)
         n_contact = effect_contacts_params.dot(self.get_features()).dot(actions)
         self._status.loc[self.id] = (mh, n_contact) 
+       
+    @staticmethod    
+    def read_features_from_file(fpath_features='../parameters/agent_features.json') -> dict:
+        """Read features (values, probabilities) from a JSON file.
+
+        Args:
+            fpath_features (str): path to the feature file.
+
+        Returns:
+            dict: dictionary of features
+        """
+        with open(fpath_features) as json_file:
+            features = json.load(json_file)
+            
+        return features 
     
     @staticmethod
     def populate(size: int, **kwargs):
