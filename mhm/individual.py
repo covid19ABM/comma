@@ -75,7 +75,7 @@ class Individual:
         return features 
     
     @staticmethod
-    def populate(size: int, **kwargs):
+    def populate(size: int, fpath_features: str = None, **kwargs):
         """Create a population with an arbitrary number of features
         """
         Individual._features = pd.DataFrame()
@@ -83,7 +83,13 @@ class Individual:
             index=range(size), columns=['mh', 'n_contacts'], dtype='float')
         
         # add all features in kwargs to the feature matrix 
-        for feature, distribution in kwargs.items():
+        if fpath_features is None:
+            features = kwargs
+        elif fpath_features == 'Default':
+            features = Individual.read_features_from_file()
+        else:
+            features = Individual.read_features_from_file(fpath_features)
+        for feature, distribution in features.items():
             Individual._features[feature] = np.random.choice(
                 distribution[0], size, p=distribution[1]
             )
