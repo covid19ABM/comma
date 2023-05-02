@@ -3,8 +3,9 @@
 
 import pandas as pd
 import numpy as np
-import json
 import os
+from . import read_json_as_dict
+from . import PARAMS_INDIVIDUAL, PARAMS_MODEL
 
 
 LOCKDOWN_POLICIES = ['absent', 'easy', 'medium', 'hard']
@@ -13,17 +14,16 @@ ACTIONS = [
     'exercise', 'socialise', 'travel', 'seek_help', 
     'negative_coping', 'positive_coping', 'socialise_online'
 ]
-DEFAULT_PARAMS_DIR = '../parameters/'
-DEFAULT_FEATURES = os.path.join(DEFAULT_PARAMS_DIR, 'agent_features.json')
+STATUS = ['contacts', 'mh']
 
 
 class Individual:
     _features = pd.DataFrame()
     _status = pd.DataFrame()
-    _dir_params = ''
     
-    def __init__(self, id: int):
+    def __init__(self, id: int, dir_params: str):
         self.id: int = id
+        self.dir_params = dir_params
         
     def get_features(self):
         return self._features.loc[self.id]
@@ -69,37 +69,8 @@ class Individual:
         n_contact = effect_contacts_params.dot(self.get_features()).dot(actions)
         self._status.loc[self.id] = (mh, n_contact) 
        
-    @staticmethod    
-    def _read_features_from_file(fpath_features=DEFAULT_FEATURES) -> dict:
-        """Read features (values, probabilities) from a JSON file.
-
-        Args:
-            fpath_features (str): path to the feature file.
-
-        Returns:
-            dict: dictionary of features
-        """
-        with open(fpath_features) as json_file:
-            features = json.load(json_file)
-        return features
-    
-    @staticmethod 
-    def _create_hypothesis_files():
-        """Create CSV files for storing hypothesis parameters
-        """
-        features = Individual._features.columns.tolist()
-        features.insert(0, 'baseline')
-        df = pd.DataFrame(0, index=range(len(ACTIONS)), columns=features)
-        df.insert(0, 'actions', ACTIONS)
-        
-        fpaths = ["lockdown_%s.csv" % l for l in LOCKDOWN_POLICIES]
-        fpaths += ['actions_effects_on_contacts.csv', 'actions_effects_on_mh.csv']
-        fpaths = [os.path.join(DEFAULT_PARAMS_DIR, fp) for fp in fpaths]
-        for fp in fpaths:
-            df.to_csv(fp, sep=';', index=False) 
-    
     @staticmethod
-    def populate(size: int, dir_params: str, from_scratch: bool = False): 
+    def populate(size: int, dir_params: str): 
         """Create a population of individual agents with the given feature parameters.
         
         Args:
@@ -111,21 +82,15 @@ class Individual:
             list[Individual]: a list of Individual agents
         """
         assert size > 0, 'Size must be positive!'
-        assert type(size) == int, 'Size must be integer!'
+        assert isinstance(size, int), 'Size must be integer!'
         assert os.path.isdir(dir_params), "Given folder doesn't exist!"
-        Individual._dir_params = dir_params
-        
-        # read prior parameters from file
-        fpath_params_features = os.path.join(dir_params, 'params_features.json')
-        assert os.path.isfile(fpath_params_features), \
-            "Prior parameter file doesn't exist in the given folder, \
-                file name should be params_features.json"
-        features = Individual._read_features_from_file(fpath_params_features)
-            
-        # initialize features and status matrices
+    
         Individual._features = pd.DataFrame()
         Individual._status = pd.DataFrame(
-            index=range(size), columns=['mh', 'n_contacts'], dtype='float')
+            index=range(size), columns=STATUS, dtype='float')
+        
+        fpath_params_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
+        features = read_json_as_dict(fpath_params_individual)
         for feature, distribution in features.items():
             Individual._features[feature] = np.random.choice(
                 distribution[0], size, p=distribution[1]
@@ -135,8 +100,4 @@ class Individual:
         Individual._features.drop(categorical_cols.columns, axis=1, inplace=True)
         Individual._features = pd.concat([Individual._features, encoded_cols], axis=1)
         
-        # create empty hypothesis params files if needed
-        if from_scratch:
-            Individual._create_hypothesis_files()
-        
-        return [Individual(i) for i in range(size)]
+        return [Individual(i, dir_params) for i in range(size)]
