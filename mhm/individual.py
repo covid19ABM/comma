@@ -20,6 +20,7 @@ DEFAULT_FEATURES = os.path.join(DEFAULT_PARAMS_DIR, 'agent_features.json')
 class Individual:
     _features = pd.DataFrame()
     _status = pd.DataFrame()
+    _dir_params = ''
     
     def __init__(self, id: int):
         self.id: int = id
@@ -98,32 +99,44 @@ class Individual:
             df.to_csv(fp, sep=';', index=False) 
     
     @staticmethod
-    def populate(size: int, fpath_features: str = None, **kwargs):
-        """Create a population with an arbitrary number of features
+    def populate(size: int, dir_params: str, from_scratch: bool = False): 
+        """Create a population of individual agents with the given feature parameters.
+        
+        Args:
+            size (int): population size, i.e., number of agents.
+            dir_params (str): dir to the folder containing feature parameter file.
+            from_scratch (bool, optional): flag of creating hypothesis from scratch or reading from files. Defaults to False.
+
+        Returns:
+            list[Individual]: a list of Individual agents
         """
+        assert size > 0, 'Size must be positive!'
+        assert type(size) == int, 'Size must be integer!'
+        assert os.path.isdir(dir_params), "Given folder doesn't exist!"
+        Individual._dir_params = dir_params
+        
+        # read prior parameters from file
+        fpath_params_features = os.path.join(dir_params, 'params_features.json')
+        assert os.path.isfile(fpath_params_features), \
+            "Prior parameter file doesn't exist in the given folder, \
+                file name should be params_features.json"
+        features = Individual._read_features_from_file(fpath_params_features)
+            
+        # initialize features and status matrices
         Individual._features = pd.DataFrame()
         Individual._status = pd.DataFrame(
             index=range(size), columns=['mh', 'n_contacts'], dtype='float')
-        
-        # add all features in kwargs to the feature matrix 
-        if fpath_features is None:
-            features = kwargs
-        elif fpath_features == 'Default':
-            features = Individual._read_features_from_file()
-        else:
-            features = Individual._read_features_from_file(fpath_features)
         for feature, distribution in features.items():
             Individual._features[feature] = np.random.choice(
                 distribution[0], size, p=distribution[1]
             )
-            
-        # one-hot encoding all the object columns
         categorical_cols = Individual._features.select_dtypes(include=['object'])
         encoded_cols = pd.get_dummies(categorical_cols).astype(int)
         Individual._features.drop(categorical_cols.columns, axis=1, inplace=True)
         Individual._features = pd.concat([Individual._features, encoded_cols], axis=1)
         
-        # create empty hypothesis files
-        Individual._create_hypothesis_files()
+        # create empty hypothesis params files if needed
+        if from_scratch:
+            Individual._create_hypothesis_files()
         
         return [Individual(i) for i in range(size)]
