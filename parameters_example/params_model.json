@@ -1,0 +1,24 @@
+{
+    "lockdown_policies": [
+        "absent",
+        "easy",
+        "medium",
+        "hard"
+    ],
+    "actions": [
+        "go_to_work",
+        "maintain_physical_distance",
+        "stay_at_home",
+        "exercise",
+        "socialise",
+        "travel",
+        "seek_help",
+        "negative_coping",
+        "positive_coping",
+        "socialise_online"
+    ],
+    "status": [
+        "contacts",
+        "mh"
+    ]
+}
