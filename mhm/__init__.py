@@ -25,7 +25,7 @@ def create_empty_hypotheses(dir_params: str):
     """Create empty CSV files for storing hypotheses on the impact of actions and lockdown policies on different agent statuses
 
     Args:
-        dir_params (str): folder that contains the agent and model parameter files.
+        dir_params (str): The directory of the folder that contains the agent and model parameter files.
     """
     fpath_params_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
     fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
