@@ -22,7 +22,7 @@ def read_json_as_dict(fpath: str):
     return data
 
 def create_empty_hypotheses(dir_params: str):
-    """Create empty hypotheses files in a user-defined folder.
+    """Create empty CSV files for storing hypotheses on the impact of actions and lockdown policies on different agent statuses
 
     Args:
         dir_params (str): folder that contains the agent and model parameter files.
