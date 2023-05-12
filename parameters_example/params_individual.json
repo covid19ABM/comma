@@ -1,0 +1,78 @@
+{
+    "age_group":[
+        ["_1", "_2", "_3", "_4"], 
+        [0.25, 0.23, 0.31, 0.21]
+    ], 
+    "gender":[
+        [0, 1],
+        [0.5, 0.5]    
+    ], 
+    "education": [
+        ["Low", "Medium", "High"], 
+        [0.11, 0.25, 0.64]
+    ],
+    "employed":[
+        ["No, other", "No, seeking employment", "Yes"], 
+        [0.76, 0.155, 0.085]
+    ],
+    "partnership_status":[
+        ["Single", "Married", "Live-in partner", "In relationship, no cohabitation", "Other"],
+        [0.2, 0.41, 0.29, 0.09, 0.01]    
+    ],
+    "pre_existing_depression":[
+        [0, 1], 
+        [0.8, 0.2]
+    ],
+    "pre_existing_burnout":[
+        [0, 1], 
+        [0.27, 0.73]
+    ],
+    "pre_existing_addiction":[
+        [0, 1], 
+        [0.95, 0.05]
+    ],
+    "pre_existing_chronic_fatigue":[
+        [0, 1], 
+        [0.95, 0.05]
+    ],
+    "parenthood":[
+        [0, 1], 
+        [0.93, 0.07]
+    ],
+    "living_with_child":[
+        [0, 1], 
+        [0.42, 0.58]
+    ],
+    "single_parent":[
+        [0, 1], 
+        [0.95, 0.05]
+    ],
+    "housing_difficulties":[
+        ["No", "Some", "Many"], 
+        [0.79, 0.18, 0.03]
+    ],
+    "finance_difficulties":[
+        ["No", "Some", "Many"], 
+        [0.75, 0.13, 0.12]
+    ],
+    "pre_existing_health_issues":[
+        ["No", "Some", "Many"], 
+        [0.65, 0.20, 0.15]
+    ],
+    "partner_difficulties":[
+        ["No", "Some", "Many", "Other"], 
+        [0.67, 0.18, 0.05, 0.1]
+    ],
+    "job_type":[
+        ["white_collar", "medical_professional", "key_worker", "other"], 
+        [0.2, 0.2, 0.2, 0.4]
+    ],
+    "area":[
+        ["urban", "rural"], 
+        [0.7, 0.3]
+    ],
+    "ses":[
+        ["low", "medium", "high"], 
+        [0.15, 0.55, 0.3]
+    ]
+}

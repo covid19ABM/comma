@@ -11,15 +11,16 @@ class Model:
         self.agents: list = None
         self.id: int = None
 
-    def setup(self, size: int, **kwargs):
+    def setup(self, size: int, dir_params: str):
         """Setup the model with input parameters.
 
         Args:
             size (int): size of the population
 
-            kwargs: feature variables for the population
+            dir_params (str): dir to the folder containing feature parameter files.
         """
-        self.agents = Individual.populate(size, **kwargs)
+        self.agents = Individual.populate(size, dir_params)
+        return self.agents
 
     def step(self, lockdown: str):
         """Actions to be performed in each step.
