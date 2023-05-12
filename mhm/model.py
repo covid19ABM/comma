@@ -20,6 +20,7 @@ class Model:
             dir_params (str): dir to the folder containing feature parameter files.
         """
         self.agents = Individual.populate(size, dir_params)
+        return self.agents
 
     def step(self, lockdown: str):
         """Actions to be performed in each step.
