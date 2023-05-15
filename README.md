@@ -9,7 +9,7 @@ This project aims at understanding the full spectrum of impacts the lockdown pol
 
 ```bash
 git clone git@github.com:covid19ABM/mhm.git
-$ cd shallow-backup
+$ cd mhm
 $ pip3 install .
 ```
 # Credits
