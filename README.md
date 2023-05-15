@@ -1,13 +1,18 @@
 # COMMA - **CO**vid **M**ental-health **M**odel with **A**gents 
 
 <div align="center">
-<img src="avatar_comma.png">
+<img src="docs/img/avatar_comma.png">
 </div>
 
 `comma` lets you run a agent-based simulations to study mental health outcomes during covid-19 lockdowns. 
 
 # Why?
 This project aims at understanding the full spectrum of impacts the lockdown policies had during the COVID-19 pandemic, specifically on non-COVID-19-related health outcomes, such as mental health. Although lockdowns reduced disease transmission and mortality, they also potentially exacerbated mental health issues. By using `comma` you can simulate real-world scenarios, and estimate/compare the effects of lockdown policies on the mental health of an a-priori defined population across time.
+
+# Project status [![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)]
+[![Python package](https://github.com/covid19ABM/comma/actions/workflows/python-package.yml/badge.svg)](https://github.com/covid19ABM/comma/actions/workflows/python-package.yml) 
+[![pages-build-deployment](https://github.com/covid19ABM/comma/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/covid19ABM/comma/actions/workflows/pages/pages-build-deployment)
+[![Docs](https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml/badge.svg)](https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml)
 
 # Installation
 
