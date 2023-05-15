@@ -19,6 +19,7 @@ This project aims at understanding the full spectrum of impacts the lockdown pol
 - [Motivation](#why)
 - [Installation](#installation)
 - [Example](#example)
+- [License](#license)
 - [Credits](#credits)
 
 # Installation[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#installation)
@@ -42,7 +43,16 @@ poetry shell
 
 That's it! After following these steps, you should have `comma` installed in a dedicated virtual environment and be ready to use it.
 
+<div align="right">[ <a href="#table-of-contents">↑ Back to top ↑</a> ]</div>
+
 # Example[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#example)
+You can find a tutorial that demonstrates the usage of `comma` in the `/notebooks` folder.
+
+<div align="right">[ <a href="#table-of-contents">↑ Back to top ↑</a> ]</div>
+
+# License[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#license)
+`comma` is under free open source [Apache License Version 2.0](https://github.com/aregtech/areg-sdk/blob/master/LICENSE.txt). This means that you're free to use, modify, and distribute this software, even for commercial applications.
 
 # Credits[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#credits)
 This is a project funded by the Netherlands eScience Center (Grant ID: NLESC.SSI.2022b.022) and awarded to Dr Kristina Thompson (Wageningen University) and developed in collaboration with the Netherlands eScience Center. More information on the [Research Software Directory](https://research-software-directory.org/projects/covid-19-mitigation-policies).
+
