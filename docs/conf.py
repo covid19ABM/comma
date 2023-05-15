@@ -7,8 +7,11 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'comma - **CO**vid **M**ental-health **M**odel with **A**gents'
-copyright = '2023, Eva Viviani'
-author = ['Eva Viviani', 'Ji Qi']
+authors = ["Eva Viviani <e.viviani@esciencecenter.nl>", "Ji Qi <j.qi@esciencecenter.nl>"]
+
+authors_ = ', '.join(authors)
+author = authors_
+copyright = f'2023, {author}'
 release = '0.0.1'
 
 # -- General configuration ---------------------------------------------------
