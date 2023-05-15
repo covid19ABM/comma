@@ -30,15 +30,18 @@ This project aims at understanding the full spectrum of impacts the lockdown pol
 
 ## Install from source
 
+We recommend installing `comma` in a virtual environment. For example, in conda:
+```bash
+conda create --name comma_env
+conda activate comma_env
+```
+
+Then installing `comma` with `pip` by cloning the github repository locally:
 ```bash
 git clone git@github.com:covid19ABM/comma.git
 cd comma
-poetry install
-```
+python -m pip install .
 
-After the package is installed, you can activate the virtual environment to use the package:
-```bash
-poetry shell
 ```
 
 That's it! After following these steps, you should have `comma` installed in a dedicated virtual environment and be ready to use it.
