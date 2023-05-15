@@ -1,15 +1,15 @@
-# mhm - Mental Health modelling
-`mhm` lets you run an agent-based simulation model to study mental health outcomes during covid-19 lockdowns. 
+# COMMA - **CO**vid **M**ental-health **M**odel with **A**gents 
+`comma` lets you run an agent-based simulation model to study mental health outcomes during covid-19 lockdowns. 
 
 # Why?
-This project aims at understanding the full spectrum of impacts the lockdown policies had during the COVID-19 pandemic, specifically on non-COVID-19-related health outcomes, such as mental health. Although lockdowns reduced disease transmission and mortality, they also potentially exacerbated mental health issues. By using `mhm` you can simulate real-world scenarios, and estimate/compare the effects of lockdown policies on the mental health of an a-priori defined population across time.
+This project aims at understanding the full spectrum of impacts the lockdown policies had during the COVID-19 pandemic, specifically on non-COVID-19-related health outcomes, such as mental health. Although lockdowns reduced disease transmission and mortality, they also potentially exacerbated mental health issues. By using `comma` you can simulate real-world scenarios, and estimate/compare the effects of lockdown policies on the mental health of an a-priori defined population across time.
 
 # Installation
 ## Install from source
 
 ```bash
-git clone git@github.com:covid19ABM/mhm.git
-$ cd mhm
+git clone git@github.com:covid19ABM/comma.git
+$ cd comma
 $ pip3 install .
 ```
 # Credits
