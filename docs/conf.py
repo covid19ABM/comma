@@ -6,9 +6,12 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Mental Health Modelling'
-copyright = '2023, Eva Viviani'
-author = 'Eva Viviani'
+project = 'comma - **CO**vid **M**ental-health **M**odel with **A**gents'
+authors = ["Eva Viviani <e.viviani@esciencecenter.nl>", "Ji Qi <j.qi@esciencecenter.nl>"]
+
+authors_ = ', '.join(authors)
+author = authors_
+copyright = f'2023, {author}'
 release = '0.0.1'
 
 # -- General configuration ---------------------------------------------------
@@ -19,7 +22,7 @@ extensions = ['autoapi.extension']
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-autoapi_dirs = ['../mhm']
+autoapi_dirs = ['../comma/']
 
 
 # -- Options for HTML output -------------------------------------------------

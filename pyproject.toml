@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "comma"
+version = "0.0.1"
+description = "A package to run agent-based simulations to study mental health outcomes during covid-19 lockdowns"
+authors = [
+    "Eva Viviani <e.viviani@esciencecenter.nl>",
+    "Ji Qi <j.qi@esciencecenter.nl>"
+]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://covid19abm.github.io/comma/"
+repository = "https://github.com/covid19ABM/comma"
+
+
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+pandas = "^2.0.1"
+numpy = "^1.24.3"
+jupyter = "^1.0.0"
+matplotlib = "^3.7.1"
+pytest = "^7.3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
