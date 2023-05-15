@@ -14,7 +14,7 @@ This project aims at understanding the full spectrum of impacts the lockdown pol
 [![pages-build-deployment](https://github.com/covid19ABM/comma/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/covid19ABM/comma/actions/workflows/pages/pages-build-deployment)
 [![Docs](https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml/badge.svg)](https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml)
 
-# Installation
+# Installation[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#installation)
 
 ## Prerequisites
 - Python 3.6 or above 
@@ -35,5 +35,5 @@ poetry shell
 
 That's it! After following these steps, you should have `comma` installed in a dedicated virtual environment and be ready to use it.
 
-# Credits
+# Credits[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#credits)
 This is a project funded by the Netherlands eScience Center (Grant ID: NLESC.SSI.2022b.022) and awarded to Dr Kristina Thompson (Wageningen University) and developed in collaboration with the Netherlands eScience Center. More information on the [Research Software Directory](https://research-software-directory.org/projects/covid-19-mitigation-policies).
