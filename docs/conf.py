@@ -6,9 +6,9 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Mental Health Modelling'
+project = 'comma - **CO**vid **M**ental-health **M**odel with **A**gents'
 copyright = '2023, Eva Viviani'
-author = 'Eva Viviani'
+author = ['Eva Viviani', 'Ji Qi']
 release = '0.0.1'
 
 # -- General configuration ---------------------------------------------------
@@ -19,11 +19,11 @@ extensions = ['autoapi.extension']
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-autoapi_dirs = ['../mhm']
+autoapi_dirs = ['../comma']
 
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'agogo'
 html_static_path = ['_static']
