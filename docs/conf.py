@@ -22,7 +22,7 @@ extensions = ['autoapi.extension']
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-autoapi_dirs = ['../comma']
+autoapi_dirs = ['../comma/']
 
 
 # -- Options for HTML output -------------------------------------------------
