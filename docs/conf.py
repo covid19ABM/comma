@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'comma - **CO**vid **M**ental-health **M**odel with **A**gents'
+project = 'comma - COvid Mental-health Model with Agents'
 authors = ["Eva Viviani <e.viviani@esciencecenter.nl>", "Ji Qi <j.qi@esciencecenter.nl>"]
 
 authors_ = ', '.join(authors)
@@ -28,5 +28,5 @@ autoapi_dirs = ['../comma/']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'agogo'
 html_static_path = ['_static']
