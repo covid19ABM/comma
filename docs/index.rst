@@ -5,7 +5,7 @@
 
 Welcome to Comma's documentation!
 ===================================================
-.. include:: ../README.md
+.. include:: ../README.rst
 
 .. toctree::
    :maxdepth: 2

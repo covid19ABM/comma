@@ -12,6 +12,10 @@ BUILDDIR      = _build
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
+# Add a new rule for converting the README.md to README.rst
+readme:
+	pandoc -s ../README.md -o ../README.rst
+
 .PHONY: help Makefile
 
 # Catch-all target: route all unknown targets to Sphinx using the new
