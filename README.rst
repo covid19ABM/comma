@@ -3,7 +3,7 @@ COMMA - **CO**\ vid **M**\ ental-health **M**\ odel with **A**\ gents
 
 .. container::
 
-``comma`` lets you run a agent-based simulations to study mental health
+``comma`` lets you run agent-based simulations to study mental health
 outcomes during covid-19 lockdowns.
 
 Project status\ |image1|
