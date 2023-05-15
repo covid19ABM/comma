@@ -4,7 +4,7 @@
 <img src="docs/img/avatar_comma.png">
 </div>
 
-`comma` lets you run a agent-based simulations to study mental health outcomes during covid-19 lockdowns.
+`comma` lets you run agent-based simulations to study mental health outcomes during covid-19 lockdowns.
 
 # Project status[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#project-status)
 
