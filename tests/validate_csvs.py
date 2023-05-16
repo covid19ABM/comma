@@ -15,7 +15,6 @@ def test_input_example_matrices():
     column_names = first_df.columns
     num_columns = len(column_names)
     num_rows = len(first_df)
-    #dtypes = first_df.dtypes
     actions = set(first_df['actions'].unique())
 
     for file in csv_files[1:]:
