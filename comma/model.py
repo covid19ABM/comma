@@ -2,10 +2,14 @@
 """
 from comma.individual import Individual
 import pandas as pd
+from . import read_json_as_dict, _get_one_hot_encoded_features, PARAMS_INDIVIDUAL, PARAMS_MODEL
+import os
 
 
 class Model:
     _status = dict()
+    _required_params = ['size', 'steps', 'actions', 'status', 
+                       'lockdown_policies', 'lockdown']
     
     def __init__(self):
         self.agents: list = None
@@ -16,25 +20,89 @@ class Model:
 
         Args:
             size (int): size of the population
-
-            dir_params (str): dir to the folder containing feature parameter files.
+            dir_params (str): dir to the folder containing hypothesis and parameter files.
         """
+        self.param_file_validation(dir_params)
         self.agents = Individual.populate(size, dir_params)
         return self.agents
     
-    def params_validation(self):
+    def param_file_validation(self, dir_params: str):
         """Validate files in the parameter folder.
         
-        Things to ve validated:
-        - If desired parameter and hypothesis files exist.
-        - for each hypothesis file, if
-            - it contains all the desired columns and rows according to features
-              and actions given in the params_model.json file.
-            - values in hypothesis files are within expected ranges
-        - if the given lockdown intervals fully cover the given steps without overlap
+        Args:
+            dir_params (str): dir to the folder containing hypothesis and parameter files.
         """
-        pass
-
+        # check if parameter files exist
+        fpath_params_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
+        fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
+        assert os.path.isfile(fpath_params_individual), \
+            "File not found: %s." % PARAMS_INDIVIDUAL
+        assert os.path.isfile(fpath_params_model), \
+            "File not found: %s" % PARAMS_MODEL
+       
+        # check if all required model parameters are given 
+        params_model = read_json_as_dict(fpath_params_model)
+        missing_model_params = set(self._required_params) - set(params_model.keys())
+        assert not missing_model_params, \
+            "Model parameter(s) not found: %s." % ", ".join(missing_model_params)
+            
+        # check if there is any overlap between lockdown intervals
+        lockdown = params_model["lockdown"]
+        lockdown_intervals = [l["interval"] for l in lockdown] 
+        lockdown_intervals = sorted(lockdown_intervals, key=lambda li: li[0])
+        overlaps = [lockdown_intervals[i][1] >= lockdown_intervals[i+1][0] \
+            for i in range(len(lockdown_intervals) - 1)]
+        assert not any(overlaps), "Lockdown intervals have overlap: \n%s" % "\n".join(
+            ["%s - %s" % (str(lockdown_intervals[i]), str(lockdown_intervals[i+1])) \
+                for i in range(len(overlaps)) if overlaps[i]] 
+        )
+        
+        # check if all the steps are fully covered by the given lockdown intervals
+        steps = params_model["steps"]
+        expected_timeline = list(range(steps))
+        given_timeline = []
+        for li in lockdown_intervals:
+            given_timeline += list(range(li[0], li[1] + 1))
+        uncovered_steps = set(expected_timeline) - set(given_timeline)
+        assert not uncovered_steps, "Uncovered steps: %s." % ", ".join(
+            [str(us) for us in uncovered_steps]
+        )
+            
+        # check if all hypothesis files exist
+        fnames = ["actions_effects_on_%s.csv" % s for s in params_model["status"]]
+        fnames += ["lockdown_%s.csv" % l for l in params_model["lockdown_policies"]]
+        fpaths = [os.path.join(dir_params, fn) for fn in fnames]
+        fexist = [os.path.isfile(fp) for fp in fpaths]
+        assert all(fexist), "File(s) not found: %s." % ", ".join(
+            [fnames[i] for i in range(len(fnames)) if not fexist[i]]
+        )
+        
+        # check if all hypothesis files contain all the required agent features
+        required_features = ["actions", "baseline"]
+        required_features += _get_one_hot_encoded_features(fpath_params_individual)
+        hypothesis_data = [pd.read_csv(fp) for fp in fpaths]
+        missing_features = [set(required_features) - set(hd.columns) for hd in hypothesis_data]
+        assert not any(missing_features), "Missing features:\n%s" % "\n".join(
+            ["%s - %s" % (fnames[i], ", ".join(missing_features[i])) \
+                for i in range(len(fnames)) if missing_features[i]]
+        )
+        
+        # check if all hypothesis files contain hypotheses of all actions
+        required_actions = params_model["actions"]
+        missing_actions = [set(required_actions) - set(hd["actions"]) for hd in hypothesis_data]
+        assert not any(missing_actions), "Missing actions:\n%s" % "\n".join(
+            ["%s - %s" % (fnames[i], ", ".join(missing_actions[i])) \
+                for i in range(len(fnames)) if missing_actions[i]]
+        )
+        
+        # check if any hypothesis file contains out-of-range values
+        required_range = [-1, 1]
+        out_of_range = [(hd.max() > required_range[1] or hd.min() < required_range[0]) \
+            for hd in hypothesis_data]
+        assert not any(out_of_range), "Values out of range: %s." % ", ".join(
+            [fnames[i] for i in range(len(fnames)) if out_of_range[i]] 
+        )
+    
     def step(self, lockdown: str):
         """Actions to be performed in each step.
 
