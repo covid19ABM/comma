@@ -21,6 +21,10 @@ def read_json_as_dict(fpath: str):
         data = json.load(file)
     return data
 
+# TODO: have a separate function of one-hot encoding
+def _one_hot_encoding():
+    pass
+
 def create_empty_hypotheses(dir_params: str):
     """Create empty CSV files for storing hypotheses on the impact of actions and lockdown policies on different agent statuses
 
