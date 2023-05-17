@@ -16,6 +16,9 @@ class Individual:
         self.id: int = id
         self.dir_params = dir_params
         
+        fpath_param_model = os.path.join(dir_params, PARAMS_MODEL)
+        self.actions = read_json_as_dict(fpath_param_model)["actions"]
+        
     def get_features(self):
         return self._features.loc[self.id]
     
@@ -24,6 +27,10 @@ class Individual:
         
     def _read_hypothesis(self, fpath: str):
         """Read a hypothesis file and return the parameter matrix.
+        
+        This funciton will also make sure that the resulting parameter
+        matrix will have exactly the same amount of actions and features
+        and have them ordered as desired.
 
         Args:
             fpath (str): hypothesis file path
@@ -32,9 +39,18 @@ class Individual:
             pd.Dataframe: hypothesis parameter matrix
         """
         assert os.path.isfile(fpath), 'File not found: %s.' % fpath
-        df = pd.read_csv(fpath, delimiter=';')
         cols = self.get_features().index
-        return df[cols]
+        df = pd.read_csv(fpath, delimiter=';')
+        
+        # sort rows
+        df['actions'] = df['actions'].astype('category')
+        df['actions'] = df['actions'].cat.set_categories(self.actions)
+        df = df.sort_values(by='actions', ignore_index=True)
+        
+        # get and sort desired columns
+        df = df[cols]
+        
+        return df
         
     def choose_actions_on_lockdown(self, lockdown: str):
         """Choose the actions to take based on current lockdown policy.
