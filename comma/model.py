@@ -36,9 +36,9 @@ class Model:
         fpath_params_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
         fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
         assert os.path.isfile(fpath_params_individual), \
-            "File not found: %s." % PARAMS_INDIVIDUAL
+            "Parameter file not found: %s." % PARAMS_INDIVIDUAL
         assert os.path.isfile(fpath_params_model), \
-            "File not found: %s" % PARAMS_MODEL
+            "Parameter file not found: %s" % PARAMS_MODEL
        
         # check if all required model parameters are given 
         params_model = read_json_as_dict(fpath_params_model)
@@ -59,7 +59,7 @@ class Model:
         
         # check if all the steps are fully covered by the given lockdown intervals
         steps = params_model["steps"]
-        expected_timeline = list(range(steps))
+        expected_timeline = list(range(1, steps+1))
         given_timeline = []
         for li in lockdown_intervals:
             given_timeline += list(range(li[0], li[1] + 1))
@@ -73,14 +73,14 @@ class Model:
         fnames += ["lockdown_%s.csv" % l for l in params_model["lockdown_policies"]]
         fpaths = [os.path.join(dir_params, fn) for fn in fnames]
         fexist = [os.path.isfile(fp) for fp in fpaths]
-        assert all(fexist), "File(s) not found: %s." % ", ".join(
+        assert all(fexist), "Hypothesis file(s) not found: %s." % ", ".join(
             [fnames[i] for i in range(len(fnames)) if not fexist[i]]
         )
         
         # check if all hypothesis files contain all the required agent features
         required_features = ["actions", "baseline"]
         required_features += _get_one_hot_encoded_features(fpath_params_individual)
-        hypothesis_data = [pd.read_csv(fp) for fp in fpaths]
+        hypothesis_data = [pd.read_csv(fp, sep=";") for fp in fpaths]
         missing_features = [set(required_features) - set(hd.columns) for hd in hypothesis_data]
         assert not any(missing_features), "Missing features:\n%s" % "\n".join(
             ["%s - %s" % (fnames[i], ", ".join(missing_features[i])) \
@@ -97,7 +97,8 @@ class Model:
         
         # check if any hypothesis file contains out-of-range values
         required_range = [-1, 1]
-        out_of_range = [(hd.max() > required_range[1] or hd.min() < required_range[0]) \
+        out_of_range = [(hd.drop(columns=["actions"]).max().max() > required_range[1] or\
+            hd.drop(columns=["actions"]).min().min() < required_range[0]) \
             for hd in hypothesis_data]
         assert not any(out_of_range), "Values out of range: %s." % ", ".join(
             [fnames[i] for i in range(len(fnames)) if out_of_range[i]] 
