@@ -21,6 +21,19 @@ class Model:
         """
         self.agents = Individual.populate(size, dir_params)
         return self.agents
+    
+    def params_validation(self):
+        """Validate files in the parameter folder.
+        
+        Things to ve validated:
+        - If desired parameter and hypothesis files exist.
+        - for each hypothesis file, if
+            - it contains all the desired columns and rows according to features
+              and actions given in the params_model.json file.
+            - values in hypothesis files are within expected ranges
+        - if the given lockdown intervals fully cover the given steps without overlap
+        """
+        pass
 
     def step(self, lockdown: str):
         """Actions to be performed in each step.
