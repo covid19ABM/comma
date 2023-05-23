@@ -94,15 +94,6 @@ class Model:
             ["%s - %s" % (fnames[i], ", ".join(missing_actions[i])) \
                 for i in range(len(fnames)) if missing_actions[i]]
         )
-        
-        # check if any hypothesis file contains out-of-range values
-        required_range = [-1, 1]
-        out_of_range = [(hd.drop(columns=["actions"]).max().max() > required_range[1] or\
-            hd.drop(columns=["actions"]).min().min() < required_range[0]) \
-            for hd in hypothesis_data]
-        assert not any(out_of_range), "Values out of range: %s." % ", ".join(
-            [fnames[i] for i in range(len(fnames)) if out_of_range[i]] 
-        )
     
     def step(self, lockdown: str):
         """Actions to be performed in each step.
