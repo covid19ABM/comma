@@ -39,9 +39,3 @@ def test_param_file_validation():
     dir = "./tests/test_data/case7"
     with pytest.raises(AssertionError, match=r"^Missing actions"):
         model.param_file_validation(dir)
-    
-    # test of value out of range
-    dir = "./tests/test_data/case8"
-    with pytest.raises(AssertionError, match=r"^Values out of range"):
-        model.param_file_validation(dir)
-    

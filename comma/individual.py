@@ -81,7 +81,7 @@ class Individual:
         results = []
         for s in status:
             fpath_params_status = os.path.join(
-                self.dir_params, 'action_effects_on_%s.csv' % s)
+                self.dir_params, 'actions_effects_on_%s.csv' % s)
             params_status = self._read_hypothesis(fpath_params_status)
             result = params_status.dot(self.get_features()).dot(actions)
             results.append(result)
