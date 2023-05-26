@@ -26,7 +26,6 @@ This project aims at understanding the full spectrum of impacts the lockdown pol
 
 ## Prerequisites
 - Python 3.6 or above 
-- [Poetry (Python packaging and dependency management tool)](https://python-poetry.org/docs/#installation)
 
 ## Install from source
 
