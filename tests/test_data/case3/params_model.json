@@ -1,0 +1,40 @@
+{
+    "size": 10,
+    "steps": 20,
+    "actions": [
+        "go_to_work",
+        "maintain_physical_distance",
+        "stay_at_home"
+    ],
+    "status": [
+        "contacts",
+        "mh"
+    ],
+    "lockdown_policies": [
+        "absent",
+        "hard"
+    ],
+    "lockdown": [
+        {
+            "type": "absent",
+            "interval": [
+                1,
+                8
+            ]
+        },
+        {
+            "type": "hard",
+            "interval": [
+                6,
+                10
+            ]
+        },
+        {
+            "type": "absent",
+            "interval": [
+                11,
+                20
+            ]
+        }
+    ]
+}
