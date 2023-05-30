@@ -8,6 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
+      - name: Setup pandoc
+        uses: pandoc/pandoc-action-example@master
+      - name: Convert README.md to README.rst
+        run: pandoc README.md -o README.rst
       - name: Install dependencies
         run: |
           pip install sphinx sphinx_rtd_theme sphinx-autoapi myst-parser
