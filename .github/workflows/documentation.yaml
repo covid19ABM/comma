@@ -1,5 +1,14 @@
 name: Docs
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    branches:
+      - main
 permissions:
     contents: write
 jobs:
@@ -20,7 +29,9 @@ jobs:
           git config --local user.name "GitHub Action"
           git add README.rst
           git commit -m "Update README.rst" -a || echo "No changes to commit"
-          git push
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            git push origin ${{ github.ref }}
+          fi
       - name: Install dependencies
         run: |
           pip install sphinx sphinx_rtd_theme sphinx-autoapi myst-parser
