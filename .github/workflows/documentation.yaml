@@ -14,6 +14,13 @@ jobs:
           sudo apt-get install -y pandoc
       - name: Convert README.md to README.rst
         run: pandoc README.md -o README.rst
+      - name: Commit and push README.rst
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.rst
+          git commit -m "Update README.rst" -a || echo "No changes to commit"
+          git push
       - name: Install dependencies
         run: |
           pip install sphinx sphinx_rtd_theme sphinx-autoapi myst-parser
