@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>comma &#8212; comma - COvid Mental-health Model with Agents 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/agogo.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../../index.html">comma - COvid Mental-health Model with Agents 0.0.1 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-comma">
+<span id="comma"></span><h1><a class="reference internal" href="#module-comma" title="comma"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma</span></code></a><a class="headerlink" href="#module-comma" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="individual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma.individual</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma.model</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this heading">¶</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#comma.read_json_as_dict" title="comma.read_json_as_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_json_as_dict</span></code></a>(fpath)</p></td>
+<td><p>Read content of a JSON file as Python dictionary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#comma._get_one_hot_encoded_features" title="comma._get_one_hot_encoded_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_get_one_hot_encoded_features</span></code></a>(fpath_params_individual)</p></td>
+<td><p>One-hot encode categorical features in the <cite>params_individual.json</cite> file</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#comma.create_empty_hypotheses" title="comma.create_empty_hypotheses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_empty_hypotheses</span></code></a>(dir_params)</p></td>
+<td><p>Create empty CSV files for storing hypotheses on the impact of actions and lockdown policies on different agent statuses</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#comma.PARAMS_INDIVIDUAL" title="comma.PARAMS_INDIVIDUAL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PARAMS_INDIVIDUAL</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#comma.PARAMS_MODEL" title="comma.PARAMS_MODEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PARAMS_MODEL</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="comma.PARAMS_INDIVIDUAL">
+<span class="sig-prename descclassname"><span class="pre">comma.</span></span><span class="sig-name descname"><span class="pre">PARAMS_INDIVIDUAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'params_individual.json'</span></em><a class="headerlink" href="#comma.PARAMS_INDIVIDUAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="comma.PARAMS_MODEL">
+<span class="sig-prename descclassname"><span class="pre">comma.</span></span><span class="sig-name descname"><span class="pre">PARAMS_MODEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'params_model.json'</span></em><a class="headerlink" href="#comma.PARAMS_MODEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="comma.read_json_as_dict">
+<span class="sig-prename descclassname"><span class="pre">comma.</span></span><span class="sig-name descname"><span class="pre">read_json_as_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#comma.read_json_as_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read content of a JSON file as Python dictionary.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fpath (str): file path.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: result dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="comma._get_one_hot_encoded_features">
+<span class="sig-prename descclassname"><span class="pre">comma.</span></span><span class="sig-name descname"><span class="pre">_get_one_hot_encoded_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpath_params_individual</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#comma._get_one_hot_encoded_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>One-hot encode categorical features in the <cite>params_individual.json</cite> file
+and return the feature list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>data (dict): input data dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="comma.create_empty_hypotheses">
+<span class="sig-prename descclassname"><span class="pre">comma.</span></span><span class="sig-name descname"><span class="pre">create_empty_hypotheses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#comma.create_empty_hypotheses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create empty CSV files for storing hypotheses on the impact of actions and lockdown policies on different agent statuses</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dir_params (str): The directory of the folder that contains the agent and model parameter files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../probability_matrices.html">Lockdown probability matrices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides &amp; Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">API Reference</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="../../py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="../../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../../_sources/autoapi/comma/index.rst.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Eva Viviani &lt;e.viviani@esciencecenter.nl&gt;, Ji Qi &lt;j.qi@esciencecenter.nl&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

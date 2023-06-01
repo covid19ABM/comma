@@ -1,0 +1,89 @@
+:py:mod:`comma.model`
+=====================
+
+.. py:module:: comma.model
+
+.. autoapi-nested-parse::
+
+   Model class definition
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   comma.model.Model
+
+
+
+
+.. py:class:: Model
+
+   .. py:attribute:: _status
+
+      
+
+   .. py:attribute:: _required_params
+      :value: ['size', 'steps', 'actions', 'status', 'lockdown_policies', 'lockdown']
+
+      
+
+   .. py:method:: setup(size: int, dir_params: str)
+
+      Setup the model with input parameters.
+
+      Args:
+          size (int): size of the population
+          dir_params (str): dir to the folder containing hypothesis and parameter files.
+
+
+   .. py:method:: param_file_validation(dir_params: str)
+
+      Validate files in the parameter folder.
+
+      Args:
+          dir_params (str): dir to the folder containing hypothesis and parameter files.
+
+
+   .. py:method:: step(lockdown: str)
+
+      Actions to be performed in each step.
+
+      Args:
+          lockdown (str): lockdown type
+
+
+   .. py:method:: update(lockdown: str)
+
+      Data to be recorded in each step.
+
+      Args:
+          lockdown (str): lockdown type
+
+
+   .. py:method:: report(out_path: str)
+
+      Collect data recorded at the end of the simulation and export as csv file.
+
+      Args:
+          out_path (str): File path of the output file
+
+
+   .. py:method:: run(steps: int, lockdown: list, out_path: str)
+
+      Run a simulation
+
+      Args:
+          steps (int): Number of steps to run the simulation
+
+          lockdown (str): Type of lockdown (easy, hard, medium, no_lockdown)
+
+          out_path (str): File path of the output file
+
+
+

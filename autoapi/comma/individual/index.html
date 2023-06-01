@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>comma.individual &#8212; comma - COvid Mental-health Model with Agents 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/agogo.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../../../index.html">comma - COvid Mental-health Model with Agents 0.0.1 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-comma.individual">
+<span id="comma-individual"></span><h1><a class="reference internal" href="#module-comma.individual" title="comma.individual"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma.individual</span></code></a><a class="headerlink" href="#module-comma.individual" title="Permalink to this heading">¶</a></h1>
+<p>Individual agent class definition</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#comma.individual.Individual" title="comma.individual.Individual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Individual</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="comma.individual.Individual">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">comma.individual.</span></span><span class="sig-name descname"><span class="pre">Individual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#comma.individual.Individual" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="comma.individual.Individual._features">
+<span class="sig-name descname"><span class="pre">_features</span></span><a class="headerlink" href="#comma.individual.Individual._features" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="comma.individual.Individual._status">
+<span class="sig-name descname"><span class="pre">_status</span></span><a class="headerlink" href="#comma.individual.Individual._status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.individual.Individual.get_features">
+<span class="sig-name descname"><span class="pre">get_features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comma.individual.Individual.get_features" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.individual.Individual.get_status">
+<span class="sig-name descname"><span class="pre">get_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#comma.individual.Individual.get_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.individual.Individual._read_hypothesis">
+<span class="sig-name descname"><span class="pre">_read_hypothesis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#comma.individual.Individual._read_hypothesis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a hypothesis file and return the parameter matrix.</p>
+<p>This funciton will also make sure that the resulting parameter
+matrix will have exactly the same amount of actions and features
+and have them ordered as desired.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fpath (str): hypothesis file path</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.Dataframe: hypothesis parameter matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.individual.Individual.choose_actions_on_lockdown">
+<span class="sig-name descname"><span class="pre">choose_actions_on_lockdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lockdown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#comma.individual.Individual.choose_actions_on_lockdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose the actions to take based on current lockdown policy.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>lockdown (str): one of the given lockdowns</p>
+</dd>
+<dt>Returns:</dt><dd><p>actions (pd.Series): list of booleans of taking/not-taking actions
+actions_probs (pd.Series): probability of taking that action</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.individual.Individual.take_actions">
+<span class="sig-name descname"><span class="pre">take_actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#comma.individual.Individual.take_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update status by taking the given actions.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>actions (pd.Series): list of booleans of taking/not-taking actions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.individual.Individual.populate">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">populate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#comma.individual.Individual.populate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a population of individual agents with the given feature parameters.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>size (int): population size, i.e., number of agents.
+dir_params (str): dir to the folder containing feature parameter file.
+#from_scratch (bool, optional): flag of creating hypothesis from scratch or reading from files. Defaults to False.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list[Individual]: a list of Individual agents</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../probability_matrices.html">Lockdown probability matrices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides &amp; Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../../../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </div>
+
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="../../../py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="../../../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="../../../_sources/autoapi/comma/individual/index.rst.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Eva Viviani &lt;e.viviani@esciencecenter.nl&gt;, Ji Qi &lt;j.qi@esciencecenter.nl&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>
