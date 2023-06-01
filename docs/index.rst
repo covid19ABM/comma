@@ -13,8 +13,11 @@ Welcome to Comma's documentation!
 
    probability_matrices
 
-.. nbgallery::
-   notebooks/example_on_how_to_use_lockdown_matrices
+.. toctree::
+   :maxdepth: 2
+   :caption: How-to guides & Examples:
+
+   examples
 
 Indices and tables
 ==================

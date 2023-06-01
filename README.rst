@@ -6,12 +6,12 @@ COMMA - **CO**\ vid **M**\ ental-health **M**\ odel with **A**\ gents
 ``comma`` lets you run agent-based simulations to study mental health
 outcomes during covid-19 lockdowns.
 
-Project status\ |image0|
+Project status\ |image1|
 ========================
 
 |Python package| |pages-build-deployment| |Docs|
 
-Why?\ |image4|
+Why?\ |image2|
 ==============
 
 This project aims at understanding the full spectrum of impacts the
@@ -23,7 +23,7 @@ simulate real-world scenarios, and estimate/compare the effects of
 lockdown policies on the mental health of an a-priori defined population
 across time.
 
-Table of contents\ |image5|
+Table of contents\ |image3|
 ===========================
 
 -  `Motivation <#why>`__
@@ -32,7 +32,7 @@ Table of contents\ |image5|
 -  `License <#license>`__
 -  `Credits <#credits>`__
 
-Installation\ |image6|
+Installation\ |image4|
 ======================
 
 Prerequisites
@@ -67,7 +67,7 @@ installed in a dedicated virtual environment and be ready to use it.
 
    [ ↑ Back to top ↑ ]
 
-Example\ |image7|
+Example\ |image5|
 =================
 
 You can find a tutorial that demonstrates the usage of ``comma`` in the
@@ -77,7 +77,7 @@ You can find a tutorial that demonstrates the usage of ``comma`` in the
 
    [ ↑ Back to top ↑ ]
 
-License\ |image8|
+License\ |image6|
 =================
 
 ``comma`` is under free open source `Apache License Version
@@ -85,7 +85,7 @@ License\ |image8|
 This means that you’re free to use, modify, and distribute this
 software, even for commercial applications.
 
-Credits\ |image9|
+Credits\ |image7|
 =================
 
 This is a project funded by the Netherlands eScience Center (Grant ID:
@@ -94,7 +94,7 @@ University) and developed in collaboration with the Netherlands eScience
 Center. More information on the `Research Software
 Directory <https://research-software-directory.org/projects/covid-19-mitigation-policies>`__.
 
-.. |image0| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image1| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
    :target: #project-status
 .. |Python package| image:: https://github.com/covid19ABM/comma/actions/workflows/python-package.yml/badge.svg
    :target: https://github.com/covid19ABM/comma/actions/workflows/python-package.yml
@@ -102,15 +102,15 @@ Directory <https://research-software-directory.org/projects/covid-19-mitigation-
    :target: https://github.com/covid19ABM/comma/actions/workflows/pages/pages-build-deployment
 .. |Docs| image:: https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml/badge.svg
    :target: https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml
-.. |image4| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image2| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
    :target: #why
-.. |image5| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image3| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
    :target: #table-of-contents
-.. |image6| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image4| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
    :target: #installation
-.. |image7| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image5| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
    :target: #example
-.. |image8| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image6| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
    :target: #license
-.. |image9| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image7| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
    :target: #credits
