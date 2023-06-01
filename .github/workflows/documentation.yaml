@@ -1,14 +1,5 @@
 name: Docs 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
-    branches:
-      - main
+on: [push, pull_request, workflow_dispatch]
 permissions:
     contents: write
 jobs:
@@ -17,21 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
-      - name: Install pandoc
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc
-      - name: Convert README.md to README.rst
-        run: pandoc README.md -o README.rst
-      - name: Commit and push README.rst
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add README.rst
-          git commit -m "Update README.rst" -a || echo "No changes to commit"
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            git push origin ${{ github.ref }}
-          fi
       - name: Install dependencies
         run: |
           pip install sphinx sphinx_rtd_theme sphinx-autoapi myst-parser nbsphinx sphinx-gallery
