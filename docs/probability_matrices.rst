@@ -51,9 +51,4 @@ certainty never exists), one can introduce a threshold and say:
 :math:`p_{A}=0` if :math:`x<th`, or :math:`p_{a}=1` if :math:`x>th`, on
 top of the sigmoid shape.
 
-.. toctree::
-   :maxdepth: 1
-
-   ../notebooks/example_on_how_to_use_lockdown_matrices
-
 .. |image1| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/sigmoid_dist.png
