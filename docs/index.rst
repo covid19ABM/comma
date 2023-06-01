@@ -11,6 +11,8 @@ Welcome to Comma's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   probability_matrices
+
 
 Indices and tables
 ==================
