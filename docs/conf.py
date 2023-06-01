@@ -17,13 +17,14 @@ release = '0.0.1'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['autoapi.extension', 'myst_parser']
+extensions = ['autoapi.extension', 'myst_parser', 'nbsphinx']
 source_suffix = ['.rst', '.md']
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 autoapi_dirs = ['../comma/']
+nbsphinx_execute = 'never'
 
 
 # -- Options for HTML output -------------------------------------------------
