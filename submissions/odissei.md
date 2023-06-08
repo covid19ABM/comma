@@ -1,4 +1,6 @@
-# COMMA: A microsimulation model of investigating impact of covid-19 lockdown policies on depression rates (Word count: 249)
+# COMMA: A microsimulation model to investigate the impact of covid-19 lockdown policies on depression rates 
+
+(Word count: 249)
 
 During the COVID-19 pandemic, lockdowns decreased COVID-19-related mortality and hospitalizations, but also took a large toll on populations\'92 mental health, particularly on depression. We hypothesized that depression rates during the pandemic could be associated with the duration, sequence, and severity of lockdown policies, as evidenced by the growing literature on the effects of lockdown on mental health issues.\
 
