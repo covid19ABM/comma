@@ -11,6 +11,13 @@ Welcome to Comma's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   probability_matrices
+
+.. toctree::
+   :maxdepth: 2
+   :caption: How-to guides & Examples:
+
+   examples
 
 Indices and tables
 ==================
