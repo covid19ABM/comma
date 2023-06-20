@@ -3,6 +3,15 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# general
+
+simulation_results.csv
+notebooks/BNnetwork.ipynb 
+notebooks/drafted.ipynb
+notebooks/tutorial_copy.ipynb
+parameters_literature
+
+
 # C extensions
 *.so
 
