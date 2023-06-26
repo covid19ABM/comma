@@ -10,6 +10,12 @@ notebooks/BNnetwork.ipynb
 notebooks/drafted.ipynb
 notebooks/tutorial_copy.ipynb
 parameters_literature
+PhenoData
+outcome_models_ep1
+outcome_models_ep2
+notebooks/merge_file_to_excel.ipynb
+dag_png
+parameters/merged_file_original.xlsx
 
 
 # C extensions
