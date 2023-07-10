@@ -5,6 +5,7 @@ import pandas as pd
 
 PARAMS_INDIVIDUAL = 'params_individual.json'
 PARAMS_MODEL = 'params_model.json'
+PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
 
 
 def read_json_as_dict(fpath: str):

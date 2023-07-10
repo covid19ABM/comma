@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import os
 from . import read_json_as_dict
-from . import PARAMS_INDIVIDUAL, PARAMS_MODEL
+from . import PARAMS_INDIVIDUAL, PARAMS_MODEL, PARAMS_IPF_WEIGHTS
 
 
 class Individual:
@@ -87,6 +87,26 @@ class Individual:
             results.append(result)
         self._status.loc[self.id] = results
        
+    @staticmethod    
+    def data_sampling_ipf(size: int, dir_params: str):
+        """Sample data items from ipf weights.
+
+        Args:
+            size (int): size of data sample.
+            dir_params (str): path to paramters folder.
+        """
+        fpath_weights = os.path.join(dir_params, PARAMS_IPF_WEIGHTS) 
+        assert os.path.isfile(fpath_weights)
+        
+        df_weights = pd.read_csv(fpath_weights, sep=",", index_col=0)
+        weights = df_weights["weight"] / df_weights["weight"].sum()
+        indices = df_weights.index 
+        sample_indices = np.random.choice(indices, size, p=weights) 
+        sample = df_weights.loc[sample_indices].drop(["weight"], axis=1)
+        sample = sample.reset_index(drop=True)
+        
+        return sample
+        
     @staticmethod
     def populate(size: int, dir_params: str): 
         """Create a population of individual agents with the given feature parameters.
