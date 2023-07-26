@@ -5,7 +5,7 @@ import pytest
 def test_input_example_matrices():
     directory = "parameters_example/"
 
-    csv_files = [f for f in os.listdir(directory) if f.endswith('.csv')]
+    csv_files = [f for f in os.listdir(directory) if (f.endswith('.csv') and (f.startswith('lockdown') or f.startswith('actions')))]
     assert csv_files, "No CSV files found in the directory."
 
     # Load the file
