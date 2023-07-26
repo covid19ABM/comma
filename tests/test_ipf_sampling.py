@@ -62,7 +62,7 @@ def test_data_sampling_ipf(time):
     """
     
     size = 2655 # This is the original sample size provided by Kristina
-    dir_params = "./parameters_example"
+    dir_params = "./parameters"
     sample_set = Individual.data_sampling_ipf(size, dir_params)
     cols = sample_set.columns.tolist()
     
@@ -116,6 +116,6 @@ def test_data_sampling_ipf(time):
         # store the results
         result = pd.DataFrame({'var': [var], 'key': [key], 'pvalue': [p_value]})
         results_df = pd.concat([results_df, result], ignore_index=True)
-        
+        print(results_df['pvalue'] > 0.05)
     # return anything that is significant
-    assert any(results_df['pvalue'] > 0.05)
+    assert all(results_df['pvalue'] > 0.05)
