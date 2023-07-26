@@ -116,6 +116,6 @@ def test_data_sampling_ipf(time):
         # store the results
         result = pd.DataFrame({'var': [var], 'key': [key], 'pvalue': [p_value]})
         results_df = pd.concat([results_df, result], ignore_index=True)
-        print(results_df['pvalue'] > 0.05)
+        
     # return anything that is significant
     assert all(results_df['pvalue'] > 0.05)
