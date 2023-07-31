@@ -14,7 +14,7 @@ repository = "https://github.com/covid19ABM/comma"
 
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = ">=3.9, <3.13"
 pandas = "^2.0.1"
 numpy = "^1.24.3"
 jupyter = "^1.0.0"
