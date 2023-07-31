@@ -6,7 +6,7 @@ import numpy as np
 import os
 from . import read_json_as_dict
 from . import PARAMS_INDIVIDUAL, PARAMS_MODEL, PARAMS_IPF_WEIGHTS
-
+from tqdm import tqdm
 
 class Individual:
     _features = pd.DataFrame()
@@ -142,4 +142,4 @@ class Individual:
         Individual._features.drop(categorical_cols.columns, axis=1, inplace=True)
         Individual._features = pd.concat([Individual._features, encoded_cols], axis=1)
         
-        return [Individual(i, dir_params) for i in range(size)]
+        return [Individual(i, dir_params) for i in tqdm(range(size), desc="Populating individuals", unit="i")]
