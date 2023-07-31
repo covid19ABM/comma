@@ -3,6 +3,10 @@ import pandas as pd
 from pathlib import Path
 import pytest
 
+# This test ensures that the column names across the lockdown and
+# action files are the same, and in the same order.
+# This is important for the subsequent matrix multiplications done in the model.
+
 def test_input_example_matrices():
     directory = Path("parameters_example/")
 
