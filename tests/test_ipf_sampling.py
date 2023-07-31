@@ -83,7 +83,6 @@ def test_data_sampling_ipf(time):
     'original_critical_job': cross42
     }
     
-
     # df that stores the results
     results_df = pd.DataFrame(columns=['var', 'key', 'pvalue'])
     
