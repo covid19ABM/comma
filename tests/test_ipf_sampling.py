@@ -5,37 +5,37 @@ import numpy as np
 from scipy.stats import chi2_contingency
 
 
-gender = ['Male', 'Female']
-age_cat = ["24-34", "35-44", "45-54", "55-64"]
-education_level = ["Low", "Middle", "High"]
-unemployed = ["Yes", "No"]
-partner = ["Yes", "No"]
-depressed = ["Yes", "No"]
-children_presence = ["Yes", "No"]
-housing_financial_trouble = ["Yes", "No"]
-selfrated_health = ["Good/veryGood", "Average", "Poor/veryPoor"]
-critical_job = ["Yes", "No"]
+gender_names = ['Male', 'Female']
+age_cat_names = ["24-34", "35-44", "45-54", "55-64"]
+education_level_names = ["Low", "Middle", "High"]
+unemployed_names = ["Yes", "No"]
+partner_names = ["Yes", "No"]
+depressed_names = ["Yes", "No"]
+children_presence_names = ["Yes", "No"]
+housing_financial_trouble_names = ["Yes", "No"]
+selfrated_health_names = ["Good/veryGood", "Average", "Poor/veryPoor"]
+critical_job_names = ["Yes", "No"]
 
 # define the cross table gender x education_level
-cross0 = pd.DataFrame([[86, 238, 725], [106, 396, 1104]], index=gender, columns=education_level)
+gender = pd.DataFrame([[86, 238, 725], [106, 396, 1104]], index=gender_names, columns=education_level_names)
 # define the cross table age_cat x education_level
-cross9 = pd.DataFrame([[6, 97, 539], [34, 161, 486], [109, 296, 596], [43, 80, 208]], index=age_cat, columns=education_level)
+age_cat = pd.DataFrame([[6, 97, 539], [34, 161, 486], [109, 296, 596], [43, 80, 208]], index=age_cat_names, columns=education_level_names)
 # define the cross table education_level x unemployed
-cross17 = pd.DataFrame([[10, 182], [31, 603], [65, 1764]], index=education_level, columns=unemployed)
+education_level = pd.DataFrame([[10, 182], [31, 603], [65, 1764]], index=education_level_names, columns=unemployed_names)
 # Define the dataframe for Partner x Depressed
-cross24 = pd.DataFrame([[45, 2069], [21, 520]], index=partner, columns=depressed)
+partner = pd.DataFrame([[45, 2069], [21, 520]], index=partner_names, columns=depressed_names)
 # Define the dataframe for Depressed x Children
-cross29 = pd.DataFrame([[27, 39], [1310, 1279]], index=depressed, columns=children_presence)
+depressed = pd.DataFrame([[27, 39], [1310, 1279]], index=depressed_names, columns=children_presence_names)
 # Define the dataframe for Children x Housing/Financial troubles
-cross33 = pd.DataFrame([[292, 1045], [476, 842]], index=children_presence, columns=housing_financial_trouble)
+children = pd.DataFrame([[292, 1045], [476, 842]], index=children_presence_names, columns=housing_financial_trouble_names)
 # Define the dataframe for Unemployed x Partner
-cross36 = pd.DataFrame([[70, 36], [2044, 505]], index=unemployed, columns=partner)
+unemployed = pd.DataFrame([[70, 36], [2044, 505]], index=unemployed_names, columns=partner_names)
 # Define the dataframe for Housing/Financial trouble x Self-rated health
-cross41 = pd.DataFrame([[874, 928, 85], [269, 436, 63]], index=housing_financial_trouble, columns=selfrated_health)
+housing_financial_trouble = pd.DataFrame([[874, 928, 85], [269, 436, 63]], index=housing_financial_trouble_names, columns=selfrated_health_names)
 # Define the dataframe for Housing/Financial trouble x Critical job
-cross42 = pd.DataFrame([[304, 464], [808, 1079]], index=housing_financial_trouble, columns=critical_job)
+critical_job = pd.DataFrame([[304, 464], [808, 1079]], index=housing_financial_trouble_names, columns=critical_job_names)
 # Define the dataframe for Self-rated health x Critical job
-cross43 = pd.DataFrame([[471, 672], [571, 793], [70, 78]], index=selfrated_health, columns=critical_job)
+selfrated_health = pd.DataFrame([[471, 672], [571, 793], [70, 78]], index=selfrated_health_names, columns=critical_job_names)
 
 
 def chisq_of_df_cols(df, c1, c2):
@@ -71,18 +71,18 @@ def test_data_sampling_ipf(time):
     # It's sufficient to test whether the distribution of those 9 variables changes significantly than the original sample, rather than all 43 combinations.
     
     crosstabs_dict = {
-    'original_gender': cross0,
-    'original_age_cat': cross9,
-    'original_education_level': cross17,
-    'original_partner': cross24,
-    'original_depressed': cross29,
-    'original_children': cross33,
-    'original_unemployed': cross36,
-    'original_housing_financial_trouble': cross41,
-    'original_selfrated_health': cross43,
-    'original_critical_job': cross42
+    'original_gender': gender,
+    'original_age_cat': age_cat,
+    'original_education_level': education_level,
+    'original_partner': partner,
+    'original_depressed': depressed,
+    'original_children': children,
+    'original_unemployed': unemployed,
+    'original_housing_financial_trouble': housing_financial_trouble,
+    'original_selfrated_health': selfrated_health,
+    'original_critical_job': critical_job
     }
-    
+
     # df that stores the results
     results_df = pd.DataFrame(columns=['var', 'key', 'pvalue'])
     
