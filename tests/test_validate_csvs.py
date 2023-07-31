@@ -12,8 +12,8 @@ def test_input_example_matrices():
 
     csv_files = [f for f in os.listdir(directory) if (f.endswith('.csv') and (f.startswith('lockdown') or f.startswith('actions')))]
 
-    assert list(directory.glob("lockdown*.csv")) + list(
-        directory.glob("actions*.csv")), f"No CSV files found in the directory '{str(directory.absolute())}'."
+    if not list(directory.glob("lockdown*.csv")) + list(directory.glob("actions*.csv")):
+        raise ValueError(f"No CSV files found in the directory '{str(directory.absolute())}'.")
     # Load the file
     first_df = pd.read_csv(os.path.join(directory, csv_files[0]), sep=";")
 
