@@ -40,13 +40,19 @@ class Individual:
         """
         assert os.path.isfile(fpath), 'File not found: %s.' % fpath
         cols = self.get_features().index
-        df = pd.read_csv(fpath, delimiter=';')
+        df = pd.read_csv(fpath, delimiter=';', decimal=",")
         
         # sort rows
         df['actions'] = df['actions'].astype('category')
         df['actions'] = df['actions'].cat.set_categories(self.actions)
         df = df.sort_values(by='actions', ignore_index=True)
-        
+
+        # Convert dataframe column names to lowercase
+        df.columns = df.columns.str.lower()
+
+        # Convert cols to lowercase
+        cols = [col.lower() for col in cols]
+
         # get and sort desired columns
         df = df[cols]
         
@@ -66,8 +72,11 @@ class Individual:
             self.dir_params, 'lockdown_%s.csv' % lockdown)
         params_lockdown = self._read_hypothesis(fpath_params_lockdown)
         n_actions, _ = params_lockdown.shape
-        action_probs = params_lockdown.dot(self.get_features())
-        action_probs = action_probs.apply(lambda x: 1 / (1 + np.exp(-x)))
+        # added `.values.reshape(-1, 1)` to allow python to correctly interpret
+        # get_features() as row vector, rather than a column vector
+        action_probs = params_lockdown.dot(self.get_features().values.reshape(-1, 1))
+        # apply the sigmoid function
+        action_probs = np.asarray(action_probs.apply(lambda x: 1 / (1 + np.exp(-x))))
         actions = np.random.rand(n_actions) <= action_probs
         return actions, action_probs
     
