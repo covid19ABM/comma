@@ -4,6 +4,9 @@ import pandas as pd
 import numpy as np
 from scipy.stats import chi2_contingency
 
+# This test is linked to issue #53 https://github.com/covid19ABM/comma/issues/53
+# The test's aim is to check that the distribution generated is
+# matching the marginals of the LA's orginal distribution (provided as cross tabs).
 
 gender_names = ['Male', 'Female']
 age_cat_names = ["24-34", "35-44", "45-54", "55-64"]
