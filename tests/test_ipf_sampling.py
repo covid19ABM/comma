@@ -83,12 +83,11 @@ def test_data_sampling_ipf(time):
     'original_critical_job': cross42
     }
     
-    _keys = crosstabs_dict.keys()
-    
+
     # df that stores the results
     results_df = pd.DataFrame(columns=['var', 'key', 'pvalue'])
     
-    for var, key in zip(cols, _keys):
+    for var, key in zip(cols, crosstabs_dict):
         # group by variable and count the instances
         cross_ipf = sample_set.groupby(var).count().iloc[:, 0]
         # create a DataFrame with index as the variable type and count as the number of instances
