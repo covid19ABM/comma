@@ -1,13 +1,15 @@
 import os
 import pandas as pd
+from pathlib import Path
 import pytest
 
 def test_input_example_matrices():
-    directory = "parameters_example/"
+    directory = Path("parameters_example/")
 
     csv_files = [f for f in os.listdir(directory) if (f.endswith('.csv') and (f.startswith('lockdown') or f.startswith('actions')))]
-    assert csv_files, "No CSV files found in the directory."
 
+    assert list(directory.glob("lockdown*.csv")) + list(
+        directory.glob("actions*.csv")), f"No CSV files found in the directory '{str(directory.absolute())}'."
     # Load the file
     first_df = pd.read_csv(os.path.join(directory, csv_files[0]), sep=";")
 
