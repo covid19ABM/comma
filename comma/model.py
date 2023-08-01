@@ -137,7 +137,7 @@ class Model:
         status_df = pd.DataFrame(status_data, columns=['step_id', 'agent_id', 'lockdown', 'mh'])
 
         # Export to a csv
-        status_df.to_csv(out_path, index=False)
+        status_df.to_csv(out_path, index=False, sep=";", decimal=",")
 
     def run(self, steps: int, lockdown: list, out_path: str):
         """Run a simulation
