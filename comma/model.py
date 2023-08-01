@@ -4,6 +4,7 @@ from comma.individual import Individual
 import pandas as pd
 from . import read_json_as_dict, _get_one_hot_encoded_features, PARAMS_INDIVIDUAL, PARAMS_MODEL
 import os
+from tqdm import tqdm
 
 
 class Model:
@@ -129,11 +130,11 @@ class Model:
 
         for step_id, (lockdown, agent_statuses) in self._status.items():
             for agent_status in agent_statuses:
-                agent_id, mh, n_contacts = agent_status
-                status_data.append([step_id, agent_id, lockdown, mh, n_contacts])
+                agent_id, mh = agent_status
+                status_data.append([step_id, agent_id, lockdown, mh])
 
         # create a pandas dataframe to store data from `status_data`
-        status_df = pd.DataFrame(status_data, columns=['step_id', 'agent_id', 'lockdown', 'mh', 'n_contacts'])
+        status_df = pd.DataFrame(status_data, columns=['step_id', 'agent_id', 'lockdown', 'mh'])
 
         # Export to a csv
         status_df.to_csv(out_path, index=False)
@@ -151,7 +152,7 @@ class Model:
         if len(lockdown) != steps:
             raise ValueError("The length of the lockdown list must be equal to the number of steps")
 
-        for step, current_lockdown in enumerate(lockdown):
+        for step, current_lockdown in tqdm(enumerate(lockdown), total=steps, desc="Running simulation"):
             self.id = step
             self.step(current_lockdown)
             self.update(current_lockdown)
