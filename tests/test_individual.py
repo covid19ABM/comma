@@ -1,6 +1,6 @@
 from comma.individual import Individual
 import numpy as np
-
+from pathlib import Path
 
 def test_choose_actions_on_lockdown():
     """
@@ -14,7 +14,8 @@ def test_choose_actions_on_lockdown():
     - `actions` array length should be 10 (assuming there are 10 possible actions).
 
     """
-    dir_params = "../parameters/"  # specify the path to your parameters
+
+    dir_params = Path("parameters/")  # specify the path to your parameters
     lockdown = 'easy'  # specify the type of lockdown
 
     # Create an individual with id 0
