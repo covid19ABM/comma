@@ -72,9 +72,7 @@ class Individual:
             self.dir_params, 'lockdown_%s.csv' % lockdown)
         params_lockdown = self._read_hypothesis(fpath_params_lockdown)
         n_actions, _ = params_lockdown.shape
-        # added `.values.reshape(-1, 1)` to allow python to correctly interpret
-        # get_features() as row vector, rather than a column vector
-        action_probs = params_lockdown.dot(self.get_features().values.reshape(-1, 1))
+        action_probs = params_lockdown.dot(self.get_features())
         # apply the sigmoid function
         action_probs = np.asarray(action_probs.apply(lambda x: 1 / (1 + np.exp(-x))))
         actions = np.random.rand(n_actions) <= action_probs
