@@ -93,27 +93,59 @@ class Individual:
             result = params_status.dot(self.get_features()).dot(actions)
             results.append(result)
         self._status.loc[self.id] = results
-       
-    @staticmethod    
-    def data_sampling_ipf(size: int, dir_params: str):
-        """Sample data items from ipf weights.
+
+    @staticmethod
+    def populate_ipf(size: int, dir_params: str):
+        """
+        Create a population of individual agents with the given weights obtained via IPF
 
         Args:
             size (int): size of data sample.
             dir_params (str): path to paramters folder.
         """
-        fpath_weights = os.path.join(dir_params, PARAMS_IPF_WEIGHTS) 
+        fpath_weights = os.path.join(dir_params, PARAMS_IPF_WEIGHTS)
         assert os.path.isfile(fpath_weights)
-        
+
         df_weights = pd.read_csv(fpath_weights, sep=",", index_col=0)
         weights = df_weights["weight"] / df_weights["weight"].sum()
-        indices = df_weights.index 
-        sample_indices = np.random.choice(indices, size, p=weights) 
+        indices = df_weights.index
+        sample_indices = np.random.choice(indices, size, p=weights)
         sample = df_weights.loc[sample_indices].drop(["weight"], axis=1)
         sample = sample.reset_index(drop=True)
-        
-        return sample
-        
+
+        all_possible_cols = [
+            'age_group__1',
+            'age_group__2',
+            'age_group__3',
+            'age_group__4',
+            'gender_f',
+            'gender_m',
+            'education_high',
+            'education_low',
+            'education_medium',
+            'unemployed_no',
+            'unemployed_yes',
+            'have_partner_no',
+            'have_partner_yes',
+            'depressed_no',
+            'depressed_yes',
+            'children_presence_no',
+            'children_presence_yes',
+            'housing_financial_difficulties_no',
+            'housing_financial_difficulties_yes',
+            'selfrated_health_average',
+            'selfrated_health_good',
+            'selfrated_health_poor',
+            'critical_job_no',
+            'critical_job_yes'
+        ]
+
+        # hot-one encoding
+        encoded_columns = pd.get_dummies(sample).reindex(columns=all_possible_cols, fill_value=0)
+        encoded_columns.insert(0, "baseline", 1)
+
+        return encoded_columns
+
     @staticmethod
     def populate(size: int, dir_params: str): 
         """Create a population of individual agents with the given feature parameters.
