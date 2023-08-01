@@ -15,8 +15,8 @@
     ],
     "gender": [
         [
-            "M",
-            "F"
+            "m",
+            "f"
         ],
         [
             0.5,
@@ -25,9 +25,9 @@
     ],
     "education": [
         [
-            "Low",
-            "Medium",
-            "High"
+            "low",
+            "medium",
+            "high"
         ],
         [
             0.11,
@@ -37,8 +37,8 @@
     ],
     "unemployed": [
         [
-            "No",
-            "Yes"
+            "no",
+            "yes"
         ],
         [
             0.76,
@@ -47,8 +47,8 @@
     ],
     "have_partner": [
         [
-            "No",
-            "Yes"
+            "no",
+            "yes"
         ],
         [
             0.6,
@@ -57,8 +57,8 @@
     ],
     "depressed": [
         [
-            "No",
-            "Yes"
+            "no",
+            "yes"
         ],
         [
             0.8,
@@ -67,8 +67,8 @@
     ],
     "children_presence": [
         [
-            "No",
-            "Yes"
+            "no",
+            "yes"
         ],
         [
             0.42,
@@ -77,8 +77,8 @@
     ],
     "housing_finanicial_difficulties": [
         [
-            "No",
-            "Yes"
+            "no",
+            "yes"
         ],
         [
             0.79,
@@ -87,9 +87,9 @@
     ],
     "selfrated_health": [
         [
-            "Poor",
-            "Average",
-            "Good"
+            "poor",
+            "average",
+            "good"
         ],
         [
             0.65,
@@ -99,8 +99,8 @@
     ],
     "critical_job": [
         [
-            "No",
-            "Yes"
+            "no",
+            "yes"
         ],
         [
             0.2,
