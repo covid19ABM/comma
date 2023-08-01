@@ -73,8 +73,54 @@ def test_populate():
         'critical_job_yes'
     ]
 
-    assert list(Individual._features.columns) == expected_cols, 'Columns in Individual._features are incorrect'
+    assert list(Individual._features.columns) == expected_cols, 'Columns in Individual._features returned by populate() are incorrect'
 
     for individual in individuals:
         assert np.all((individual.get_features() == 0) | (individual.get_features() == 1)), \
                'Values in Individual._features should be either 0 or 1'
+
+
+def test_populate_ipf():
+    """
+    Unit test for the `populate_ipf` method of the `Individual` class.
+
+    The test checks whether the DataFrame returned by `populate_ipf` has the correct columns.
+    Additionally, it ensures that the values in these columns are either 0 or 1.
+
+    """
+    dir_params = Path("parameters/")  # specify the path to your parameters
+
+    # Call populate_ipf for testing
+    df = Individual.populate_ipf(1, dir_params)
+
+    expected_cols = [
+        'baseline',
+        'age_group__1',
+        'age_group__2',
+        'age_group__3',
+        'age_group__4',
+        'gender_f',
+        'gender_m',
+        'education_high',
+        'education_low',
+        'education_medium',
+        'unemployed_no',
+        'unemployed_yes',
+        'have_partner_no',
+        'have_partner_yes',
+        'depressed_no',
+        'depressed_yes',
+        'children_presence_no',
+        'children_presence_yes',
+        'housing_financial_difficulties_no',
+        'housing_financial_difficulties_yes',
+        'selfrated_health_average',
+        'selfrated_health_good',
+        'selfrated_health_poor',
+        'critical_job_no',
+        'critical_job_yes'
+    ]
+
+    assert list(df.columns) == expected_cols, 'Columns in the DataFrame returned by populate_ipf() are incorrect'
+
+    assert np.all((df == 0) | (df == 1)).all(), 'Values in the DataFrame returned by populate_ipf should be either 0 or 1'
