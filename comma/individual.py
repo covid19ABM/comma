@@ -28,7 +28,7 @@ class Individual:
     def _read_hypothesis(self, fpath: str):
         """Read a hypothesis file and return the parameter matrix.
         
-        This funciton will also make sure that the resulting parameter
+        This function will also make sure that the resulting parameter
         matrix will have exactly the same amount of actions and features
         and have them ordered as desired.
 
@@ -142,11 +142,46 @@ class Individual:
             Individual._features[feature] = np.random.choice(
                 distribution[0], size, p=distribution[1]
             )
-            
+
+            # --- Define all possible columns (including those not present in the sample) --- #
+            # When the sample size is too small, this doesn't cover all categories,
+            # the resulting DataFrame thus lacks those columns.
+            # To solve the issue, we ensure all possible categories are present
+            # when creating the dummy variables
+            all_possible_cols = [
+                'age_group__1',
+                'age_group__2',
+                'age_group__3',
+                'age_group__4',
+                'gender_f',
+                'gender_m',
+                'education_high',
+                'education_low',
+                'education_medium',
+                'unemployed_no',
+                'unemployed_yes',
+                'have_partner_no',
+                'have_partner_yes',
+                'depressed_no',
+                'depressed_yes',
+                'children_presence_no',
+                'children_presence_yes',
+                'housing_financial_difficulties_no',
+                'housing_financial_difficulties_yes',
+                'selfrated_health_average',
+                'selfrated_health_good',
+                'selfrated_health_poor',
+                'critical_job_no',
+                'critical_job_yes'
+            ]
+
         # one-hot encoding
         categorical_cols = Individual._features.select_dtypes(include=['object'])
-        encoded_cols = pd.get_dummies(categorical_cols).astype(int)
+        encoded_cols = pd.get_dummies(categorical_cols).reindex(columns=all_possible_cols, fill_value=0)
         Individual._features.drop(categorical_cols.columns, axis=1, inplace=True)
         Individual._features = pd.concat([Individual._features, encoded_cols], axis=1)
-        
+
+        # Add 'baseline' column filled with ones
+        Individual._features.insert(0, "baseline", 1)
+
         return [Individual(i, dir_params) for i in tqdm(range(size), desc="Populating individuals", unit="i")]

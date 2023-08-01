@@ -31,3 +31,50 @@ def test_choose_actions_on_lockdown():
 
     assert np.all((0 <= action_probs) & (action_probs <= 1)), 'all action_probs should be between 0 and 1'
     assert len(action_probs) == len(actions), 'action_probs and actions should have the same length'
+
+def test_populate():
+    """
+    Unit test for the `populate` method of the `Individual` class.
+
+    The test checks whether `Individual._features` has the correct columns.
+    Additionally, it ensures that the values in these columns are either 0 or 1.
+
+    """
+    dir_params = Path("parameters/")  # specify the path to your parameters
+
+    # Populate with one individual for the test
+    individuals = Individual.populate(1, dir_params)
+
+    expected_cols = [
+        'baseline',
+        'age_group__1',
+        'age_group__2',
+        'age_group__3',
+        'age_group__4',
+        'gender_f',
+        'gender_m',
+        'education_high',
+        'education_low',
+        'education_medium',
+        'unemployed_no',
+        'unemployed_yes',
+        'have_partner_no',
+        'have_partner_yes',
+        'depressed_no',
+        'depressed_yes',
+        'children_presence_no',
+        'children_presence_yes',
+        'housing_financial_difficulties_no',
+        'housing_financial_difficulties_yes',
+        'selfrated_health_average',
+        'selfrated_health_good',
+        'selfrated_health_poor',
+        'critical_job_no',
+        'critical_job_yes'
+    ]
+
+    assert list(Individual._features.columns) == expected_cols, 'Columns in Individual._features are incorrect'
+
+    for individual in individuals:
+        assert np.all((individual.get_features() == 0) | (individual.get_features() == 1)), \
+               'Values in Individual._features should be either 0 or 1'
