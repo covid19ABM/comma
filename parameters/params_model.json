@@ -2,7 +2,7 @@
     "size": 100,
     "steps": 100,
     "actions": [
-        "go_to_work",
+        "work_from_home",
         "maintain_physical_distance",
         "stay_at_home",
         "exercise",
@@ -14,7 +14,6 @@
         "socialise_online"
     ],
     "status": [
-        "contacts",
         "mh"
     ],
     "lockdown_policies": [

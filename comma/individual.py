@@ -6,29 +6,52 @@ import numpy as np
 import os
 from . import read_json_as_dict
 from . import PARAMS_INDIVIDUAL, PARAMS_MODEL, PARAMS_IPF_WEIGHTS
-
+from tqdm import tqdm
 
 class Individual:
     _features = pd.DataFrame()
     _status = pd.DataFrame()
-    
+
     def __init__(self, id: int, dir_params: str):
         self.id: int = id
         self.dir_params = dir_params
-        
+        self.chosen_actions = None
+
         fpath_param_model = os.path.join(dir_params, PARAMS_MODEL)
         self.actions = read_json_as_dict(fpath_param_model)["actions"]
-        
+
     def get_features(self):
+        """
+        Get agent's features
+
+        Returns:
+            pd.Series: represents an individual (agent) with their various features
+        """
         return self._features.loc[self.id]
-    
+
     def get_status(self):
+        """
+        Get the current agent status (i.e., mental health)
+
+        Returns:
+            pd.Series: the current status of the agent
+        """
         return self._status.loc[self.id]
-        
+
+    def get_actions(self):
+        """
+        Get the current actions chosen by the agent
+
+        Returns:
+            actions (list): list of actions taken
+        """
+        return [action_name for action_name, action_was_taken in
+                zip(self.actions, self.chosen_actions) if action_was_taken]
+
     def _read_hypothesis(self, fpath: str):
         """Read a hypothesis file and return the parameter matrix.
         
-        This funciton will also make sure that the resulting parameter
+        This function will also make sure that the resulting parameter
         matrix will have exactly the same amount of actions and features
         and have them ordered as desired.
 
@@ -40,18 +63,24 @@ class Individual:
         """
         assert os.path.isfile(fpath), 'File not found: %s.' % fpath
         cols = self.get_features().index
-        df = pd.read_csv(fpath, delimiter=';')
-        
+        df = pd.read_csv(fpath, delimiter=';', decimal=",")
+
         # sort rows
         df['actions'] = df['actions'].astype('category')
         df['actions'] = df['actions'].cat.set_categories(self.actions)
         df = df.sort_values(by='actions', ignore_index=True)
-        
+
+        # Convert dataframe column names to lowercase
+        df.columns = df.columns.str.lower()
+
+        # Convert cols to lowercase
+        cols = [col.lower() for col in cols]
+
         # get and sort desired columns
         df = df[cols]
-        
+
         return df
-        
+
     def choose_actions_on_lockdown(self, lockdown: str):
         """Choose the actions to take based on current lockdown policy.
 
@@ -67,10 +96,13 @@ class Individual:
         params_lockdown = self._read_hypothesis(fpath_params_lockdown)
         n_actions, _ = params_lockdown.shape
         action_probs = params_lockdown.dot(self.get_features())
-        action_probs = action_probs.apply(lambda x: 1 / (1 + np.exp(-x)))
+        # apply the sigmoid function
+        action_probs = np.asarray(action_probs.apply(lambda x: 1 / (1 + np.exp(-x))))
         actions = np.random.rand(n_actions) <= action_probs
+        self.chosen_actions = actions # store the chosen action
+
         return actions, action_probs
-    
+
     def take_actions(self, actions: pd.Series):
         """Update status by taking the given actions.
 
@@ -86,29 +118,89 @@ class Individual:
             result = params_status.dot(self.get_features()).dot(actions)
             results.append(result)
         self._status.loc[self.id] = results
-       
-    @staticmethod    
-    def data_sampling_ipf(size: int, dir_params: str):
-        """Sample data items from ipf weights.
+
+    @staticmethod
+    def sampling_from_ipf(size: int, dir_params: str):
+        """
+        Sample from IPF distribution saved as `weights.csv` in the parameters folder
+
+        Parameters
+        ----------
+        size (int): size of data sample
+        dir_params (str): path to the parameters folder
+
+        Returns
+        -------
+        sample (pandas.dataFrame): dataframe containing the sampling
+        """
+        fpath_weights = os.path.join(dir_params, PARAMS_IPF_WEIGHTS)
+        assert os.path.isfile(fpath_weights)
+
+        df_weights = pd.read_csv(fpath_weights, sep=",", index_col=0)
+        weights = df_weights["weight"] / df_weights["weight"].sum()
+        indices = df_weights.index
+        sample_indices = np.random.choice(indices, size, p=weights)
+        sample = df_weights.loc[sample_indices].drop(["weight"], axis=1)
+        sample = sample.reset_index(drop=True)
+        return sample
+
+    @staticmethod
+    def populate_ipf(size: int, dir_params: str):
+        """
+        Create a population of individual agents with the given weights obtained via IPF
 
         Args:
             size (int): size of data sample.
-            dir_params (str): path to paramters folder.
+            dir_params (str): path to parameters folder.
         """
-        fpath_weights = os.path.join(dir_params, PARAMS_IPF_WEIGHTS) 
-        assert os.path.isfile(fpath_weights)
-        
-        df_weights = pd.read_csv(fpath_weights, sep=",", index_col=0)
-        weights = df_weights["weight"] / df_weights["weight"].sum()
-        indices = df_weights.index 
-        sample_indices = np.random.choice(indices, size, p=weights) 
-        sample = df_weights.loc[sample_indices].drop(["weight"], axis=1)
-        sample = sample.reset_index(drop=True)
-        
-        return sample
-        
+
+        fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
+        status = read_json_as_dict(fpath_params_model)['status']
+        Individual._status = pd.DataFrame(
+            index=range(size), columns=status, dtype='float')
+        Individual._features = pd.DataFrame()
+
+        sample = Individual.sampling_from_ipf(size, dir_params)
+
+        all_possible_cols = [
+            'age_group__1',
+            'age_group__2',
+            'age_group__3',
+            'age_group__4',
+            'gender_f',
+            'gender_m',
+            'education_high',
+            'education_low',
+            'education_medium',
+            'unemployed_no',
+            'unemployed_yes',
+            'have_partner_no',
+            'have_partner_yes',
+            'depressed_no',
+            'depressed_yes',
+            'children_presence_no',
+            'children_presence_yes',
+            'housing_financial_difficulties_no',
+            'housing_financial_difficulties_yes',
+            'selfrated_health_average',
+            'selfrated_health_good',
+            'selfrated_health_poor',
+            'critical_job_no',
+            'critical_job_yes'
+        ]
+
+        # hot-one encoding
+        encoded_columns = pd.get_dummies(sample).reindex(columns=all_possible_cols, fill_value=0)
+        Individual._features = pd.concat([Individual._features, encoded_columns], axis=1)
+
+        # Add 'baseline' column filled with ones if this is not present yet
+        if 'baseline' not in Individual._features.columns:
+            Individual._features.insert(0, "baseline", 1)
+
+        return [Individual(i, dir_params) for i in tqdm(range(size), desc="Populating individuals", unit="i")]
+
     @staticmethod
-    def populate(size: int, dir_params: str): 
+    def populate(size: int, dir_params: str):
         """Create a population of individual agents with the given feature parameters.
         
         Args:
@@ -122,12 +214,12 @@ class Individual:
         assert size > 0, 'Size must be positive!'
         assert isinstance(size, int), 'Size must be integer!'
         assert os.path.isdir(dir_params), "Given folder doesn't exist!"
-        
+
         fpath_params_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
         fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
         status = read_json_as_dict(fpath_params_model)['status']
         features = read_json_as_dict(fpath_params_individual)
-    
+
         Individual._status = pd.DataFrame(
             index=range(size), columns=status, dtype='float')
         Individual._features = pd.DataFrame()
@@ -135,11 +227,46 @@ class Individual:
             Individual._features[feature] = np.random.choice(
                 distribution[0], size, p=distribution[1]
             )
-            
+
+            # --- Define all possible columns (including those not present in the sample) --- #
+            # When the sample size is too small, this doesn't cover all categories,
+            # the resulting DataFrame thus lacks those columns.
+            # To solve the issue, we ensure all possible categories are present
+            # when creating the dummy variables
+            all_possible_cols = [
+                'age_group__1',
+                'age_group__2',
+                'age_group__3',
+                'age_group__4',
+                'gender_f',
+                'gender_m',
+                'education_high',
+                'education_low',
+                'education_medium',
+                'unemployed_no',
+                'unemployed_yes',
+                'have_partner_no',
+                'have_partner_yes',
+                'depressed_no',
+                'depressed_yes',
+                'children_presence_no',
+                'children_presence_yes',
+                'housing_financial_difficulties_no',
+                'housing_financial_difficulties_yes',
+                'selfrated_health_average',
+                'selfrated_health_good',
+                'selfrated_health_poor',
+                'critical_job_no',
+                'critical_job_yes'
+            ]
+
         # one-hot encoding
         categorical_cols = Individual._features.select_dtypes(include=['object'])
-        encoded_cols = pd.get_dummies(categorical_cols).astype(int)
+        encoded_cols = pd.get_dummies(categorical_cols).reindex(columns=all_possible_cols, fill_value=0)
         Individual._features.drop(categorical_cols.columns, axis=1, inplace=True)
         Individual._features = pd.concat([Individual._features, encoded_cols], axis=1)
-        
-        return [Individual(i, dir_params) for i in range(size)]
+
+        # Add 'baseline' column filled with ones
+        Individual._features.insert(0, "baseline", 1)
+
+        return [Individual(i, dir_params) for i in tqdm(range(size), desc="Populating individuals", unit="i")]
