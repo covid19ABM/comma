@@ -15,8 +15,8 @@
     ],
     "gender": [
         [
-            "M",
-            "F"
+            "m",
+            "f"
         ],
         [
             0.5,
@@ -25,9 +25,9 @@
     ],
     "education": [
         [
-            "Low",
-            "Medium",
-            "High"
+            "low",
+            "medium",
+            "high"
         ],
         [
             0.11,
@@ -35,133 +35,61 @@
             0.64
         ]
     ],
-    "employed": [
+    "unemployed": [
         [
-            "No, other",
-            "No, seeking employment",
-            "Yes"
+            "no",
+            "yes"
         ],
         [
             0.76,
-            0.155,
-            0.085
+            0.24
         ]
     ],
-    "partnership_status": [
+    "have_partner": [
         [
-            "Single",
-            "Married",
-            "Live-in partner",
-            "In relationship, no cohabitation",
-            "Other"
+            "no",
+            "yes"
         ],
         [
-            0.2,
-            0.41,
-            0.29,
-            0.09,
-            0.01
+            0.6,
+            0.4
         ]
     ],
-    "pre_existing_depression": [
+    "depressed": [
         [
-            0,
-            1
+            "no",
+            "yes"
         ],
         [
             0.8,
             0.2
         ]
     ],
-    "pre_existing_burnout": [
+    "children_presence": [
         [
-            0,
-            1
-        ],
-        [
-            0.27,
-            0.73
-        ]
-    ],
-    "pre_existing_addiction": [
-        [
-            0,
-            1
-        ],
-        [
-            0.95,
-            0.05
-        ]
-    ],
-    "pre_existing_chronic_fatigue": [
-        [
-            0,
-            1
-        ],
-        [
-            0.95,
-            0.05
-        ]
-    ],
-    "parenthood": [
-        [
-            0,
-            1
-        ],
-        [
-            0.93,
-            0.07
-        ]
-    ],
-    "living_with_child": [
-        [
-            0,
-            1
+            "no",
+            "yes"
         ],
         [
             0.42,
             0.58
         ]
     ],
-    "single_parent": [
+    "housing_financial_difficulties": [
         [
-            0,
-            1
-        ],
-        [
-            0.95,
-            0.05
-        ]
-    ],
-    "housing_difficulties": [
-        [
-            "No",
-            "Some",
-            "Many"
+            "no",
+            "yes"
         ],
         [
             0.79,
-            0.18,
-            0.03
+            0.21
         ]
     ],
-    "finance_difficulties": [
+    "selfrated_health": [
         [
-            "No",
-            "Some",
-            "Many"
-        ],
-        [
-            0.75,
-            0.13,
-            0.12
-        ]
-    ],
-    "pre_existing_health_issues": [
-        [
-            "No",
-            "Some",
-            "Many"
+            "poor",
+            "average",
+            "good"
         ],
         [
             0.65,
@@ -169,54 +97,14 @@
             0.15
         ]
     ],
-    "partner_difficulties": [
+    "critical_job": [
         [
-            "No",
-            "Some",
-            "Many",
-            "Other"
-        ],
-        [
-            0.67,
-            0.18,
-            0.05,
-            0.1
-        ]
-    ],
-    "job_type": [
-        [
-            "white_collar",
-            "medical_professional",
-            "key_worker",
-            "other"
+            "no",
+            "yes"
         ],
         [
             0.2,
-            0.2,
-            0.2,
-            0.4
-        ]
-    ],
-    "area": [
-        [
-            "urban",
-            "rural"
-        ],
-        [
-            0.7,
-            0.3
-        ]
-    ],
-    "ses": [
-        [
-            "low",
-            "medium",
-            "high"
-        ],
-        [
-            0.15,
-            0.55,
-            0.3
+            0.8
         ]
     ]
 }
