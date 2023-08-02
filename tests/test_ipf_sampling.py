@@ -65,7 +65,7 @@ def test_data_sampling_ipf(time):
     
     size = 2655 # This is the original sample size provided by Kristina
     dir_params = "./parameters"
-    sample_set = Individual.populate_ipf(size, dir_params)
+    sample_set = Individual.sampling_from_ipf(size, dir_params)
     cols = sample_set.columns.tolist()
     
     # Define crosstabs of the original sample (i.e., truth). 

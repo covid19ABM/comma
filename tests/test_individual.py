@@ -121,6 +121,6 @@ def test_populate_ipf():
         'critical_job_yes'
     ]
 
-    assert list(df.columns) == expected_cols, 'Columns in the DataFrame returned by populate_ipf() are incorrect'
+    assert list(df[0].get_features().index) == expected_cols, 'Columns in the dataframe returned by populate_ipf() are incorrect'
 
-    assert np.all((df == 0) | (df == 1)).all(), 'Values in the DataFrame returned by populate_ipf should be either 0 or 1'
+    assert np.all((df[0].get_features() == 0) | (df[0].get_features() == 1)).all(), 'Values in the dataframe returned by populate_ipf should be either 0 or 1'
