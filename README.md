@@ -59,7 +59,7 @@ You can find a tutorial that demonstrates the usage of `comma` in the `/notebook
 <div align="right">[ <a href="#table-of-contents">↑ Back to top ↑</a> ]</div>
 
 # Diagram[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#diagram)
-![diagram](https://github.com/covid19ABM/comma/blob/draw.io/comma_diagram.drawio.svg)
+![diagram](https://github.com/covid19ABM/comma/blob/main/comma_diagram.drawio.svg)
 
 <div align="right">[ <a href="#table-of-contents">↑ Back to top ↑</a> ]</div>
 
