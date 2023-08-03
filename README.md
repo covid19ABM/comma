@@ -56,8 +56,12 @@ You can find a tutorial that demonstrates the usage of `comma` in the `/notebook
 # License[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#license)
 `comma` is under free open source [Apache License Version 2.0](https://raw.githubusercontent.com/covid19ABM/comma/main/LICENSE). This means that you're free to use, modify, and distribute this software, even for commercial applications.
 
+<div align="right">[ <a href="#table-of-contents">↑ Back to top ↑</a> ]</div>
+
 # Diagram[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#diagram)
 ![diagram](https://github.com/covid19ABM/comma/blob/draw.io/comma_diagram.drawio.svg)
+
+<div align="right">[ <a href="#table-of-contents">↑ Back to top ↑</a> ]</div>
 
 # Credits[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#credits)
 This is a project funded by the Netherlands eScience Center (Grant ID: NLESC.SSI.2022b.022) and awarded to Dr Kristina Thompson (Wageningen University) and developed in collaboration with the Netherlands eScience Center. More information on the [Research Software Directory](https://research-software-directory.org/projects/covid-19-mitigation-policies).
