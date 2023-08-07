@@ -8,7 +8,7 @@ import pytest
 # This is important for the subsequent matrix multiplications done in the model.
 
 def test_input_example_matrices():
-    directory = Path("parameters_example/")
+    directory = Path("parameters/")
 
     csv_files = [f for f in os.listdir(directory) if (f.endswith('.csv') and (f.startswith('lockdown') or f.startswith('actions')))]
 
@@ -18,14 +18,14 @@ def test_input_example_matrices():
     first_df = pd.read_csv(os.path.join(directory, csv_files[0]), sep=";")
 
     # Get the column names, number of columns and rows, data types, and unique entries in "actions" column
-    column_names = first_df.columns
+    column_names = first_df.columns.str.lower()
     num_columns = len(column_names)
     num_rows = len(first_df)
     actions = set(first_df['actions'].unique())
 
     for file in csv_files[1:]:
         df = pd.read_csv(os.path.join(directory, file), sep=";")
-
+        df.columns = df.columns.str.lower()
         # Check for the same number of columns
         assert len(df.columns) == num_columns, f"{file} has a different number of columns."
 
