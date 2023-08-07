@@ -2,6 +2,36 @@ from comma.individual import Individual
 import numpy as np
 from pathlib import Path
 
+def test_take_actions():
+    """
+    Test for the `take_actions` method of the individual class.
+    The test checks that the returned matrix multiplication matches the expected values
+    """
+    dir_params = Path("parameters/")  # specify the path to your parameters
+    actions = np.array([False, True, True, True, True,
+                        False, True, True, False, False]) # specify the actions
+
+    individual = Individual.populate(1, dir_params)
+    individual[0].take_actions(actions)
+
+    individual[0].chosen_actions = actions
+
+    actual_actions = individual[0].get_actions()
+    expected_actions = np.array([
+        'maintain_physical_distance',
+        'stay_at_home',
+        'exercise',
+        'socialise',
+        'seek_help',
+        'negative_coping'
+    ])
+
+    actual_status = individual[0]._status.values
+    expected_status = np.array(0.)
+
+    assert np.all(actual_actions == expected_actions), 'actions chosen should match the expected'
+    assert np.all(actual_status == expected_status), 'status after action taken should be equal to 0.'
+
 def test_choose_actions_on_lockdown():
     """
     Unit test for the `choose_actions_on_lockdown` method of the `Individual` class.
