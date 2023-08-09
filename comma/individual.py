@@ -52,54 +52,17 @@ class Individual:
         return [action_name for action_name, action_was_taken in
                 zip(self.actions, self.chosen_actions) if action_was_taken]
 
-    def _read_hypothesis(self, fpath: str):
-        """
-        Read a hypothesis file and return the parameter matrix.
-        This function will also make sure that the resulting parameter
-        matrix will have exactly the same amount of actions and features
-        and have them ordered as desired.
-
-        Args:
-            fpath (str): hypothesis file path
-        Returns:
-            pd.Dataframe: hypothesis parameter matrix
-        """
-        assert os.path.isfile(fpath), 'File not found: %s.' % fpath
-        cols = self.get_features().index
-        df = pd.read_csv(fpath, delimiter=';', decimal=",")
-
-        # sort rows
-        df['actions'] = df['actions'].astype('category')
-        df['actions'] = df['actions'].cat.set_categories(self.actions)
-        df = df.sort_values(by='actions', ignore_index=True)
-
-        # Convert dataframe column names to lowercase
-        df.columns = df.columns.str.lower()
-
-        # Convert cols to lowercase
-        cols = [col.lower() for col in cols]
-
-        # get and sort desired columns
-        df = df[cols]
-
-        return df
-
-    # TO-DO
-    # add def select_lockdown_matrix?
-
-    def choose_actions_on_lockdown(self, lockdown: str):
+    def choose_actions_on_lockdown(self, lockdown: pd.DataFrame):
         """Choose the actions to take based on current lockdown policy.
 
         Args:
-            lockdown (str): one of the given lockdowns
+            lockdown (pd.DataFrame): dataframe of a given lockdown
 
         Returns:
             actions (pd.Series): list of booleans of taking/not-taking actions
             actions_probs (pd.Series): probability of taking that action
         """
-        fpath_params_lockdown = os.path.join(
-            self.dir_params, 'lockdown_%s.csv' % lockdown)
-        params_lockdown = self._read_hypothesis(fpath_params_lockdown)
+        params_lockdown = lockdown
         n_actions, _ = params_lockdown.shape
         action_probs = params_lockdown.dot(self.get_features())
         # apply the sigmoid function
@@ -111,16 +74,13 @@ class Individual:
 
         return actions, action_probs
 
-    def take_actions(self, actions: pd.Series):
+    def take_actions(self, actions: pd.Series, action_effects: pd.DataFrame):
         """Update status by taking the given actions.
 
         Args:
-            actions (pd.Series): list of booleans of taking/not-taking actions.
+            actions (pd.Series): list of booleans of chosen/not-chosen actions.
         """
-
-        fpath_params_status = os.path.join(
-            self.dir_params, 'actions_effects_on_mh.csv')
-        params_status = self._read_hypothesis(fpath_params_status)
+        params_status = action_effects
         result = params_status.dot(self.get_features()).dot(actions)
 
         self._status = result
@@ -161,22 +121,13 @@ class Individual:
             size (int): size of data sample.
             dir_params (str): path to parameters folder.
         """
-
-        # fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
-        # with open(fpath_params_model) as f:
-        #    status = json.load(f)['status']
-
-        # Individual._status = pd.DataFrame(
-        #    index=range(size), columns=status, dtype='float')
         _features = pd.DataFrame()
 
         sample = Individual.sampling_from_ipf(size, dir_params)
 
-        all_possible_cols = Hypothesis.all_possible_features
-
         # one-hot encoding
         encoded_columns = pd.get_dummies(sample).reindex(
-            columns=all_possible_cols,
+            columns=Hypothesis.all_possible_features,
             fill_value=0
         )
         _features = pd.concat([_features, encoded_columns], axis=1)
@@ -209,15 +160,9 @@ class Individual:
         assert os.path.isdir(dir_params), "Given folder doesn't exist!"
 
         fpath_params_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
-        # fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
-        # with open(fpath_params_model) as f:
-        #    status = json.load(f)['status']
         with open(fpath_params_individual) as f:
             features = json.load(f)
 
-        # Individual._status = pd.DataFrame(
-        #    index=range(size), columns=status, dtype='float')
-        # Individual._features = pd.DataFrame()
         _features = pd.DataFrame()
         for feature, distribution in features.items():
             _features[feature] = np.random.choice(
@@ -230,12 +175,11 @@ class Individual:
             # the resulting DataFrame thus lacks those columns.
             # To solve the issue, we ensure all possible categories are present
             # when creating the dummy variables
-            all_possible_cols = Hypothesis.all_possible_features
 
         # one-hot encoding
         categorical_cols = _features.select_dtypes(include=['object'])
         encoded_cols = pd.get_dummies(categorical_cols).reindex(
-            columns=all_possible_cols,
+            columns=Hypothesis.all_possible_features,
             fill_value=0
         )
         _features.drop(categorical_cols.columns, axis=1, inplace=True)
