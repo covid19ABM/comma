@@ -2,14 +2,17 @@ from comma.individual import Individual
 import numpy as np
 from pathlib import Path
 
+
 def test_take_actions():
     """
     Test for the `take_actions` method of the individual class.
-    The test checks that the returned matrix multiplication matches the expected values
+    The test checks that the returned matrix
+    multiplication matches the expected values
     """
     dir_params = Path("parameters/")  # specify the path to your parameters
+    # specify the actions
     actions = np.array([False, True, True, True, True,
-                        False, True, True, False, False]) # specify the actions
+                        False, True, True, False, False])
 
     individual = Individual.populate(1, dir_params)
     individual[0].take_actions(actions)
@@ -29,20 +32,23 @@ def test_take_actions():
     actual_status = individual[0]._status
     expected_status = np.array(0.)
 
-    assert np.all(actual_actions == expected_actions), 'actions chosen should match the expected'
-    assert np.all(actual_status == expected_status), 'status after action taken should be equal to 0.'
+    assert np.all(actual_actions == expected_actions), \
+        'actions chosen should match the expected'
+    assert np.all(actual_status == expected_status), \
+        'status after action taken should be equal to 0.'
+
 
 def test_choose_actions_on_lockdown():
     """
-    Unit test for the `choose_actions_on_lockdown` method of the `Individual` class.
-
-   The test checks whether the method returns correct types for the `actions` and
-   `action_probs` outputs, and whether these outputs follow the expected properties:
+    Unit test for the `choose_actions_on_lockdown`
+    method of the `Individual` class.
+    The test checks whether the method returns correct
+    types for the `actions` and `action_probs` outputs,
+    and whether these outputs follow the expected properties:
     - `actions` is an array of booleans.
-    - `action_probs` is a numpy array of probabilities (values between 0 and 1).
+    - `action_probs` is a numpy array of probabilities (between 0 and 1).
     - Both `actions` and `action_probs` should have the same length.
-    - `actions` array length should be 10 (assuming there are 10 possible actions).
-
+    - `actions` array length should be 10.
     """
 
     dir_params = Path("parameters/")  # specify the path to your parameters
@@ -53,24 +59,30 @@ def test_choose_actions_on_lockdown():
 
     actions, action_probs = individual[0].choose_actions_on_lockdown(lockdown)
 
-    assert isinstance(actions, np.ndarray), 'actions should be a numpy array'
-    assert isinstance(action_probs, np.ndarray), 'action_probs should be a numpy array'
+    assert isinstance(actions, np.ndarray), \
+        'actions should be a numpy array'
+    assert isinstance(action_probs, np.ndarray), \
+        'action_probs should be a numpy array'
 
-    assert len(actions) == 10, 'actions array should have length 10'
-    assert np.all((actions == False) | (actions == True)), 'all actions should be False or True'
+    assert len(actions) == 10, \
+        'actions array should have length 10'
+    assert np.all((actions == 0) | (actions == 1)), \
+        'all actions should be False or True'
 
-    assert np.all((0 <= action_probs) & (action_probs <= 1)), 'all action_probs should be between 0 and 1'
-    assert len(action_probs) == len(actions), 'action_probs and actions should have the same length'
+    assert np.all((0 <= action_probs) & (action_probs <= 1)), \
+        'all action_probs should be between 0 and 1'
+    assert len(action_probs) == len(actions), \
+        'action_probs and actions should have the same length'
+
 
 def test_populate():
     """
     Unit test for the `populate` method of the `Individual` class.
 
     The test checks whether `Individual._features` has the correct columns.
-    Additionally, it ensures that the values in these columns are either 0 or 1.
-
+    It also ensures that the values in these columns are either 0 or 1.
     """
-    dir_params = Path("parameters/")  # specify the path to your parameters
+    dir_params = Path("parameters/")
 
     # Populate with one individual for the test
     individuals = Individual.populate(1, dir_params)
@@ -103,20 +115,22 @@ def test_populate():
         'critical_job_yes'
     ]
 
-    assert list(individuals[0]._features.index) == expected_cols, 'Columns in Individual._features returned by populate() are incorrect'
+    assert list(individuals[0]._features.index) == expected_cols, \
+        'Columns in Individual._features returned by populate() are incorrect'
 
     for individual in individuals:
-        assert np.all((individual.get_features() == 0) | (individual.get_features() == 1)), \
-               'Values in Individual._features should be either 0 or 1'
+        assert np.all(
+            (individual.get_features() == 0) | (individual.get_features() == 1)
+        ), 'Values in Individual._features should be either 0 or 1'
 
 
 def test_populate_ipf():
     """
     Unit test for the `populate_ipf` method of the `Individual` class.
 
-    The test checks whether the DataFrame returned by `populate_ipf` has the correct columns.
-    Additionally, it ensures that the values in these columns are either 0 or 1.
-
+    The test checks whether the DataFrame returned by
+    `populate_ipf` has the correct columns.
+    It also ensures that the values in these columns are either 0 or 1.
     """
     dir_params = Path("parameters/")  # specify the path to your parameters
 
@@ -151,6 +165,11 @@ def test_populate_ipf():
         'critical_job_yes'
     ]
 
-    assert list(df[0].get_features().index) == expected_cols, 'Columns in the dataframe returned by populate_ipf() are incorrect'
+    assert list(df[
+                    0].get_features().index) == expected_cols, \
+        'Columns in the dataframe returned by populate_ipf() are incorrect'
 
-    assert np.all((df[0].get_features() == 0) | (df[0].get_features() == 1)).all(), 'Values in the dataframe returned by populate_ipf should be either 0 or 1'
+    assert np.all(
+        (df[0].get_features() == 0) | (df[0].get_features() == 1)
+    ).all(), 'Values in the dataframe returned ' \
+             'by populate_ipf should be either 0 or 1'
