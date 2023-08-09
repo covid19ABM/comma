@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 from pathlib import Path
-import pytest
 
 # This test ensures that the column names across the lockdown and
 # action files are the same, and in the same order.

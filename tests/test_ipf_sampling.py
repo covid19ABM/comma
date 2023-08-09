@@ -1,6 +1,6 @@
-import pytest
 from comma.individual import Individual
 import pandas as pd
+import pytest
 from scipy.stats import chi2_contingency
 
 # This test is linked to issue #53 https://github.com/covid19ABM/comma/issues/53

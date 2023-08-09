@@ -1,24 +1,26 @@
 """Individual agent class definition
 """
 
-import pandas as pd
+from comma.hypothesis import PARAMS_INDIVIDUAL, PARAMS_MODEL, PARAMS_IPF_WEIGHTS, Hypothesis
+import json
 import numpy as np
 import os
-from . import read_json_as_dict
-from . import PARAMS_INDIVIDUAL, PARAMS_MODEL, PARAMS_IPF_WEIGHTS
+import pandas as pd
 from tqdm import tqdm
 
 class Individual:
-    _features = pd.DataFrame()
-    _status = pd.DataFrame()
 
-    def __init__(self, id: int, dir_params: str):
+    def __init__(self, id: int, dir_params: str, features):
         self.id: int = id
         self.dir_params = dir_params
         self.chosen_actions = None
+        self._status: float = .0
+        self._features = features
 
         fpath_param_model = os.path.join(dir_params, PARAMS_MODEL)
-        self.actions = read_json_as_dict(fpath_param_model)["actions"]
+        with open(fpath_param_model) as f:
+            self.actions = json.load(f)["actions"]
+
 
     def get_features(self):
         """
@@ -27,7 +29,7 @@ class Individual:
         Returns:
             pd.Series: represents an individual (agent) with their various features
         """
-        return self._features.loc[self.id]
+        return self._features
 
     def get_status(self):
         """
@@ -36,7 +38,7 @@ class Individual:
         Returns:
             pd.Series: the current status of the agent
         """
-        return self._status.loc[self.id]
+        return self._status
 
     def get_actions(self):
         """
@@ -81,6 +83,9 @@ class Individual:
 
         return df
 
+    #TO-DO
+    # add def select_lockdown_matrix?
+
     def choose_actions_on_lockdown(self, lockdown: str):
         """Choose the actions to take based on current lockdown policy.
 
@@ -109,15 +114,14 @@ class Individual:
         Args:
             actions (pd.Series): list of booleans of taking/not-taking actions.
         """
-        status = self.get_status().index
+
         results = []
-        for s in status:
-            fpath_params_status = os.path.join(
-                self.dir_params, 'actions_effects_on_%s.csv' % s)
-            params_status = self._read_hypothesis(fpath_params_status)
-            result = params_status.dot(self.get_features()).dot(actions)
-            results.append(result)
-        self._status.loc[self.id] = results
+        fpath_params_status = os.path.join(
+            self.dir_params, 'actions_effects_on_mh.csv')
+        params_status = self._read_hypothesis(fpath_params_status)
+        result = params_status.dot(self.get_features()).dot(actions)
+
+        self._status = result
 
     @staticmethod
     def sampling_from_ipf(size: int, dir_params: str):
@@ -154,50 +158,27 @@ class Individual:
             dir_params (str): path to parameters folder.
         """
 
-        fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
-        status = read_json_as_dict(fpath_params_model)['status']
-        Individual._status = pd.DataFrame(
-            index=range(size), columns=status, dtype='float')
-        Individual._features = pd.DataFrame()
+        #fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
+        #with open(fpath_params_model) as f:
+        #    status = json.load(f)['status']
+
+        #Individual._status = pd.DataFrame(
+        #    index=range(size), columns=status, dtype='float')
+        _features = pd.DataFrame()
 
         sample = Individual.sampling_from_ipf(size, dir_params)
 
-        all_possible_cols = [
-            'age_group__1',
-            'age_group__2',
-            'age_group__3',
-            'age_group__4',
-            'gender_f',
-            'gender_m',
-            'education_high',
-            'education_low',
-            'education_medium',
-            'unemployed_no',
-            'unemployed_yes',
-            'have_partner_no',
-            'have_partner_yes',
-            'depressed_no',
-            'depressed_yes',
-            'children_presence_no',
-            'children_presence_yes',
-            'housing_financial_difficulties_no',
-            'housing_financial_difficulties_yes',
-            'selfrated_health_average',
-            'selfrated_health_good',
-            'selfrated_health_poor',
-            'critical_job_no',
-            'critical_job_yes'
-        ]
+        all_possible_cols = Hypothesis.all_possible_features
 
-        # hot-one encoding
+        # one-hot encoding
         encoded_columns = pd.get_dummies(sample).reindex(columns=all_possible_cols, fill_value=0)
-        Individual._features = pd.concat([Individual._features, encoded_columns], axis=1)
+        _features = pd.concat([_features, encoded_columns], axis=1)
 
         # Add 'baseline' column filled with ones if this is not present yet
-        if 'baseline' not in Individual._features.columns:
-            Individual._features.insert(0, "baseline", 1)
+        if 'baseline' not in _features.columns:
+            _features.insert(0, "baseline", 1)
 
-        return [Individual(i, dir_params) for i in tqdm(range(size), desc="Populating individuals", unit="i")]
+        return [Individual(i, dir_params, _features.iloc[i]) for i in tqdm(range(size), desc="Populating individuals", unit="i")]
 
     @staticmethod
     def populate(size: int, dir_params: str):
@@ -216,15 +197,19 @@ class Individual:
         assert os.path.isdir(dir_params), "Given folder doesn't exist!"
 
         fpath_params_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
-        fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
-        status = read_json_as_dict(fpath_params_model)['status']
-        features = read_json_as_dict(fpath_params_individual)
+        #fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
+        #with open(fpath_params_model) as f:
+        #    status = json.load(f)['status']
+        with open(fpath_params_individual) as f:
+            features = json.load(f)
 
-        Individual._status = pd.DataFrame(
-            index=range(size), columns=status, dtype='float')
-        Individual._features = pd.DataFrame()
+
+        #Individual._status = pd.DataFrame(
+        #    index=range(size), columns=status, dtype='float')
+        #Individual._features = pd.DataFrame()
+        _features = pd.DataFrame()
         for feature, distribution in features.items():
-            Individual._features[feature] = np.random.choice(
+            _features[feature] = np.random.choice(
                 distribution[0], size, p=distribution[1]
             )
 
@@ -233,40 +218,15 @@ class Individual:
             # the resulting DataFrame thus lacks those columns.
             # To solve the issue, we ensure all possible categories are present
             # when creating the dummy variables
-            all_possible_cols = [
-                'age_group__1',
-                'age_group__2',
-                'age_group__3',
-                'age_group__4',
-                'gender_f',
-                'gender_m',
-                'education_high',
-                'education_low',
-                'education_medium',
-                'unemployed_no',
-                'unemployed_yes',
-                'have_partner_no',
-                'have_partner_yes',
-                'depressed_no',
-                'depressed_yes',
-                'children_presence_no',
-                'children_presence_yes',
-                'housing_financial_difficulties_no',
-                'housing_financial_difficulties_yes',
-                'selfrated_health_average',
-                'selfrated_health_good',
-                'selfrated_health_poor',
-                'critical_job_no',
-                'critical_job_yes'
-            ]
+            all_possible_cols = Hypothesis.all_possible_features
 
         # one-hot encoding
-        categorical_cols = Individual._features.select_dtypes(include=['object'])
+        categorical_cols = _features.select_dtypes(include=['object'])
         encoded_cols = pd.get_dummies(categorical_cols).reindex(columns=all_possible_cols, fill_value=0)
-        Individual._features.drop(categorical_cols.columns, axis=1, inplace=True)
-        Individual._features = pd.concat([Individual._features, encoded_cols], axis=1)
+        _features.drop(categorical_cols.columns, axis=1, inplace=True)
+        _features = pd.concat([_features, encoded_cols], axis=1)
 
         # Add 'baseline' column filled with ones
-        Individual._features.insert(0, "baseline", 1)
+        _features.insert(0, "baseline", 1)
 
-        return [Individual(i, dir_params) for i in tqdm(range(size), desc="Populating individuals", unit="i")]
+        return [Individual(i, dir_params, _features.iloc[i]) for i in tqdm(range(size), desc="Populating individuals", unit="i")]
