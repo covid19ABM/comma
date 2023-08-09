@@ -5,7 +5,6 @@ import os
 import pandas as pd
 
 PARAMS_INDIVIDUAL = 'params_individual.json'
-PARAMS_MODEL = 'params_model.json'
 PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
 
 
@@ -29,6 +28,17 @@ class Hypothesis:
     """
     _required_params = ['size', 'steps', 'actions', 'status',
                         'lockdown_policies', 'lockdown']
+
+    lockdown_policies = [
+        'absent',
+        'easy',
+        'medium',
+        'hard'
+    ]
+
+    individual_status = [
+        'mh'
+    ]
 
     all_possible_features = [
         'age_group__1',
@@ -164,22 +174,15 @@ class Hypothesis:
             the agent and model parameter files.
         """
         fpath_params_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
-        fpath_params_model = os.path.join(dir_params, PARAMS_MODEL)
 
         # Check if the files exist
         if not os.path.exists(fpath_params_individual):
             raise FileNotFoundError(f"'{PARAMS_INDIVIDUAL}' \
             file is missing in the directory '{dir_params}'")
-        if not os.path.exists(fpath_params_model):
-            raise FileNotFoundError(f"'{PARAMS_MODEL}' \
-            file is missing in the directory '{dir_params}'")
 
-        with open(fpath_params_model) as f:
-            params_model = json.load(f)
-
-        actions = params_model['actions']
-        lockdown_policies = params_model['lockdown_policies']
-        status = params_model['status']
+        actions = cls.all_possible_actions
+        lockdown_policies = cls.lockdown_policies
+        status = cls.individual_status
         columns = ['actions', 'baseline']
         columns += cls._get_one_hot_encoded_features(fpath_params_individual)
         df = pd.DataFrame(0, index=range(len(actions)), columns=columns)
@@ -205,54 +208,12 @@ class Hypothesis:
         """
         # check if parameter files exist
         path_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
-        path_model = os.path.join(dir_params, PARAMS_MODEL)
-
-        # check if all required model parameters are given
-        with open(path_model) as f:
-            params_model = json.load(f)
-
-        missing_model_params = set(cls._required_params) - \
-            set(params_model.keys())
-
-        if missing_model_params:
-            raise ValueError("Model parameter(s) not found: %s."
-                             % ", ".join(missing_model_params))
-
-        # check if there is any overlap between lockdown intervals
-        lockdown = params_model["lockdown"]
-        lockdown_intervals = [policy["interval"] for policy in lockdown]
-        lockdown_intervals = sorted(lockdown_intervals, key=lambda li: li[0])
-        overlaps = [lockdown_intervals[i][1] >= lockdown_intervals[i + 1][0]
-                    for i in range(len(lockdown_intervals) - 1)]
-        if any(overlaps):
-            overlap_strings = [
-                "%s - %s" % (str(lockdown_intervals[i]),
-                             str(lockdown_intervals[i + 1]))
-                for i in range(len(overlaps)) if overlaps[i]
-            ]
-
-            error_message = "Lockdown intervals have overlap: \n%s" \
-                            % "\n".join(overlap_strings)
-
-            raise ValueError(error_message)
-
-        # check that steps are covered by the given lockdown intervals
-        steps = params_model["steps"]
-        expected_timeline = list(range(1, steps + 1))
-        given_timeline = []
-        for li in lockdown_intervals:
-            given_timeline += list(range(li[0], li[1] + 1))
-        uncovered_steps = set(expected_timeline) - set(given_timeline)
-        if uncovered_steps:
-            raise ValueError("Uncovered steps: %s." % ", ".join(
-                [str(us) for us in uncovered_steps]
-            ))
 
         # check if all hypothesis files exist
         fnames = ["actions_effects_on_%s.csv" %
-                  status for status in params_model["status"]]
+                  status for status in cls.individual_status]
         fnames += ["lockdown_%s.csv" %
-                   lockdown for lockdown in params_model["lockdown_policies"]]
+                   lockdown for lockdown in cls.lockdown_policies]
         fpaths = [os.path.join(dir_params, fn) for fn in fnames]
         fexist = [os.path.isfile(fp) for fp in fpaths]
         if not all(fexist):
@@ -278,7 +239,7 @@ class Hypothesis:
             ))
 
         # check if all hypothesis files contain hypotheses of all actions
-        required_actions = params_model["actions"]
+        required_actions = cls.all_possible_actions
         missing_actions = [set(required_actions) - set(hd["actions"])
                            for hd in hypothesis_data]
         if any(missing_actions):
