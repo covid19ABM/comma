@@ -37,8 +37,8 @@
     ],
     "unemployed": [
         [
-            "no",
-            "yes"
+            "yes",
+            "no"
         ],
         [
             0.76,
@@ -47,8 +47,8 @@
     ],
     "have_partner": [
         [
-            "no",
-            "yes"
+            "yes",
+            "no"
         ],
         [
             0.6,
@@ -57,8 +57,8 @@
     ],
     "depressed": [
         [
-            "no",
-            "yes"
+            "yes",
+            "no"
         ],
         [
             0.8,
@@ -67,8 +67,8 @@
     ],
     "children_presence": [
         [
-            "no",
-            "yes"
+            "yes",
+            "no"
         ],
         [
             0.42,
@@ -77,8 +77,8 @@
     ],
     "housing_financial_difficulties": [
         [
-            "no",
-            "yes"
+            "yes",
+            "no"
         ],
         [
             0.79,
@@ -99,8 +99,8 @@
     ],
     "critical_job": [
         [
-            "no",
-            "yes"
+            "yes",
+            "no"
         ],
         [
             0.2,
