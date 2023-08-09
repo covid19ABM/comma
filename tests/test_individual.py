@@ -1,3 +1,4 @@
+from comma.hypothesis import Hypothesis
 from comma.individual import Individual
 import numpy as np
 from pathlib import Path
@@ -14,8 +15,10 @@ def test_take_actions():
     actions = np.array([False, True, True, True, True,
                         False, True, True, False, False])
 
+    # specify the actions effects
+    actions_effects = Hypothesis.read_actions(dir_params)
     individual = Individual.populate(1, dir_params)
-    individual[0].take_actions(actions)
+    individual[0].take_actions(actions, actions_effects)
 
     individual[0].chosen_actions = actions
 
@@ -54,10 +57,15 @@ def test_choose_actions_on_lockdown():
     dir_params = Path("parameters/")  # specify the path to your parameters
     lockdown = 'easy'  # specify the type of lockdown
 
+    current_lockdown = Hypothesis.read_hypotheses(
+        dir_params,
+        set([lockdown])
+    )
     # Create an individual with id 0
     individual = Individual.populate(1, dir_params)
 
-    actions, action_probs = individual[0].choose_actions_on_lockdown(lockdown)
+    actions, action_probs = individual[0].\
+        choose_actions_on_lockdown(current_lockdown[lockdown])
 
     assert isinstance(actions, np.ndarray), \
         'actions should be a numpy array'
