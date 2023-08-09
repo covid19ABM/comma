@@ -2,7 +2,7 @@
 """
 
 from comma.hypothesis import PARAMS_INDIVIDUAL, \
-    PARAMS_MODEL, PARAMS_IPF_WEIGHTS, Hypothesis
+    PARAMS_IPF_WEIGHTS, Hypothesis
 import json
 import numpy as np
 import os
@@ -18,10 +18,7 @@ class Individual:
         self.chosen_actions = None
         self._status: float = .0
         self._features = features
-
-        fpath_param_model = os.path.join(dir_params, PARAMS_MODEL)
-        with open(fpath_param_model) as f:
-            self.actions = json.load(f)["actions"]
+        self.actions = Hypothesis.all_possible_actions
 
     def get_features(self):
         """
