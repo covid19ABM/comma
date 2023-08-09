@@ -26,7 +26,7 @@ def test_take_actions():
         'negative_coping'
     ])
 
-    actual_status = individual[0]._status.values
+    actual_status = individual[0]._status
     expected_status = np.array(0.)
 
     assert np.all(actual_actions == expected_actions), 'actions chosen should match the expected'
@@ -103,7 +103,7 @@ def test_populate():
         'critical_job_yes'
     ]
 
-    assert list(Individual._features.columns) == expected_cols, 'Columns in Individual._features returned by populate() are incorrect'
+    assert list(individuals[0]._features.index) == expected_cols, 'Columns in Individual._features returned by populate() are incorrect'
 
     for individual in individuals:
         assert np.all((individual.get_features() == 0) | (individual.get_features() == 1)), \
