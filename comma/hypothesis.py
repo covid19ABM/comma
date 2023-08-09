@@ -57,6 +57,76 @@ class Hypothesis:
         'critical_job_yes'
     ]
 
+    all_possible_actions = [
+        'work_from_home',
+        'maintain_physical_distance',
+        'stay_at_home',
+        'exercise',
+        'socialise',
+        'travel',
+        'seek_help',
+        'negative_coping',
+        'positive_coping',
+        'socialise_online'
+    ]
+
+    @classmethod
+    def read_actions(cls, dir_params: str):
+        fpath_params_status = os.path.join(
+            dir_params, 'actions_effects_on_mh.csv')
+
+        df = pd.read_csv(fpath_params_status, delimiter=';', decimal=",")
+
+        # sort rows
+        df['actions'] = df['actions'].astype('category')
+        df['actions'] = df['actions'].cat.\
+            set_categories(cls.all_possible_actions)
+        df = df.sort_values(by='actions', ignore_index=True)
+
+        # Convert dataframe column names to lowercase
+        df.columns = df.columns.str.lower()
+
+        # Convert cols to lowercase
+        cols = [col.lower() for col in cls.all_possible_features]
+        cols.insert(0, "baseline")
+
+        # get and sort desired columns
+        df = df[cols]
+
+        return df
+
+    @classmethod
+    def read_hypotheses(cls, dir_params: str, lockdown: object):
+        lockdown_dfs = {}
+
+        for policy in lockdown:
+            # Create the file path
+            fpath_params_lockdown = os.path.join(
+                dir_params, 'lockdown_%s.csv' % policy
+            )
+
+            df = pd.read_csv(fpath_params_lockdown, delimiter=';', decimal=",")
+
+            # sort rows
+            df['actions'] = df['actions'].astype('category')
+            df['actions'] = df['actions'].cat.\
+                set_categories(cls.all_possible_actions)
+            df = df.sort_values(by='actions', ignore_index=True)
+
+            # Convert dataframe column names to lowercase
+            df.columns = df.columns.str.lower()
+
+            # Convert cols to lowercase
+            cols = [col.lower() for col in cls.all_possible_features]
+            cols.insert(0, "baseline")
+
+            # get and sort desired columns
+            df = df[cols]
+
+            lockdown_dfs[policy] = df
+
+        return lockdown_dfs
+
     @staticmethod
     def _get_one_hot_encoded_features(fpath_params_individual: str):
         """

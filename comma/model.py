@@ -15,6 +15,7 @@ class Model:
         self.simulation_id: int = None
         self.current_step: int = 0  # keep track of the current simulation step
         self.lockdown_status: dict = {}
+        self.dir_params: str = None
 
     def setup(self, size: int, dir_params: str, use_ipf: bool = False):
         """Setup the model with input parameters.
@@ -27,6 +28,7 @@ class Model:
             method to populate the agents If false,
             use the standard populate method.
         """
+        self.dir_params = dir_params
         Hypothesis.validate_param_file(dir_params)
         if use_ipf:
             self.agents = Individual.populate_ipf(size, dir_params)
@@ -34,17 +36,20 @@ class Model:
             self.agents = Individual.populate(size, dir_params)
         return self.agents
 
-    def step(self, lockdown: str):
+    def step(self, lockdown: pd.DataFrame, action_effects: pd.DataFrame):
         """Actions to be performed in each step.
 
         Args:
-            lockdown (str): lockdown type
+            lockdown (pd.DataFrame): lockdown dataframe
+        Returns:
+            actions: array of booleans
+            action_probs: array of probabilities
         """
         for agent in self.agents:
             # choose actions based on lockdown
             actions, action_probs = agent.choose_actions_on_lockdown(lockdown)
             # take those actions, and compute their effect on mental health
-            agent.take_actions(actions=actions)
+            agent.take_actions(actions=actions, action_effects=action_effects)
 
     def update(self, lockdown: str, step: int):
         """Update status at every step.
@@ -115,12 +120,19 @@ class Model:
             raise ValueError("The length of the lockdown list \
             must be equal to the number of steps")
 
+        # read once the hypotheses
+        lockdown_matrices = Hypothesis.read_hypotheses(
+            self.dir_params,
+            set(lockdown)
+        )
+        actions_effects = Hypothesis.read_actions(self.dir_params)
+
         for step, current_lockdown in tqdm(enumerate(lockdown),
                                            total=steps,
                                            desc="Running simulation"):
             self.simulation_id = step
             self.lockdown_status[step] = current_lockdown
-            self.step(current_lockdown)
+            self.step(lockdown_matrices[current_lockdown], actions_effects)
             self.update(current_lockdown, step)
             self.current_step += 1  # Increment the simulation step
         self.report(out_path)
