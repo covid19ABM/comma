@@ -70,7 +70,6 @@ class TestIndividual:
         - Correct actions are chosen based on input.
         - Status after action is as expected.
         """
-        dir_params = Path("parameters/")  # specify the path to your parameters
         # specify the actions
         actions = np.array([False, True, True, True, True,
                             False, True, True, False, False])
