@@ -9,7 +9,8 @@ outcomes during covid-19 lockdowns.
 Project status\ |image1|
 ========================
 
-|Python package| |pages-build-deployment| |Docs|
+|Python package| |pages-build-deployment| |Docs| |Quality Gate Status|
+|github license badge| |OpenSSF Best Practices|
 
 Why?\ |image2|
 ==============
@@ -29,6 +30,7 @@ Table of contents\ |image3|
 -  `Motivation <#why>`__
 -  `Installation <#installation>`__
 -  `Example <#example>`__
+-  `Diagram <#diagram>`__
 -  `License <#license>`__
 -  `Credits <#credits>`__
 
@@ -85,7 +87,23 @@ License\ |image6|
 This means that you’re free to use, modify, and distribute this
 software, even for commercial applications.
 
-Credits\ |image7|
+.. container::
+
+   [ ↑ Back to top ↑ ]
+
+Diagram\ |image7|
+=================
+
+.. figure:: https://github.com/covid19ABM/comma/blob/main/comma_diagram.drawio.svg
+   :alt: diagram
+
+   diagram
+
+.. container::
+
+   [ ↑ Back to top ↑ ]
+
+Credits\ |image8|
 =================
 
 This is a project funded by the Netherlands eScience Center (Grant ID:
@@ -102,6 +120,12 @@ Directory <https://research-software-directory.org/projects/covid-19-mitigation-
    :target: https://github.com/covid19ABM/comma/actions/workflows/pages/pages-build-deployment
 .. |Docs| image:: https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml/badge.svg
    :target: https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml
+.. |Quality Gate Status| image:: https://sonarcloud.io/api/project_badges/measure?project=covid19ABM_comma&metric=alert_status
+   :target: https://sonarcloud.io/summary/new_code?id=covid19ABM_comma
+.. |github license badge| image:: https://img.shields.io/github/license/covid19ABM/comma
+   :target: https://github.com/covid19ABM/comma
+.. |OpenSSF Best Practices| image:: https://www.bestpractices.dev/projects/7777/badge
+   :target: https://www.bestpractices.dev/projects/7777
 .. |image2| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
    :target: #why
 .. |image3| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
@@ -113,4 +137,6 @@ Directory <https://research-software-directory.org/projects/covid-19-mitigation-
 .. |image6| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
    :target: #license
 .. |image7| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+   :target: #diagram
+.. |image8| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
    :target: #credits
