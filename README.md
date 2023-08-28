@@ -12,6 +12,7 @@
 [![pages-build-deployment](https://github.com/covid19ABM/comma/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/covid19ABM/comma/actions/workflows/pages/pages-build-deployment)
 [![Docs](https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml/badge.svg)](https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=covid19ABM_comma&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=covid19ABM_comma)
+[![github license badge](https://img.shields.io/github/license/covid19ABM/comma)](https://github.com/covid19ABM/comma)
 
 # Why?[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#why)
 This project aims at understanding the full spectrum of impacts the lockdown policies had during the COVID-19 pandemic, specifically on non-COVID-19-related health outcomes, such as mental health. Although lockdowns reduced disease transmission and mortality, they also potentially exacerbated mental health issues. By using `comma` you can simulate real-world scenarios, and estimate/compare the effects of lockdown policies on the mental health of an a-priori defined population across time.
