@@ -112,7 +112,7 @@ University) and developed in collaboration with the Netherlands eScience
 Center. More information on the `Research Software
 Directory <https://research-software-directory.org/projects/covid-19-mitigation-policies>`__.
 
-.. |image1| image:: docs/img/pin.svg
+.. |image1| image:: _static/pin.svg
    :target: #project-status
 .. |Python package| image:: https://github.com/covid19ABM/comma/actions/workflows/python-package.yml/badge.svg
    :target: https://github.com/covid19ABM/comma/actions/workflows/python-package.yml
@@ -126,17 +126,17 @@ Directory <https://research-software-directory.org/projects/covid-19-mitigation-
    :target: https://github.com/covid19ABM/comma
 .. |OpenSSF Best Practices| image:: https://www.bestpractices.dev/projects/7777/badge
    :target: https://www.bestpractices.dev/projects/7777
-.. |image2| image:: docs/img/pin.svg
+.. |image2| image:: _static/pin.svg
    :target: #why
-.. |image3| image:: docs/img/pin.svg
+.. |image3| image:: _static/pin.svg
    :target: #table-of-contents
-.. |image4| image:: docs/img/pin.svg
+.. |image4| image:: _static/pin.svg
    :target: #installation
-.. |image5| image:: docs/img/pin.svg
+.. |image5| image:: _static/pin.svg
    :target: #example
-.. |image6| image:: docs/img/pin.svg
+.. |image6| image:: _static/pin.svg
    :target: #license
-.. |image7| image:: docs/img/pin.svg
+.. |image7| image:: _static/pin.svg
    :target: #diagram
-.. |image8| image:: docs/img/pin.svg
+.. |image8| image:: _static/pin.svg
    :target: #credits
