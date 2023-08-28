@@ -94,7 +94,7 @@ software, even for commercial applications.
 Diagram\ |image7|
 =================
 
-.. figure:: https://github.com/covid19ABM/comma/blob/main/comma_diagram.drawio.svg
+.. figure:: comma_diagram.drawio.svg
    :alt: diagram
 
    diagram
