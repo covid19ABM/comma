@@ -28,6 +28,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 autoapi_dirs = ['../comma/']
 nbsphinx_execute = 'never'
 
+html_static_path = ['_static']
+
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
