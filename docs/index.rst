@@ -5,7 +5,8 @@
 
 Welcome to Comma's documentation!
 ===================================================
-.. include:: ../README.rst
+
+.. include:: README.rst
 
 .. toctree::
    :maxdepth: 2
@@ -18,6 +19,12 @@ Welcome to Comma's documentation!
    :caption: How-to guides & Examples:
 
    examples
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Documentation:
+
+   autoapi/index
 
 Indices and tables
 ==================
