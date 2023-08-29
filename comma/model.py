@@ -121,14 +121,26 @@ class Model:
             must be equal to the number of steps")
 
         # read once the hypotheses
-        lockdown_matrices = Hypothesis.read_lockdowns(
+        #lockdown_matrices = Hypothesis.read_lockdowns(
+        #    self.dir_params,
+        #    set(lockdown_policy)
+        #)
+
+        #actions_effects_matrices = Hypothesis.read_actions(
+        #    self.dir_params,
+        #    set(lockdown_policy)
+        #)
+
+        lockdown_matrices = Hypothesis.read_hypotheses(
             self.dir_params,
-            set(lockdown_policy)
+            set(lockdown_policy),
+            "lockdown"
         )
 
-        actions_effects_matrices = Hypothesis.read_actions(
+        actions_effects_matrices = Hypothesis.read_hypotheses(
             self.dir_params,
-            set(lockdown_policy)
+            set(lockdown_policy),
+            "actions"
         )
 
         for step, current_lockdown in tqdm(enumerate(lockdown_policy),

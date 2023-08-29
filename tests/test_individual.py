@@ -77,8 +77,10 @@ class TestIndividual:
                             False, True, True, False, False])
 
         # specify the actions effects
-        actions_effects = Hypothesis.read_actions(
-            dir_params, actions_effects=set([lockdown])
+        actions_effects = Hypothesis.read_hypotheses(
+            dir_params,
+            set([lockdown]),
+            "actions"
         )
         individual = Individual.populate(1, dir_params)
         individual[0].take_actions(actions, actions_effects[lockdown])
@@ -105,9 +107,10 @@ class TestIndividual:
         - `actions` array length should be 10.
         """
 
-        current_lockdown = Hypothesis.read_lockdowns(
+        current_lockdown = Hypothesis.read_hypotheses(
             dir_params,
-            set([lockdown])
+            set([lockdown]),
+            "lockdown"
         )
         # Create an individual with id 0
         individual = Individual.populate(1, dir_params)
