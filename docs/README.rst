@@ -9,7 +9,7 @@ Project status
 ========================
 
 |Python package| |pages-build-deployment| |Docs| |Quality Gate Status|
-|github license badge| |OpenSSF Best Practices|
+|github license badge| |OpenSSF Best Practices| |Coverage|
 
 Why?
 ==============
@@ -124,6 +124,8 @@ Directory <https://research-software-directory.org/projects/covid-19-mitigation-
 .. |Docs| image:: https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml/badge.svg
    :target: https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml
 .. |Quality Gate Status| image:: https://sonarcloud.io/api/project_badges/measure?project=covid19ABM_comma&metric=alert_status
+   :target: https://sonarcloud.io/summary/new_code?id=covid19ABM_comma
+.. |Coverage| image:: https://sonarcloud.io/api/project_badges/measure?project=covid19ABM_comma&metric=coverage
    :target: https://sonarcloud.io/summary/new_code?id=covid19ABM_comma
 .. |github license badge| image:: https://img.shields.io/github/license/covid19ABM/comma
    :target: https://github.com/covid19ABM/comma
