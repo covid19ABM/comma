@@ -3,6 +3,7 @@
 import json
 import os
 import pandas as pd
+from typing import Dict, Set
 
 PARAMS_INDIVIDUAL = 'params_individual.json'
 PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
@@ -81,61 +82,62 @@ class Hypothesis:
     ]
 
     @classmethod
-    def read_actions(cls, dir_params: str):
-        fpath_params_status = os.path.join(
-            dir_params, 'actions_effects_on_mh.csv')
+    def read_hypotheses(cls, dir_params: str, policies: Set[str],
+                        data_type: str) -> Dict[str, pd.DataFrame]:
+        """
+        Read in CSV matrices for either actions or lockdowns.
 
-        df = pd.read_csv(fpath_params_status, delimiter=';', decimal=",")
+        Args:
+            dir_params (str): path of the parameters folder
+            policies (set): set object of either actions or lockdown list
+            data_type (str): either 'actions' or 'lockdown'
 
-        # sort rows
-        df['actions'] = df['actions'].astype('category')
-        df['actions'] = df['actions'].cat.\
-            set_categories(cls.all_possible_actions)
-        df = df.sort_values(by='actions', ignore_index=True)
+        Returns:
+            data_dfs (dict): A dictionary where the key is either an action
+                             effect or lockdown policy, and the value is a
+                             processed dataframe.
+        """
 
-        # Convert dataframe column names to lowercase
-        df.columns = df.columns.str.lower()
+        # Ensure valid data type
+        if data_type not in ['actions', 'lockdown']:
+            raise ValueError("data_type should be either"
+                             "'actions' or 'lockdown'.")
 
-        # Convert cols to lowercase
-        cols = [col.lower() for col in cls.all_possible_features]
-        cols.insert(0, "baseline")
+        file_patterns = {
+            'actions': 'actions_effects_on_mh_%s.csv',
+            'lockdown': 'lockdown_%s.csv'
+        }
 
-        # get and sort desired columns
-        df = df[cols]
+        data_dfs = {}
 
-        return df
-
-    @classmethod
-    def read_hypotheses(cls, dir_params: str, lockdown: object):
-        lockdown_dfs = {}
-
-        for policy in lockdown:
-            # Create the file path
-            fpath_params_lockdown = os.path.join(
-                dir_params, 'lockdown_%s.csv' % policy
+        for policy in policies:
+            fpath_params = os.path.join(
+                dir_params, file_patterns[data_type] % policy
             )
 
-            df = pd.read_csv(fpath_params_lockdown, delimiter=';', decimal=",")
+            df = pd.read_csv(fpath_params, delimiter=';', decimal=".")
+
+            for col in df.columns:
+                if col != "actions":
+                    df[col] = df[col].astype(float)
 
             # sort rows
             df['actions'] = df['actions'].astype('category')
-            df['actions'] = df['actions'].cat.\
-                set_categories(cls.all_possible_actions)
+            df['actions'] = df['actions']\
+                .cat.set_categories(cls.all_possible_actions)
             df = df.sort_values(by='actions', ignore_index=True)
 
-            # Convert dataframe column names to lowercase
+            # Convert dataframe column names and cols to lowercase
             df.columns = df.columns.str.lower()
-
-            # Convert cols to lowercase
             cols = [col.lower() for col in cls.all_possible_features]
             cols.insert(0, "baseline")
 
             # get and sort desired columns
             df = df[cols]
 
-            lockdown_dfs[policy] = df
+            data_dfs[policy] = df
 
-        return lockdown_dfs
+        return data_dfs
 
     @staticmethod
     def _get_one_hot_encoded_features(fpath_params_individual: str):
@@ -210,8 +212,9 @@ class Hypothesis:
         path_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
 
         # check if all hypothesis files exist
-        fnames = ["actions_effects_on_%s.csv" %
-                  status for status in cls.individual_status]
+        fnames = ["actions_effects_on_%s_%s.csv" % (status, policy)
+                  for status in Hypothesis.individual_status
+                  for policy in Hypothesis.lockdown_policies]
         fnames += ["lockdown_%s.csv" %
                    lockdown for lockdown in cls.lockdown_policies]
         fpaths = [os.path.join(dir_params, fn) for fn in fnames]
