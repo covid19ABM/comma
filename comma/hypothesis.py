@@ -3,7 +3,7 @@
 import json
 import os
 import pandas as pd
-from typing import Dict
+from typing import Dict, Set
 
 PARAMS_INDIVIDUAL = 'params_individual.json'
 PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
@@ -82,7 +82,7 @@ class Hypothesis:
     ]
 
     @classmethod
-    def read_actions(cls, dir_params: str, actions_effects: object) -> Dict[str, pd.DataFrame]:
+    def read_actions(cls, dir_params: str, actions_effects: Set[str]) -> Dict[str, pd.DataFrame]:
         """
         Read in action's effects matrices regarding the
         effects of taking an action, given a lockdown
