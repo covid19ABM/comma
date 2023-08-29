@@ -34,13 +34,13 @@ class Model:
             self.agents = Individual.populate_ipf(size, dir_params)
         else:
             self.agents = Individual.populate(size, dir_params)
-        return self.agents
 
     def step(self, lockdown: pd.DataFrame, action_effects: pd.DataFrame):
         """Actions to be performed in each step.
 
         Args:
             lockdown (pd.DataFrame): lockdown dataframe
+            action_effects (pd.Dataframe): actions dataframe
         Returns:
             actions: array of booleans
             action_probs: array of probabilities
@@ -106,7 +106,7 @@ class Model:
         # Export to a csv
         status_df.to_csv(out_path, index=False, sep=";", decimal=",")
 
-    def run(self, steps: int, lockdown: list, out_path: str):
+    def run(self, steps: int, lockdown_policy: list, out_path: str):
         """Run a simulation
 
         Args:
@@ -116,23 +116,28 @@ class Model:
 
             out_path (str): File path of the output file
         """
-        if len(lockdown) != steps:
+        if len(lockdown_policy) != steps:
             raise ValueError("The length of the lockdown list \
             must be equal to the number of steps")
 
         # read once the hypotheses
-        lockdown_matrices = Hypothesis.read_hypotheses(
+        lockdown_matrices = Hypothesis.read_lockdowns(
             self.dir_params,
-            set(lockdown)
+            set(lockdown_policy)
         )
-        actions_effects = Hypothesis.read_actions(self.dir_params)
 
-        for step, current_lockdown in tqdm(enumerate(lockdown),
+        actions_effects_matrices = Hypothesis.read_actions(
+            self.dir_params,
+            set(lockdown_policy)
+        )
+
+        for step, current_lockdown in tqdm(enumerate(lockdown_policy),
                                            total=steps,
                                            desc="Running simulation"):
             self.simulation_id = step
             self.lockdown_status[step] = current_lockdown
-            self.step(lockdown_matrices[current_lockdown], actions_effects)
+            self.step(lockdown_matrices[current_lockdown],
+                      actions_effects_matrices[current_lockdown])
             self.update(current_lockdown, step)
             self.current_step += 1  # Increment the simulation step
         self.report(out_path)
