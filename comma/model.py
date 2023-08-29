@@ -120,17 +120,6 @@ class Model:
             raise ValueError("The length of the lockdown list \
             must be equal to the number of steps")
 
-        # read once the hypotheses
-        #lockdown_matrices = Hypothesis.read_lockdowns(
-        #    self.dir_params,
-        #    set(lockdown_policy)
-        #)
-
-        #actions_effects_matrices = Hypothesis.read_actions(
-        #    self.dir_params,
-        #    set(lockdown_policy)
-        #)
-
         lockdown_matrices = Hypothesis.read_hypotheses(
             self.dir_params,
             set(lockdown_policy),
