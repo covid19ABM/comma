@@ -82,102 +82,62 @@ class Hypothesis:
     ]
 
     @classmethod
-    def read_actions(cls, dir_params: str, actions_effects: Set[str]) -> Dict[str, pd.DataFrame]:
+    def read_hypotheses(cls, dir_params: str, policies: Set[str],
+                        data_type: str) -> Dict[str, pd.DataFrame]:
         """
-        Read in action's effects matrices regarding the
-        effects of taking an action, given a lockdown
+        Read in CSV matrices for either actions or lockdowns.
 
         Args:
-            - dir_params (str): path of the parameters folder
-            - actions_effects: set object of the actions effects list
+            dir_params (str): path of the parameters folder
+            policies (set): set object of either actions or lockdown list
+            data_type (str): either 'actions' or 'lockdown'
 
         Returns:
-            - actions_dfs (dict): A dictionary where the key is a matrix
-            of actions effect on mental health and the value is a dataframe
-            containing the matrix
+            data_dfs (dict): A dictionary where the key is either an action
+                             effect or lockdown policy, and the value is a
+                             processed dataframe.
         """
 
-        actions_dfs = {}
+        # Ensure valid data type
+        if data_type not in ['actions', 'lockdown']:
+            raise ValueError("data_type should be either"
+                             "'actions' or 'lockdown'.")
 
-        for policy in actions_effects:
-            fpath_params_actions = os.path.join(
-                dir_params, 'actions_effects_on_mh_%s.csv' % policy
+        file_patterns = {
+            'actions': 'actions_effects_on_mh_%s.csv',
+            'lockdown': 'lockdown_%s.csv'
+        }
+
+        data_dfs = {}
+
+        for policy in policies:
+            fpath_params = os.path.join(
+                dir_params, file_patterns[data_type] % policy
             )
 
-            df = pd.read_csv(fpath_params_actions,
-                             delimiter=';', decimal=".")
+            df = pd.read_csv(fpath_params, delimiter=';', decimal=".")
+
             for col in df.columns:
                 if col != "actions":
                     df[col] = df[col].astype(float)
 
             # sort rows
             df['actions'] = df['actions'].astype('category')
-            df['actions'] = df['actions'].cat. \
-                set_categories(cls.all_possible_actions)
+            df['actions'] = df['actions']\
+                .cat.set_categories(cls.all_possible_actions)
             df = df.sort_values(by='actions', ignore_index=True)
 
-            # Convert dataframe column names to lowercase
+            # Convert dataframe column names and cols to lowercase
             df.columns = df.columns.str.lower()
-
-            # Convert cols to lowercase
             cols = [col.lower() for col in cls.all_possible_features]
             cols.insert(0, "baseline")
 
             # get and sort desired columns
             df = df[cols]
 
-            actions_dfs[policy] = df
+            data_dfs[policy] = df
 
-        return actions_dfs
-
-    @classmethod
-    def read_lockdowns(cls, dir_params: str, lockdown: object) -> Dict[str, pd.DataFrame]:
-        """
-        Read in lockdown matrices regarding the
-        probability of taking a given action in a particular lockdown
-
-        Args:
-            - dir_params (str): path of the parameters folder
-            - lockdown (object): set object of the lockdown list
-
-        Returns:
-            - lockdown_dfs (dict): A dictionary where the key is
-            a lockdown policy and the value is a processed dataframe
-            representing the lockdown matrix for that policy.
-        """
-        lockdown_dfs = {}
-
-        for policy in lockdown:
-            # Create the file path
-            fpath_params_lockdown = os.path.join(
-                dir_params, 'lockdown_%s.csv' % policy
-            )
-
-            df = pd.read_csv(fpath_params_lockdown,
-                             delimiter=';', decimal=".")
-            for col in df.columns:
-                if col != "actions":
-                    df[col] = df[col].astype(float)
-
-            # sort rows
-            df['actions'] = df['actions'].astype('category')
-            df['actions'] = df['actions'].cat.\
-                set_categories(cls.all_possible_actions)
-            df = df.sort_values(by='actions', ignore_index=True)
-
-            # Convert dataframe column names to lowercase
-            df.columns = df.columns.str.lower()
-
-            # Convert cols to lowercase
-            cols = [col.lower() for col in cls.all_possible_features]
-            cols.insert(0, "baseline")
-
-            # get and sort desired columns
-            df = df[cols]
-
-            lockdown_dfs[policy] = df
-
-        return lockdown_dfs
+        return data_dfs
 
     @staticmethod
     def _get_one_hot_encoded_features(fpath_params_individual: str):
