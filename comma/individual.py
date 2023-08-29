@@ -1,6 +1,5 @@
 """Individual agent class definition
 """
-
 from comma.hypothesis import PARAMS_INDIVIDUAL, \
     PARAMS_IPF_WEIGHTS, Hypothesis
 import json

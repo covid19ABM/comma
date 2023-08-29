@@ -3,15 +3,15 @@ COMMA - **CO**\ vid **M**\ ental-health **M**\ odel with **A**\ gents
 
 .. container::
 
-``comma`` lets you run agent-based simulations to study mental health
-outcomes during covid-19 lockdowns.
+    ``comma`` lets you run agent-based simulations to study mental health outcomes during covid-19 lockdowns.
 
-Project status\ |image1|
+Project status
 ========================
 
-|Python package| |pages-build-deployment| |Docs|
+|Python package| |pages-build-deployment| |Docs| |Quality Gate Status|
+|github license badge| |OpenSSF Best Practices|
 
-Why?\ |image2|
+Why?
 ==============
 
 This project aims at understanding the full spectrum of impacts the
@@ -23,16 +23,17 @@ simulate real-world scenarios, and estimate/compare the effects of
 lockdown policies on the mental health of an a-priori defined population
 across time.
 
-Table of contents\ |image3|
+Table of contents
 ===========================
 
 -  `Motivation <#why>`__
 -  `Installation <#installation>`__
 -  `Example <#example>`__
+-  `Diagram <#diagram>`__
 -  `License <#license>`__
 -  `Credits <#credits>`__
 
-Installation\ |image4|
+Installation
 ======================
 
 Prerequisites
@@ -67,7 +68,8 @@ installed in a dedicated virtual environment and be ready to use it.
 
    [ ↑ Back to top ↑ ]
 
-Example\ |image5|
+
+Example
 =================
 
 You can find a tutorial that demonstrates the usage of ``comma`` in the
@@ -77,7 +79,8 @@ You can find a tutorial that demonstrates the usage of ``comma`` in the
 
    [ ↑ Back to top ↑ ]
 
-License\ |image6|
+
+License
 =================
 
 ``comma`` is under free open source `Apache License Version
@@ -85,7 +88,25 @@ License\ |image6|
 This means that you’re free to use, modify, and distribute this
 software, even for commercial applications.
 
-Credits\ |image7|
+.. container::
+
+   [ ↑ Back to top ↑ ]
+
+
+Diagram
+=================
+
+.. figure:: ../comma_diagram.drawio.svg
+   :alt: diagram
+
+   diagram
+
+.. container::
+
+   [ ↑ Back to top ↑ ]
+
+
+Credits
 =================
 
 This is a project funded by the Netherlands eScience Center (Grant ID:
@@ -94,7 +115,7 @@ University) and developed in collaboration with the Netherlands eScience
 Center. More information on the `Research Software
 Directory <https://research-software-directory.org/projects/covid-19-mitigation-policies>`__.
 
-.. |image1| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image1| image:: pin.svg
    :target: #project-status
 .. |Python package| image:: https://github.com/covid19ABM/comma/actions/workflows/python-package.yml/badge.svg
    :target: https://github.com/covid19ABM/comma/actions/workflows/python-package.yml
@@ -102,15 +123,23 @@ Directory <https://research-software-directory.org/projects/covid-19-mitigation-
    :target: https://github.com/covid19ABM/comma/actions/workflows/pages/pages-build-deployment
 .. |Docs| image:: https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml/badge.svg
    :target: https://github.com/covid19ABM/comma/actions/workflows/documentation.yaml
-.. |image2| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |Quality Gate Status| image:: https://sonarcloud.io/api/project_badges/measure?project=covid19ABM_comma&metric=alert_status
+   :target: https://sonarcloud.io/summary/new_code?id=covid19ABM_comma
+.. |github license badge| image:: https://img.shields.io/github/license/covid19ABM/comma
+   :target: https://github.com/covid19ABM/comma
+.. |OpenSSF Best Practices| image:: https://www.bestpractices.dev/projects/7777/badge
+   :target: https://www.bestpractices.dev/projects/7777
+.. |image2| image:: ../_static/pin.svg
    :target: #why
-.. |image3| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image3| image:: _static/pin.svg
    :target: #table-of-contents
-.. |image4| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image4| image:: _static/pin.svg
    :target: #installation
-.. |image5| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image5| image:: _static/pin.svg
    :target: #example
-.. |image6| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image6| image:: _static/pin.svg
    :target: #license
-.. |image7| image:: https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg
+.. |image7| image:: _static/pin.svg
+   :target: #diagram
+.. |image8| image:: _static/pin.svg
    :target: #credits
