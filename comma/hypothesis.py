@@ -3,6 +3,7 @@
 import json
 import os
 import pandas as pd
+from typing import Dict
 
 PARAMS_INDIVIDUAL = 'params_individual.json'
 PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
@@ -81,32 +82,69 @@ class Hypothesis:
     ]
 
     @classmethod
-    def read_actions(cls, dir_params: str):
-        fpath_params_status = os.path.join(
-            dir_params, 'actions_effects_on_mh.csv')
+    def read_actions(cls, dir_params: str, actions_effects: object) -> Dict[str, pd.DataFrame]:
+        """
+        Read in action's effects matrices regarding the
+        effects of taking an action, given a lockdown
 
-        df = pd.read_csv(fpath_params_status, delimiter=';', decimal=",")
+        Args:
+            - dir_params (str): path of the parameters folder
+            - actions_effects: set object of the actions effects list
 
-        # sort rows
-        df['actions'] = df['actions'].astype('category')
-        df['actions'] = df['actions'].cat.\
-            set_categories(cls.all_possible_actions)
-        df = df.sort_values(by='actions', ignore_index=True)
+        Returns:
+            - actions_dfs (dict): A dictionary where the key is a matrix
+            of actions effect on mental health and the value is a dataframe
+            containing the matrix
+        """
 
-        # Convert dataframe column names to lowercase
-        df.columns = df.columns.str.lower()
+        actions_dfs = {}
 
-        # Convert cols to lowercase
-        cols = [col.lower() for col in cls.all_possible_features]
-        cols.insert(0, "baseline")
+        for policy in actions_effects:
+            fpath_params_actions = os.path.join(
+                dir_params, 'actions_effects_on_mh_%s.csv' % policy
+            )
 
-        # get and sort desired columns
-        df = df[cols]
+            df = pd.read_csv(fpath_params_actions,
+                             delimiter=';', decimal=".")
+            for col in df.columns:
+                if col != "actions":
+                    df[col] = df[col].astype(float)
 
-        return df
+            # sort rows
+            df['actions'] = df['actions'].astype('category')
+            df['actions'] = df['actions'].cat. \
+                set_categories(cls.all_possible_actions)
+            df = df.sort_values(by='actions', ignore_index=True)
+
+            # Convert dataframe column names to lowercase
+            df.columns = df.columns.str.lower()
+
+            # Convert cols to lowercase
+            cols = [col.lower() for col in cls.all_possible_features]
+            cols.insert(0, "baseline")
+
+            # get and sort desired columns
+            df = df[cols]
+
+            actions_dfs[policy] = df
+
+        return actions_dfs
 
     @classmethod
-    def read_hypotheses(cls, dir_params: str, lockdown: object):
+    def read_lockdowns(cls, dir_params: str, lockdown: object) -> Dict[str, pd.DataFrame]:
+        """
+        Read in lockdown matrices regarding the
+        probability of taking a given action in a particular lockdown
+
+        Args:
+            - dir_params (str): path of the parameters folder
+            - lockdown (object): set object of the lockdown list
+
+        Returns:
+            - lockdown_dfs (dict): A dictionary where the key is
+            a lockdown policy and the value is a processed dataframe
+            representing the lockdown matrix for that policy.
+        """
         lockdown_dfs = {}
 
         for policy in lockdown:
@@ -115,7 +153,11 @@ class Hypothesis:
                 dir_params, 'lockdown_%s.csv' % policy
             )
 
-            df = pd.read_csv(fpath_params_lockdown, delimiter=';', decimal=",")
+            df = pd.read_csv(fpath_params_lockdown,
+                             delimiter=';', decimal=".")
+            for col in df.columns:
+                if col != "actions":
+                    df[col] = df[col].astype(float)
 
             # sort rows
             df['actions'] = df['actions'].astype('category')
@@ -210,8 +252,9 @@ class Hypothesis:
         path_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
 
         # check if all hypothesis files exist
-        fnames = ["actions_effects_on_%s.csv" %
-                  status for status in cls.individual_status]
+        fnames = ["actions_effects_on_%s_%s.csv" % (status, policy)
+                  for status in Hypothesis.individual_status
+                  for policy in Hypothesis.lockdown_policies]
         fnames += ["lockdown_%s.csv" %
                    lockdown for lockdown in cls.lockdown_policies]
         fpaths = [os.path.join(dir_params, fn) for fn in fnames]

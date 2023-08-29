@@ -25,7 +25,7 @@ class TestIndividual:
 
     @pytest.fixture
     def expected_status(self):
-        return np.array(0.)
+        return np.array(-18.080000000000002)
 
     @pytest.fixture
     def lockdown(self):
@@ -61,7 +61,8 @@ class TestIndividual:
             'critical_job_yes'
         ]
 
-    def test_take_actions(self, dir_params, expected_actions, expected_status):
+    def test_take_actions(self, dir_params, expected_actions,
+                          expected_status, lockdown):
         """
         Test for the `take_actions` method of the individual class.
 
@@ -70,14 +71,17 @@ class TestIndividual:
         - Correct actions are chosen based on input.
         - Status after action is as expected.
         """
+        np.random.seed(0)
         # specify the actions
         actions = np.array([False, True, True, True, True,
                             False, True, True, False, False])
 
         # specify the actions effects
-        actions_effects = Hypothesis.read_actions(dir_params)
+        actions_effects = Hypothesis.read_actions(
+            dir_params, actions_effects=set([lockdown])
+        )
         individual = Individual.populate(1, dir_params)
-        individual[0].take_actions(actions, actions_effects)
+        individual[0].take_actions(actions, actions_effects[lockdown])
 
         individual[0].chosen_actions = actions
         actual_actions = individual[0].get_actions()
@@ -101,7 +105,7 @@ class TestIndividual:
         - `actions` array length should be 10.
         """
 
-        current_lockdown = Hypothesis.read_hypotheses(
+        current_lockdown = Hypothesis.read_lockdowns(
             dir_params,
             set([lockdown])
         )

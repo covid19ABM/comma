@@ -26,10 +26,10 @@ class TestModel:
     def full_simulation(self):
         np.random.seed(0)
         self.setup_and_run_model("expected.csv")
-        yield
-        for file in ["expected.csv", "actual.csv"]:
-            if os.path.exists(file):
-                os.remove(file)
+        #yield
+        #for file in ["expected.csv", "actual.csv"]:
+        #    if os.path.exists(file):
+        #        os.remove(file)
 
     @pytest.fixture(scope="class")
     def expected_dataframe(self):
@@ -38,17 +38,19 @@ class TestModel:
             "lockdown": ["absent", "absent", "medium", "medium",
                          "hard", "hard", "easy", "easy"],
             "agent_id": [0, 1, 0, 1, 0, 1, 0, 1],
-            "delta_mental_health": [0.0, 0.0, 0.002, 0.002, 0.003,
-                                    0.002, 0.002, 0.003],
+            "delta_mental_health": [0.0, 0.0, -40.150000000000006,
+                                    -18.09, -15.68,
+                                    -7.649999999999999,
+                                    -17.59, -31.84],
             "cumulative_mental_health": [
+                -3.9699999999999998,
                 0.0,
-                0.002,
-                0.00017395607466307600,
-                0.00192182551544801,
-                0.0014293586434475100,
-                0.0025121416075092200,
-                0.0018830078256391300,
-                0.003486168909611150
+                -44.12182604392534,
+                -18.092078174484552,
+                -59.80357064135655,
+                -25.743487858392488,
+                -77.39511699217435,
+                -57.58551383109039
             ]
         }
         return pd.DataFrame(data).round(4)
