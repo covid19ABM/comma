@@ -26,10 +26,10 @@ class TestModel:
     def full_simulation(self):
         np.random.seed(0)
         self.setup_and_run_model("expected.csv")
-        #yield
-        #for file in ["expected.csv", "actual.csv"]:
-        #    if os.path.exists(file):
-        #        os.remove(file)
+        yield
+        for file in ["expected.csv", "actual.csv"]:
+            if os.path.exists(file):
+                os.remove(file)
 
     @pytest.fixture(scope="class")
     def expected_dataframe(self):
