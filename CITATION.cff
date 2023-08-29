@@ -1,0 +1,52 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: comma - COvid Mental-health Model with Agents
+message: >-
+  comma lets you run agent-based simulations to study mental
+  health outcomes during covid-19 lockdowns.
+type: software
+authors:
+  - given-names: Eva
+    family-names: Viviani
+    email: e.viviani@esciencecenter.nl
+    affiliation: Netherlands eScience center
+    orcid: 'https://orcid.org/0000-0002-1330-0585'
+  - given-names: Ji
+    family-names: Qi
+    email: j.qi@esciencecenter.nl
+    affiliation: Netherlands eScience center
+    orcid: 'https://orcid.org/0000-0001-8074-2730'
+  - orcid: 'https://orcid.org/0000-0002-0013-2295'
+    given-names: Astrid Anh
+    family-names: Pham
+    affiliation: >-
+      Wageningen University & Research - Wageningen Social
+      Science Group (WUR-SSG)
+  - given-names: Kristina
+    family-names: Thompson
+    email: kristina.thompson@wur.nl
+    affiliation: >-
+      Wageningen University & Research - Wageningen Social
+      Science Group (WUR-SSG)
+    orcid: 'https://orcid.org/0000-0002-2570-3365'
+repository-code: 'https://github.com/covid19ABM/comma'
+url: 'https://covid19abm.github.io/comma/'
+abstract: >-
+  This project aims at understanding the full spectrum of
+  impacts the lockdown policies had during the COVID-19
+  pandemic, specifically on non-COVID-19-related health
+  outcomes, such as mental health. Although lockdowns
+  reduced disease transmission and mortality, they also
+  potentially exacerbated mental health issues. By using
+  comma you can simulate real-world scenarios, and
+  estimate/compare the effects of lockdown policies on the
+  mental health of an a-priori defined population across
+  time.
+keywords:
+  - microsimulation
+  - ABM
+  - COVID-19
+  - python
+license: Apache-2.0
