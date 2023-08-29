@@ -4,20 +4,22 @@ from comma.individual import Individual
 from comma.hypothesis import Hypothesis
 import pandas as pd
 import numpy as np
+from typing import List, Tuple
 from tqdm import tqdm
 
 
 class Model:
     cumulative_status = dict()
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.agents: list = None
         self.simulation_id: int = None
         self.current_step: int = 0  # keep track of the current simulation step
         self.lockdown_status: dict = {}
         self.dir_params: str = None
 
-    def setup(self, size: int, dir_params: str, use_ipf: bool = False):
+    def setup(self, size: int, dir_params: str,
+              use_ipf: bool = False) -> None:
         """Setup the model with input parameters.
 
         Args:
@@ -35,7 +37,8 @@ class Model:
         else:
             self.agents = Individual.populate(size, dir_params)
 
-    def step(self, lockdown: pd.DataFrame, action_effects: pd.DataFrame):
+    def step(self, lockdown: pd.DataFrame,
+             action_effects: pd.DataFrame) -> None:
         """Actions to be performed in each step.
 
         Args:
@@ -51,8 +54,9 @@ class Model:
             # take those actions, and compute their effect on mental health
             agent.take_actions(actions=actions, action_effects=action_effects)
 
-    def update(self, lockdown: str, step: int):
-        """Update status at every step.
+    def update(self, lockdown: str, step: int) -> None:
+        """
+        It updates statuses at every step.
 
         Args:
             lockdown (str): lockdown type
@@ -81,10 +85,10 @@ class Model:
                 agent_statuses.append(new_status)
             self.cumulative_status[step] = agent_statuses
 
-    def report(self, out_path: str):
+    def report(self, out_path: str) -> None:
         """
-        Collect data recorded at the end of the simulation
-        and export as csv file.
+        It Collects data recorded at the end of the simulation
+        and exports it as csv file.
 
         Args:
             out_path (str): File path of the output file
@@ -106,15 +110,15 @@ class Model:
         # Export to a csv
         status_df.to_csv(out_path, index=False, sep=";", decimal=",")
 
-    def run(self, steps: int, lockdown_policy: list, out_path: str):
+    def run(self, steps: int, lockdown_policy: list, out_path: str) -> None:
         """Run a simulation
 
         Args:
-            steps (int): Number of steps to run the simulation
+            steps(int): Number of steps to run the simulation
 
-            lockdown (str): Type of lockdown (easy, hard, medium, no_lockdown)
+            lockdown_policy(str): Type of lockdown policy
 
-            out_path (str): File path of the output file
+            out_path(str): File path of the output file
         """
         if len(lockdown_policy) != steps:
             raise ValueError("The length of the lockdown list \
