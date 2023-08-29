@@ -3,7 +3,7 @@
 import json
 import os
 import pandas as pd
-from typing import Dict, Set
+from typing import Dict, Set, List
 
 PARAMS_INDIVIDUAL = 'params_individual.json'
 PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
@@ -12,8 +12,7 @@ PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
 class Hypothesis:
     """
     The Hypothesis class is responsible for managing and validating
-    the Hypotheses specified by the user.
-    These can be found in the `dir_params` folder.
+    hypotheses specified by the user.
 
     Methods:
         _get_one_hot_encoded_features():
@@ -140,7 +139,7 @@ class Hypothesis:
         return data_dfs
 
     @staticmethod
-    def _get_one_hot_encoded_features(fpath_params_individual: str):
+    def _get_one_hot_encoded_features(fpath_params_individual: str) -> List:
         """
         One-hot encode categorical features in the
         `params_individual.json` file and return the
@@ -166,7 +165,7 @@ class Hypothesis:
         return features
 
     @classmethod
-    def create_empty_hypotheses(cls, dir_params: str):
+    def create_empty_hypotheses(cls, dir_params: str) -> None:
         """
         Create empty CSV files for storing hypotheses on
         the impact of actions and lockdown policies on different agent statuses
@@ -174,6 +173,9 @@ class Hypothesis:
         Args:
             dir_params (str): The directory of the folder that contains
             the agent and model parameter files.
+        Returns:
+            None: This function does not return anything
+            as it creates empty csv files int the specified directory
         """
         fpath_params_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
 
@@ -198,7 +200,7 @@ class Hypothesis:
             df.to_csv(fp, sep=';', index=False)
 
     @classmethod
-    def validate_param_file(cls, dir_params: str):
+    def validate_param_file(cls, dir_params: str) -> None:
         """Validate files in the parameter folder.
 
         Args:

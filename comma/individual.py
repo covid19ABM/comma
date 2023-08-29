@@ -7,6 +7,7 @@ import json
 import numpy as np
 import os
 import pandas as pd
+from typing import List, Tuple
 from tqdm import tqdm
 
 
@@ -20,7 +21,7 @@ class Individual:
         self._features = features
         self.actions = Hypothesis.all_possible_actions
 
-    def get_features(self):
+    def get_features(self) -> pd.Series:
         """
         Get agent's features
 
@@ -30,16 +31,16 @@ class Individual:
         """
         return self._features
 
-    def get_status(self):
+    def get_status(self) -> float:
         """
         Get the current agent status (i.e., mental health)
 
         Returns:
-            pd.Series: the current status of the agent
+            float: the current status of the agent
         """
         return self._status
 
-    def get_actions(self):
+    def get_actions(self) -> List[str]:
         """
         Get the current actions chosen by the agent
 
@@ -49,15 +50,17 @@ class Individual:
         return [action_name for action_name, action_was_taken in
                 zip(self.actions, self.chosen_actions) if action_was_taken]
 
-    def choose_actions_on_lockdown(self, lockdown: pd.DataFrame):
-        """Choose the actions to take based on current lockdown policy.
+    def choose_actions_on_lockdown(self, lockdown: pd.DataFrame)\
+            -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Choose the actions to take based on current lockdown policy.
 
         Args:
             lockdown (pd.DataFrame): dataframe of a given lockdown
 
         Returns:
-            actions (pd.Series): list of booleans of taking/not-taking actions
-            actions_probs (pd.Series): probability of taking that action
+            actions (np.ndarray): array of booleans
+            actions_probs (np.ndarray): array of probability
         """
         params_lockdown = lockdown
         n_actions, _ = params_lockdown.shape
@@ -71,11 +74,18 @@ class Individual:
 
         return actions, action_probs
 
-    def take_actions(self, actions: pd.Series, action_effects: pd.DataFrame):
-        """Update status by taking the given actions.
+    def take_actions(self, actions: pd.Series,
+                     action_effects: pd.DataFrame) -> None:
+        """
+        Update status by taking the given actions.
 
         Args:
             actions (pd.Series): list of booleans of chosen/not-chosen actions.
+            action_effects (pd.DataFrame): matrix of actions effects
+
+        Returns:
+            None: This function updates the agent's status
+            but does not return anything.
         """
         params_status = action_effects
         result = params_status.dot(self.get_features()).dot(actions)
@@ -83,7 +93,7 @@ class Individual:
         self._status = result
 
     @staticmethod
-    def sampling_from_ipf(size: int, dir_params: str):
+    def sampling_from_ipf(size: int, dir_params: str) -> pd.DataFrame:
         """
         Sample from IPF distribution saved
         as `weights.csv` in the parameters folder
@@ -109,7 +119,7 @@ class Individual:
         return sample
 
     @staticmethod
-    def populate_ipf(size: int, dir_params: str):
+    def populate_ipf(size: int, dir_params: str) -> List:
         """
         Create a population of individual agents
         with the given weights obtained via IPF
@@ -117,6 +127,11 @@ class Individual:
         Args:
             size (int): size of data sample.
             dir_params (str): path to parameters folder.
+
+        Returns:
+            List[Individual]: A list containing instances of
+            the individual class, each representing an
+            agent with specific features.
         """
         _features = pd.DataFrame()
 
@@ -137,7 +152,7 @@ class Individual:
                 tqdm(range(size), desc="Populating individuals", unit="i")]
 
     @staticmethod
-    def populate(size: int, dir_params: str):
+    def populate(size: int, dir_params: str) -> List:
         """
         Create a population of individual agents
         with the given feature parameters.
