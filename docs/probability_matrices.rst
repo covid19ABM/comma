@@ -1,6 +1,10 @@
 =================
-Lockdown probability matrices
+How does `comma` work?
 =================
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lockdown probability matrices: Choosing which actions agents can do every day
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The goal of this type of matrices is to specify what's the likelihood of choosing a particular action,
 given the agents' set of features.

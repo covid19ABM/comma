@@ -1,18 +1,31 @@
-COMMA - **CO**\ vid **M**\ ental-health **M**\ odel with **A**\ gents
-=====================================================================
+Overview
+========
 
 .. container::
 
     ``comma`` lets you run agent-based simulations to study mental health outcomes during covid-19 lockdowns.
 
+~~~~~~~~~~~~~~
 Project status
-========================
+~~~~~~~~~~~~~~
 
 |Python package| |pages-build-deployment| |Docs| |Quality Gate Status|
 |github license badge| |OpenSSF Best Practices| |Coverage|
 
+~~~~~~~~~~~~~~~~~
+Table of contents
+~~~~~~~~~~~~~~~~~
+
+-  `Motivation <#why>`__
+-  `Installation <#installation>`__
+-  `Example <#example>`__
+-  `Diagram <#diagram>`__
+-  `License <#license>`__
+-  `Credits <#credits>`__
+
+~~~~~~~~~~~~~~
 Why?
-==============
+~~~~~~~~~~~~~~
 
 This project aims at understanding the full spectrum of impacts the
 lockdown policies had during the COVID-19 pandemic, specifically on
@@ -23,26 +36,17 @@ simulate real-world scenarios, and estimate/compare the effects of
 lockdown policies on the mental health of an a-priori defined population
 across time.
 
-Table of contents
-===========================
-
--  `Motivation <#why>`__
--  `Installation <#installation>`__
--  `Example <#example>`__
--  `Diagram <#diagram>`__
--  `License <#license>`__
--  `Credits <#credits>`__
-
+~~~~~~~~~~~~~~
 Installation
-======================
+~~~~~~~~~~~~~~
 
 Prerequisites
--------------
+^^^^^^^^^^^^^
 
 -  Python 3.6 or above
 
 Install from source
--------------------
+^^^^^^^^^^^^^^^^^^^
 
 We recommend installing ``comma`` in a virtual environment. For example,
 in conda:
@@ -64,50 +68,33 @@ locally:
 That’s it! After following these steps, you should have ``comma``
 installed in a dedicated virtual environment and be ready to use it.
 
-.. container::
-
-   [ ↑ Back to top ↑ ]
-
-
+~~~~~~~~~~~~~~
 Example
-=================
+~~~~~~~~~~~~~~
 
 You can find a tutorial that demonstrates the usage of ``comma`` in the
 ``/notebooks`` folder.
 
-.. container::
-
-   [ ↑ Back to top ↑ ]
-
-
+~~~~~~~~~~~~~~
 License
-=================
+~~~~~~~~~~~~~~
 
 ``comma`` is under free open source `Apache License Version
 2.0 <https://raw.githubusercontent.com/covid19ABM/comma/main/LICENSE>`__.
 This means that you’re free to use, modify, and distribute this
 software, even for commercial applications.
 
-.. container::
-
-   [ ↑ Back to top ↑ ]
-
-
+~~~~~~~~~~~~~~
 Diagram
-=================
+~~~~~~~~~~~~~~
+Below is a flowchart illustrating the software's core architecture and the cascade of events within a simulation.
 
 .. figure:: ../comma_diagram.drawio.svg
    :alt: diagram
 
-   diagram
-
-.. container::
-
-   [ ↑ Back to top ↑ ]
-
-
+~~~~~~~~~~~~~~
 Credits
-=================
+~~~~~~~~~~~~~~
 
 This is a project funded by the Netherlands eScience Center (Grant ID:
 NLESC.SSI.2022b.022) and awarded to Dr Kristina Thompson (Wageningen
