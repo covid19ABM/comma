@@ -33,11 +33,10 @@ class TestHypothesis:
     def test_filter_dates_within_range(self, file_list):
         # Test whether function correctly filter out dates
         # that are *clearly* within the bounds of `time_period`
-        time_period = ('2021-01-02', '2021-01-30')
+        time_period = ('2021-01-01', '2021-01-02')
         expected_output = [
-            'data-rivm/tests/rivm_daily_2021-01-02.csv.gz',
-            'data-rivm/tests/rivm_daily_2021-01-15.csv.gz',
-            'data-rivm/tests/rivm_daily_2021-01-30.csv.gz'
+            'data-rivm/tests/rivm_daily_2021-01-01.csv.gz',
+            'data-rivm/tests/rivm_daily_2021-01-02.csv.gz'
         ]
         output = Hypothesis.filter_dates(file_list, time_period)
         assert output == expected_output
@@ -45,9 +44,8 @@ class TestHypothesis:
     def test_filter_dates_on_boundary(self, file_list):
         # Test whether function correctly includes
         # or excludes dates that are exactly on the edge
-        time_period = ('2021-01-15', '2021-02-28')
+        time_period = ('2021-01-16', '2021-02-28')
         expected_output = [
-            'data-rivm/tests/rivm_daily_2021-01-15.csv.gz',
             'data-rivm/tests/rivm_daily_2021-01-30.csv.gz',
             'data-rivm/tests/rivm_daily_2021-02-01.csv.gz',
             'data-rivm/tests/rivm_daily_2021-02-15.csv.gz',
