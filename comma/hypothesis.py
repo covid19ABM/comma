@@ -1,9 +1,13 @@
 """Hypothesis class definition"""
 
+from datetime import datetime
 import json
 import os
 import pandas as pd
-from typing import Dict, Set, List
+import re
+import requests
+from typing import List, Tuple, Set, Dict
+from tqdm import tqdm
 
 PARAMS_INDIVIDUAL = 'params_individual.json'
 PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
@@ -79,6 +83,130 @@ class Hypothesis:
         'positive_coping',
         'socialise_online'
     ]
+
+    @staticmethod
+    def get_file_paths(url: str) -> List:
+        """
+        Extract file paths from url
+
+        Args:
+        url (str): website
+
+        Returns:
+        file_paths (list): list of '.csv.gz' file paths
+        """
+
+        response = requests.get(url)
+        # Will raise an HTTPError
+        # if the HTTP request was unsuccessful
+        response.raise_for_status()
+        data = response.json()
+        # extract '.csv.gz' file paths
+        file_paths = [
+            item['path'] for item in data['payload']['tree']['items']
+        ]
+
+        return file_paths
+
+    @staticmethod
+    def filter_dates(file_list: List,
+                     time_period: Tuple[str, str]) -> List[str]:
+        """
+        Select dates within the interval defined by `time_period`
+
+        Args:
+
+        file_list (List): list of file paths
+        time_period (Tuple): time interval of the time t0 -> t1
+
+        Returns:
+        filtered_paths (List): list of filtered paths
+
+        Raises:
+        ValueError: if the time_period is not within the
+        range of dates in the file
+        """
+        start = datetime.strptime(time_period[0], '%Y-%m-%d')
+        end = datetime.strptime(time_period[1], '%Y-%m-%d')
+
+        # regular expression to extract dates from string
+        pattern = re.compile(r'(\d{4}-\d{2}-\d{2})')
+
+        all_dates = []
+
+        for file in file_list:
+            match = pattern.search(file)
+            if match:
+                date = datetime.strptime(match.group(1), '%Y-%m-%d')
+                all_dates.append(date)
+
+        if not all_dates:
+            raise ValueError("Dates provided are not within the list")
+
+        min_date = min(all_dates)
+        max_date = max(all_dates)
+
+        if start < min_date or end > max_date:
+            raise ValueError(
+                f"time_period ({time_period[0]} - {time_period[1]}) "
+                f"is outside available dates that go from "
+                f"({min_date} to {max_date})"
+            )
+
+        # Filtering the dates now that we know they're within the range
+        filtered_paths = [
+            file for file in file_list
+            if start <= datetime.strptime(
+                pattern.search(file).group(1), '%Y-%m-%d'
+            ) <= end
+        ]
+
+        return filtered_paths
+
+    def get_covid_data(self, time_period: Tuple[str, str],
+                       location: str) -> pd.DataFrame:
+        """
+        Download and filter COVID-19 test data from the RIVM website.
+
+        Args:
+        time_period (tuple): Start and end date ('YYYY-MM-DD', 'YYYY-MM-DD').
+        location (str): Security region name. This is the name of the city.
+
+        Returns:
+        df_filtered (pandas.DataFrame): Filtered data.
+        """
+
+        furl_tests = ("https://github.com/mzelst/covid-19/raw/"
+                      "master/data-rivm/tests/")
+
+        dates = self.get_file_paths(furl_tests)
+        filtered_dates = self.filter_dates(dates, time_period)
+
+        df_gzip = []
+
+        for date in tqdm(filtered_dates, desc="Downloading data"):
+            full_url = furl_tests + date.split('/')[-1]
+            df = pd.read_csv(full_url, compression="gzip",
+                             header=0, sep=",", quotechar='"')
+            if not isinstance(df, pd.DataFrame):
+                raise ValueError(
+                    f"Data retrieved from {furl_tests}"
+                    f" is not a DataFrame but a {type(df)}"
+                )
+            df_gzip.append(df)
+
+        df_tests = pd.concat(df_gzip, ignore_index=True)
+
+        df_tests['Date_of_statistics'] = pd.to_datetime(
+            df_tests['Date_of_statistics']
+        )
+
+        mask = (df_tests['Date_of_statistics'] >= time_period[0]) & \
+               (df_tests['Date_of_statistics'] <= time_period[1]) & \
+               (df_tests['Security_region_name'] == location)
+        df_filtered = df_tests.loc[mask].reset_index(drop=True)
+
+        return df_filtered
 
     @classmethod
     def read_hypotheses(cls, dir_params: str, policies: Set[str],
