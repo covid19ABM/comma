@@ -5,6 +5,24 @@ All notable changes to the codebase are documented in this file.
    :depth: 1
 
 ~~~~~~~~~
+1.1.0
+~~~~~~~~~
+
+Released on October 16, 2023
+
+Main changes
+-------------
+
+Features
+^^^^^^^^
+- feat: new documentation about the implementation of the positivity to COVID-19 by @n400peanuts in `#48 <https://github.com/covid19ABM/comma/commit/37372a3c46202d650297a285f091810914caddb1>`_
+- feat: Comma now integrates positivity to COVID-19 in the model by @n400peanuts in `#73 <https://github.com/covid19ABM/comma/pull/73>`_
+
+Tests
+^^^^^
+- feat: added tests for Hypothesis class by @n400peanuts in `#73 <https://github.com/covid19ABM/comma/commit/5636c9e6221da6d14ca9662a7947cbcda2d51ebc>`_
+
+~~~~~~~~~
 1.0.0
 ~~~~~~~~~
 

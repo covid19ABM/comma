@@ -1,6 +1,6 @@
-=================
+========================================
 How agents become positive for COVID-19?
-=================
+========================================
 
 
 In this document, we will consider the dynamics of how agents become positive for COVID-19 in our model.
@@ -20,15 +20,15 @@ time points, fully aware of the stage of the COVID-19 virus's spread at those mo
 A brief caveat to bear in mind:
 The statistics reflect only the recorded cases resulting from COVID-19 tests (any tests).
 A dip in testing numbers doesn't necessarily indicate diminished contagion.
-Nonetheless, these are the metrics that governments uses to implement lockdowns policies.
+Nonetheless, these are the metrics that governments use to implement lockdowns policies.
 Lockdown – operationalised as restrictions on actions – is our primary independent variable.
 As a consequence, this is the lens through which we examine how a positive COVID-19 diagnosis might impact mental health in our simulation.
 
 With that said, let's delve into how Comma has approached the impact of COVID-19 positivity.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Step 1: Compute new COVID-19 positive cases in the population
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We extract data from the `RIVM github repository <https://github.com/mzelst/covid-19/raw/master/data-rivm/tests/>`_.
 We select a period of time, and a location and we compute the number of new cases in the simulated population
@@ -45,9 +45,9 @@ per day become positive, and conversely, how many stay negative.
 
 [|image1|]
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Step 2: Set how long agents will be infectious / definition of recovery
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The decourse must have a distribution with a peak ~ 10 days, and have a very long tail (this decision is based on `literature <https://www.nature.com/articles/d41586-022-02026-x#ref-CR1>`_).
 Given these premises a good approximation could be a gamma distribution with :math:`a`=5 and :math:`scale`=3.
