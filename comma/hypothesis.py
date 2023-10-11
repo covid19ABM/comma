@@ -30,6 +30,8 @@ class Hypothesis:
         Hypothesis.create_empty_hypotheses("/path/to/dir_params")
         Hypothesis.validate_param_file("/path/to/dir_params")
     """
+    RIVM_URL = "https://github.com/mzelst/covid-19/raw/master/data-rivm/tests/"
+
     _required_params = ['size', 'steps', 'actions', 'status',
                         'lockdown_policies', 'lockdown']
 
@@ -176,21 +178,18 @@ class Hypothesis:
         df_filtered (pandas.DataFrame): Filtered data.
         """
 
-        furl_tests = ("https://github.com/mzelst/covid-19/raw/"
-                      "master/data-rivm/tests/")
-
-        dates = self.get_file_paths(furl_tests)
+        dates = self.get_file_paths(self.RIVM_URL)
         filtered_dates = self.filter_dates(dates, time_period)
 
         df_gzip = []
-
-        for date in tqdm(filtered_dates, desc="Downloading data"):
-            full_url = furl_tests + date.split('/')[-1]
+        message = "Downloading COVID-19 data from RIVM"
+        for date in tqdm(filtered_dates, desc=message):
+            full_url = self.RIVM_URL + date.split('/')[-1]
             df = pd.read_csv(full_url, compression="gzip",
                              header=0, sep=",", quotechar='"')
             if not isinstance(df, pd.DataFrame):
                 raise ValueError(
-                    f"Data retrieved from {furl_tests}"
+                    f"Data retrieved from {self.RIVM_URL}"
                     f" is not a DataFrame but a {type(df)}"
                 )
             df_gzip.append(df)
@@ -207,6 +206,31 @@ class Hypothesis:
         df_filtered = df_tests.loc[mask].reset_index(drop=True)
 
         return df_filtered
+
+    def get_positive_cases(self, time_period: Tuple[str, str],
+                           location: str) -> pd.Series:
+        """
+        Get an array of daily positive COVID-19 cases for
+        a specific time period and location.
+
+        Args:
+        time_period (tuple): Start and end date ('YYYY-MM-DD', 'YYYY-MM-DD').
+        location (str): Security region name.
+
+        Returns:
+        daily_positive_cases (pandas.Series): Daily positive cases.
+
+        """
+        df_filtered = self.get_covid_data(time_period, location)
+        # positive cases were reported multiple times
+        # and multiple days after a particular day
+        # as there were corrections. We select the most reliable records:
+        # sort dataframe based on date of report
+        sorted_df = df_filtered.sort_values(by="Date_of_report", ascending=False)
+        # get the most recent data
+        agg_df = sorted_df.groupby('Date_of_statistics').first().reset_index()
+        daily_positive_cases = agg_df['Tested_positive']
+        return daily_positive_cases
 
     @classmethod
     def read_hypotheses(cls, dir_params: str, policies: Set[str],
