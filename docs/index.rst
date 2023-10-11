@@ -21,6 +21,7 @@ Welcome to Comma's documentation!
    overview
    whatsnew
    probability_matrices
+   positivity_estimation
 
 .. toctree::
    :maxdepth: 4
