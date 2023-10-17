@@ -7,6 +7,7 @@ import json
 import numpy as np
 import os
 import pandas as pd
+from scipy.stats import gamma  # for the "negativisation" curve
 from typing import List, Tuple
 from tqdm import tqdm
 
@@ -20,6 +21,9 @@ class Individual:
         self._status: float = .0
         self._features = features
         self.actions = Hypothesis.all_possible_actions
+        self.covid_status: int = 0  # this tracks the positivity to COVID-19
+        self.days_since_positive = np.nan  # n-day from first day of positivity
+        self.recovery = np.nan  # recovery status
 
     def get_features(self) -> pd.Series:
         """
@@ -73,6 +77,62 @@ class Individual:
         self.chosen_actions = actions  # store the chosen action
 
         return actions, action_probs
+
+    @staticmethod
+    def is_recovered(n_days):
+        """
+        Determine if an individual is recovered based on
+        the number of days since testing positive.
+
+        The function uses a gamma cumulative distribution
+        function with shape parameter 5 and scale parameter 3
+        to model the probability of recovery. This can be of
+        course changed based on the literature.
+        Note that if `n_days` is equal or lower than 10,
+        then the probability of recovering is always 0,
+        as per Astrid's suggestion.
+
+        Args:
+            n_days (int): Number of days since tested positive.
+        Returns:
+            recovery (bool): True if recovered, False otherwise.
+        """
+
+        if n_days <= 10:
+            recovery = 0
+        else:
+            recovery_prob = gamma.cdf(n_days, a=5, scale=3)
+            recovery = np.random.uniform() <= recovery_prob
+        return recovery
+
+    @staticmethod
+    def modify_policy_when_infected(lockdown: pd.DataFrame):
+        """
+
+        Args:
+            lockdown (pd.DataFrame): lockdown matrix
+
+        Returns:
+            actions (np.ndarray): array of booleans
+            actions_probs (np.ndarray): array of probability
+
+        """
+
+        # Set betas to 0 in all columns except actions and baseline
+        columns_to_update = lockdown.columns.difference(
+            ['actions', 'baseline']
+        )
+        lockdown[columns_to_update] = 0
+
+        # set baseline beta to -5 (v. unlikely)
+        lockdown['baseline'] = -5
+        # however for 'stay at home' set beta to 5 (v. likely)
+        if 'actions' in lockdown.columns:
+            lockdown.loc[lockdown['actions'] == 'stay_at_home', 'baseline'] = 5
+        else:
+            lockdown.iat[2, lockdown.columns.get_loc('baseline')] = 5
+
+        return lockdown
 
     def take_actions(self, actions: pd.Series,
                      action_effects: pd.DataFrame) -> None:
