@@ -1,5 +1,5 @@
 """Hypothesis class definition"""
-
+import warnings
 from datetime import datetime
 import json
 import os
@@ -165,7 +165,8 @@ class Hypothesis:
 
         return filtered_paths
 
-    def get_covid_data(self, time_period: Tuple[str, str],
+    @classmethod
+    def get_covid_data(cls, time_period: Tuple[str, str],
                        location: str) -> pd.DataFrame:
         """
         Download and filter COVID-19 test data from the RIVM website.
@@ -178,18 +179,18 @@ class Hypothesis:
         df_filtered (pandas.DataFrame): Filtered data.
         """
 
-        dates = self.get_file_paths(self.RIVM_URL)
-        filtered_dates = self.filter_dates(dates, time_period)
+        dates = cls.get_file_paths(cls.RIVM_URL)
+        filtered_dates = cls.filter_dates(dates, time_period)
 
         df_gzip = []
         message = "Downloading COVID-19 data from RIVM"
         for date in tqdm(filtered_dates, desc=message):
-            full_url = self.RIVM_URL + date.split('/')[-1]
+            full_url = cls.RIVM_URL + date.split('/')[-1]
             df = pd.read_csv(full_url, compression="gzip",
                              header=0, sep=",", quotechar='"')
             if not isinstance(df, pd.DataFrame):
                 raise ValueError(
-                    f"Data retrieved from {self.RIVM_URL}"
+                    f"Data retrieved from {cls.RIVM_URL}"
                     f" is not a DataFrame but a {type(df)}"
                 )
             df_gzip.append(df)
@@ -207,7 +208,8 @@ class Hypothesis:
 
         return df_filtered
 
-    def get_positive_cases(self, time_period: Tuple[str, str],
+    @classmethod
+    def get_positive_cases(cls, steps, time_period: Tuple[str, str],
                            location: str) -> pd.Series:
         """
         Get an array of daily positive COVID-19 cases for
@@ -221,16 +223,96 @@ class Hypothesis:
         daily_positive_cases (pandas.Series): Daily positive cases.
 
         """
-        df_filtered = self.get_covid_data(time_period, location)
+        df_filtered = cls.get_covid_data(time_period, location)
+        # Check if the filtered dataframe is empty after filtering by location
+        if df_filtered.empty:
+            raise ValueError(f"No data available for location: {location}")
+
         # positive cases were reported multiple times
         # and multiple days after a particular day
         # as there were corrections. We select the most reliable records:
         # sort dataframe based on date of report
-        sorted_df = df_filtered.sort_values(by="Date_of_report", ascending=False)
+        sorted_df = df_filtered.sort_values(by="Date_of_report",
+                                            ascending=False)
         # get the most recent data
         agg_df = sorted_df.groupby('Date_of_statistics').first().reset_index()
         daily_positive_cases = agg_df['Tested_positive']
+
+        # match the length of the positives by day with the n of steps
+        if len(daily_positive_cases) < steps:
+            # if there are fewer data than steps
+            daily_positive_cases = cls.adjust_cases(steps,
+                                                    daily_positive_cases)
+        else:
+            # otherwise match the n of steps
+            # this prevents problems when there is more data than steps
+            daily_positive_cases = daily_positive_cases[:steps]
         return daily_positive_cases
+
+    @staticmethod
+    def adjust_cases(steps: int, daily_positive_cases: pd.Series) -> pd.Series:
+        """
+        Ensures the length of daily_positive_cases matches the given steps.
+
+        If the length of daily_positive_cases is less than the provided steps,
+        (this might happen if there are missing data for some days in RIVM)
+        this function will repeat the last row of daily_positive_cases until
+        its length is equal to steps.
+
+        Args:
+            steps (int): Desired length for daily_positive_cases
+            daily_positive_cases (pd.Series): Series of positive cases per day
+
+        Returns:
+            pd.Series: Modified series with length equal to steps
+
+        """
+        n_times = steps - len(daily_positive_cases)
+
+        if n_times > 0:
+            n_values = pd.Series([daily_positive_cases.iloc[-1]] * n_times)
+
+            positive_cases = pd.concat(
+                [daily_positive_cases, n_values],
+                ignore_index=True
+            )
+        return positive_cases
+
+    @staticmethod
+    def scale_cases_to_population(daily_positive_cases: pd.Series,
+                                  real_size: int, sim_size: int):
+        """
+        We compute the number of new positives in day _i_
+        for our simulated population as `new_cases_sim` = (n/N)*M where
+        N is the size of the simulated population, M is the size of the
+        real population, n is the number of new positives reported
+        on RIVM for that day.
+
+        Args:
+            daily_positive_cases(pd.Series): Daily positive cases
+            real_size(int): Size of the original population location
+            sim_size(int): Size of the simulated population
+
+        Returns:
+            pd.Series: Daily positive cases based on simulated population size
+        """
+        # Warning/ FYI:
+        # if sim_size is very small compared to real_size and
+        # the values in daily_positive_cases are also small
+        # (each value is much less than real_size), then the
+        # function could always result in zeros for every
+        # entry in daily_positive_cases.
+        max_scaled_case = daily_positive_cases.max() * sim_size
+
+        if max_scaled_case < real_size:
+            message = f"Given sim_size={sim_size}, " \
+                      f"real_size={real_size}, " \
+                      f"and max daily cases={daily_positive_cases.max()}," \
+                      f"the scaling might result in all zeros."
+            warnings.warn(message)
+
+        new_cases = (daily_positive_cases * sim_size) / real_size
+        return new_cases.astype("int")
 
     @classmethod
     def read_hypotheses(cls, dir_params: str, policies: Set[str],

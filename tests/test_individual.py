@@ -5,7 +5,6 @@ from comma.individual import Individual
 import numpy as np
 from pathlib import Path
 
-
 class TestIndividual:
 
     @pytest.fixture
@@ -173,3 +172,21 @@ class TestIndividual:
             (df[0].get_features() == 0) | (df[0].get_features() == 1)
         ).all(), 'Values in the dataframe returned ' \
                  'by populate_ipf should be either 0 or 1'
+
+    def test_actions_when_positive(self, dir_params, lockdown):
+        """
+        Test that modify_policy_when_infected returns 'stay at home' action
+        """
+        policy = Hypothesis.read_hypotheses(
+            dir_params,
+            set([lockdown]),
+            'lockdown'
+        )
+        agent = Individual.populate_ipf(1, dir_params)
+        lockdown_new = agent[0].modify_policy_when_infected(policy[lockdown])
+        _, action_probs = agent[0].choose_actions_on_lockdown(lockdown_new)
+        action_out = agent[0].get_actions()
+        assert action_out[0] == 'stay_at_home', f"Expected 'stay at home' " \
+                                                f"got {action_out[0]}"
+        assert action_probs.round()[2] == 1, f"Expected Probability ~ 1 " \
+                                             f"got {action_probs.round()[2]}"

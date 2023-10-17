@@ -38,23 +38,27 @@ class TestModel:
             "lockdown": ["absent", "absent", "medium", "medium",
                          "hard", "hard", "easy", "easy"],
             "agent_id": [0, 1, 0, 1, 0, 1, 0, 1],
-            "delta_mental_health": [0.0, 0.0, -40.150000000000006,
-                                    -18.09, -15.68,
-                                    -7.649999999999999,
-                                    -17.59, -31.84],
+            "delta_mental_health": [0.0, 0.0, -25.28,
+                                    -18.09, -16.24,
+                                    -4.109999999999999,
+                                    -42.519999999999996, -36.39],
             "cumulative_mental_health": [
                 -3.9699999999999998,
                 0.0,
-                -44.12182604392534,
-                -18.092078174484552,
-                -59.80357064135655,
-                -25.743487858392488,
-                -77.39511699217435,
-                -57.58551383109039
-            ]
+                -29.252087693266336,
+                -18.091768747230283,
+                -45.49484241580747,
+                -22.204302634795013,
+                -88.01741211614974,
+                -58.595685221884835
+            ],
+            "covid_status": [0, 0, 0, 0, 0, 0, 0, 0],
+            "days_since_first_infection": [np.nan, np.nan, np.nan, np.nan,
+                                           np.nan, np.nan, np.nan, np.nan]
         }
         return pd.DataFrame(data).round(4)
 
+    @pytest.mark.filterwarnings("ignore:Given sim_size")
     def test_simulation_output(self, full_simulation):
         np.random.seed(0)
         self.setup_and_run_model("actual.csv")
@@ -71,6 +75,7 @@ class TestModel:
             assert expected_row[1].equals(actual_row[1]), \
                 f"Row {idx} is different"
 
+    @pytest.mark.filterwarnings("ignore:Given sim_size")
     def test_expected_output(self, expected_dataframe):
         np.random.seed(0)
         self.setup_and_run_model("actual.csv")

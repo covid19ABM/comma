@@ -1,3 +1,5 @@
+import warnings
+
 import pandas as pd
 import pytest
 from unittest.mock import patch
@@ -69,6 +71,7 @@ class TestHypothesis:
     def test_get_covid_data(self, mocked_tqdm,
                             mocked_read_csv, mocked_filter_dates,
                             mocked_get_file_paths, mock_df):
+        # Test that the whole data extraction
         time_period = ('2022-01-01', '2022-01-3')
         location = "Groningen"
 
@@ -100,3 +103,59 @@ class TestHypothesis:
             compression="gzip", header=0,
             sep=",", quotechar='"'
         )
+
+    def test_location_not_in_dataset(self):
+        # trying to get data for an unknown location
+        # should raise an error
+        with pytest.raises(ValueError):
+            Hypothesis.get_positive_cases(10,
+                                          ('2023-01-01', '2023-01-03'),
+                                          'Los Angeles')
+
+    def test_scaling(self):
+        # Tests the scale_cases_to_population function
+        real_size = 100
+        sim_size = 50
+        daily_positive_cases = pd.Series([10, 20, 30, 40, 50])
+        out = Hypothesis.scale_cases_to_population(daily_positive_cases,
+                                                   real_size,
+                                                   sim_size)
+        expected = pd.Series([5, 10, 15, 20, 25])
+        assert all(out == expected), f"Expected {expected}, but got {out}"
+
+    def test_scaling_warning(self):
+        # Tests the warning of scale_cases_to_population function
+        daily_positive_cases = pd.Series([1, 1, 1, 1, 1])
+        real_size = 1000
+        sim_size = 50
+        with warnings.catch_warnings(record=True) as w:
+            Hypothesis.scale_cases_to_population(daily_positive_cases,
+                                                 real_size,
+                                                 sim_size)
+            # is there warning there?
+            assert len(w) == 1, f"Expected a warning, but got" \
+                                f"{len(w)} warnings"
+
+    def test_no_scaling_warning(self):
+        # Tests the warning of scale_cases_to_population function
+        # I expect no warning here
+        daily_positive_cases = pd.Series([500, 600, 700, 800, 900])
+        real_size = 1000
+        sim_size = 500
+        with warnings.catch_warnings(record=True) as w:
+            Hypothesis.scale_cases_to_population(daily_positive_cases,
+                                                 real_size,
+                                                 sim_size)
+            assert len(w) == 0, f"Expected no warnings, but got {len(w)}"
+
+    def test_adjust_cases(self):
+        # Test that when positives are less than steps
+        # the number is repeated n times * steps
+        less_positive_cases = pd.Series([846])
+        steps = 2
+        expected = pd.Series([846, 846])
+        out = Hypothesis.adjust_cases(steps, less_positive_cases)
+        assert all(out == expected), f"Expected {expected}, but got {out}"
+
+
+
