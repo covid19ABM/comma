@@ -80,8 +80,7 @@ class Individual:
         )
         # use the new random generator method of numpy
         if rng is None:
-            seed = random.randint(1, 2**32 - 1)
-            rng = np.random.default_rng(seed)
+            rng = np.random.default_rng(12345)
         actions = rng.random(n_actions) <= action_probs
         self.chosen_actions = actions  # store the chosen action
 
@@ -116,8 +115,7 @@ class Individual:
             recovery_prob = gamma.cdf(n_days, a=5, scale=3)
             # use the new generator method of numpy
             if rng is None:
-                seed = random.randint(1, 2**32 - 1)
-                rng = np.random.default_rng(seed)
+                rng = np.random.default_rng(12345)
             recovery = rng.uniform() <= recovery_prob
         return recovery
 
@@ -195,8 +193,7 @@ class Individual:
         indices = df_weights.index
         # use the new random method of numpy
         if rng is None:
-            seed = random.randint(1, 2**32 - 1)
-            rng = np.random.default_rng(seed)
+            rng = np.random.default_rng(12345)
         sample_indices = rng.choice(indices, size, p=weights)
         sample = df_weights.loc[sample_indices].drop(["weight"], axis=1)
         sample = sample.reset_index(drop=True)
@@ -271,8 +268,7 @@ class Individual:
             if rng is None:
                 # quality gate complains about security if
                 # I don't use a large range
-                seed = random.randint(1, 2**32 - 1)
-                rng = np.random.default_rng(seed)
+                rng = np.random.default_rng(12345)
             _features[feature] = rng.choice(
                 distribution[0], size, p=distribution[1]
             )
