@@ -24,8 +24,7 @@ class Model:
         else:
             self.rng = np.random.default_rng(12345)
 
-    def setup(self, size: int, dir_params: str,
-              use_ipf: bool = False) -> None:
+    def setup(self, size: int, dir_params: str, use_ipf: bool = False) -> None:
         """Setup the model with input parameters.
 
         Args:
@@ -39,17 +38,9 @@ class Model:
         self.dir_params = dir_params
         Hypothesis.validate_param_file(dir_params)
         if use_ipf:
-            self.agents = Individual.populate_ipf(
-                size,
-                dir_params,
-                rng=self.rng
-            )
+            self.agents = Individual.populate_ipf(size, dir_params, rng=self.rng)
         else:
-            self.agents = Individual.populate(
-                size,
-                dir_params,
-                rng=self.rng
-            )
+            self.agents = Individual.populate(size, dir_params, rng=self.rng)
 
     def update_covid_counter(self):
         """
@@ -73,8 +64,9 @@ class Model:
             recovered (list): List of indices of recovered agents
 
         """
-        positives = [index for index, agent in enumerate(self.agents) if
-                     agent.covid_status == 1]
+        positives = [
+            index for index, agent in enumerate(self.agents) if agent.covid_status == 1
+        ]
         recovered = []
         for i in positives:
             days_positive = self.agents[i].days_since_positive
@@ -84,9 +76,9 @@ class Model:
 
         return recovered
 
-    def step(self, lockdown: pd.DataFrame,
-             action_effects: pd.DataFrame,
-             new_infected: int) -> None:
+    def step(
+        self, lockdown: pd.DataFrame, action_effects: pd.DataFrame, new_infected: int
+    ) -> None:
         """Actions to be performed in each step.
 
         Args:
@@ -110,15 +102,12 @@ class Model:
                 self.agents[i].days_since_positive = 0
 
         # extract agents who are negative
-        negative_agents = [agent for agent in self.agents if
-                           agent.covid_status == 0]
+        negative_agents = [agent for agent in self.agents if agent.covid_status == 0]
 
         # make some of them positive (selected randomly)
         random_rng = np.random.default_rng(21345)
         newly_infected_agents = random_rng.choice(
-            negative_agents,
-            new_infected,
-            replace=False
+            negative_agents, new_infected, replace=False
         )
 
         # mark selected agents as infected (covid_status = 1)
@@ -130,28 +119,18 @@ class Model:
         for agent in self.agents:
             if agent.covid_status == 0:
                 # choose actions based on lockdown
-                actions, _ = agent.choose_actions_on_lockdown(
-                    lockdown,
-                    rng=self.rng
-                    )
+                actions, _ = agent.choose_actions_on_lockdown(lockdown, rng=self.rng)
                 # take those actions, and compute their effect on mental health
-                agent.take_actions(
-                    actions=actions,
-                    action_effects=action_effects
-                )
+                agent.take_actions(actions, action_effects)
             else:
                 # positive agents stay at home
                 lockdown_updated = agent.modify_policy_when_infected(lockdown)
                 actions, _ = agent.choose_actions_on_lockdown(
-                    lockdown_updated,
-                    rng=self.rng
-                    )
+                    lockdown_updated, rng=self.rng
+                )
                 # depending on lockdown staying at home
                 # has certain consequences on mental health
-                agent.take_actions(
-                    actions=actions,
-                    action_effects=action_effects
-                )
+                agent.take_actions(actions, action_effects)
 
     def update(self, lockdown: str, step: int) -> None:
         """
@@ -164,27 +143,39 @@ class Model:
         if self.current_step == 0:
             delta_mh = 0  # it's day 0, so no incremental change
             self.cumulative_status[step] = [
-                (lockdown, agent.id, delta_mh, agent.get_status(),
-                 agent.covid_status, agent.days_since_positive)
+                (
+                    lockdown,
+                    agent.id,
+                    delta_mh,
+                    agent.get_status(),
+                    agent.covid_status,
+                    agent.days_since_positive,
+                )
                 for agent in self.agents
             ]
         else:
             # from step 1++, sum the agent's status with the previous status
             agent_statuses = []
             for agent in self.agents:
-                last_status = \
-                    [status for status in self.cumulative_status[step - 1]
-                     if status[1] == agent.id][0][-3]
+                last_status = [
+                    status
+                    for status in self.cumulative_status[step - 1]
+                    if status[1] == agent.id
+                ][0][-3]
                 delta_mh = agent.get_status()  # this is the incremental effect
                 mu, sigma = 0.002, 0.0005
                 # this is the baseline effect when no action is taken
                 # or when action effects are canceled out
                 update_rng = np.random.default_rng(82356)
                 baseline = update_rng.normal(mu, sigma)
-                new_status = (lockdown, agent.id, delta_mh,
-                              (last_status + delta_mh) - baseline,
-                              agent.covid_status,
-                              agent.days_since_positive)
+                new_status = (
+                    lockdown,
+                    agent.id,
+                    delta_mh,
+                    (last_status + delta_mh) - baseline,
+                    agent.covid_status,
+                    agent.days_since_positive,
+                )
                 agent_statuses.append(new_status)
             self.cumulative_status[step] = agent_statuses
 
@@ -200,27 +191,52 @@ class Model:
 
         for step_id, agent_statuses in self.cumulative_status.items():
             for agent_status in agent_statuses:
-                lockdown, agent_id, delta_mh, mh,\
-                    covid_status, days_since_positive = agent_status
-                status_data.append([step_id, lockdown, agent_id,
-                                    delta_mh, mh, covid_status,
-                                    days_since_positive])
+                (
+                    lockdown,
+                    agent_id,
+                    delta_mh,
+                    mh,
+                    covid_status,
+                    days_since_positive,
+                ) = agent_status
+                status_data.append(
+                    [
+                        step_id,
+                        lockdown,
+                        agent_id,
+                        delta_mh,
+                        mh,
+                        covid_status,
+                        days_since_positive,
+                    ]
+                )
 
         # create a pandas dataframe to store data from `status_data`
         status_df = pd.DataFrame(
             status_data,
-            columns=['step_id', 'lockdown', 'agent_id',
-                     'delta_mental_health', 'cumulative_mental_health',
-                     'covid_status', 'days_since_first_infection']
+            columns=[
+                "step_id",
+                "lockdown",
+                "agent_id",
+                "delta_mental_health",
+                "cumulative_mental_health",
+                "covid_status",
+                "days_since_first_infection",
+            ],
         )
 
         # Export to a csv
-        status_df.to_csv(out_path, index=False, sep=";",
-                         decimal=",", mode='w+')
+        status_df.to_csv(out_path, index=False, sep=";", decimal=",", mode="w+")
 
-    def run(self, steps: int, lockdown_policy: list,
-            out_path: str, starting_date='2021-02-05',
-            location='Groningen', real_pop_size=200336) -> None:
+    def run(
+        self,
+        steps: int,
+        lockdown_policy: list,
+        out_path: str,
+        starting_date="2021-02-05",
+        location="Groningen",
+        real_pop_size=200336,
+    ) -> None:
         """Run a simulation
 
         Args:
@@ -240,53 +256,45 @@ class Model:
             raise ValueError("Steps must be more than 1")
 
         if len(lockdown_policy) != steps:
-            raise ValueError("The length of the lockdown list "
-                             "must be equal to the number of steps")
+            raise ValueError(
+                "The length of the lockdown list "
+                "must be equal to the number of steps"
+            )
 
         # compute time_period
         time_period = Hypothesis.compute_time_period(
-            starting_date,
-            steps,
-            self.date_format
+            starting_date, steps, self.date_format
         )
 
         # get new positive cases
-        positives = Hypothesis.get_positive_cases(
-            steps,
-            time_period,
-            location
-        )
+        positives = Hypothesis.get_positive_cases(steps, time_period, location)
         # scale them to the size of the simulated population
         new_cases = Hypothesis.scale_cases_to_population(
-            positives,
-            real_pop_size,
-            len(self.agents)
+            positives, real_pop_size, len(self.agents)
         )
         # print(f"scaled cases: {new_cases} \n cases: {positives}")
         # read hypotheses
         lockdown_matrices = Hypothesis.read_hypotheses(
-            self.dir_params,
-            set(lockdown_policy),
-            "lockdown"
+            self.dir_params, set(lockdown_policy), "lockdown"
         )
 
         actions_effects_matrices = Hypothesis.read_hypotheses(
-            self.dir_params,
-            set(lockdown_policy),
-            "actions"
+            self.dir_params, set(lockdown_policy), "actions"
         )
 
         # start the simulation
-        for step, current_lockdown in tqdm(enumerate(lockdown_policy),
-                                           total=steps,
-                                           desc="Running simulation"):
+        for step, current_lockdown in tqdm(
+            enumerate(lockdown_policy), total=steps, desc="Running simulation"
+        ):
             # print(f'new cases: {new_cases[step]}, day: {step}')
             self.simulation_id = step
             self.lockdown_status[step] = current_lockdown
             new_infected = new_cases[step]
-            self.step(lockdown_matrices[current_lockdown],
-                      actions_effects_matrices[current_lockdown],
-                      new_infected)
+            self.step(
+                lockdown_matrices[current_lockdown],
+                actions_effects_matrices[current_lockdown],
+                new_infected,
+            )
             self.update(current_lockdown, step)
             self.current_step += 1  # Increment the simulation step
         self.report(out_path)

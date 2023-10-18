@@ -9,7 +9,7 @@ import requests
 from typing import List, Tuple, Set, Dict
 from tqdm import tqdm
 
-PARAMS_INDIVIDUAL = 'params_individual.json'
+PARAMS_INDIVIDUAL = "params_individual.json"
 PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
 
 
@@ -30,60 +30,60 @@ class Hypothesis:
         Hypothesis.create_empty_hypotheses("/path/to/dir_params")
         Hypothesis.validate_param_file("/path/to/dir_params")
     """
+
     RIVM_URL = "https://github.com/mzelst/covid-19/raw/master/data-rivm/tests/"
 
-    _required_params = ['size', 'steps', 'actions', 'status',
-                        'lockdown_policies', 'lockdown']
-
-    lockdown_policies = [
-        'absent',
-        'easy',
-        'medium',
-        'hard'
+    _required_params = [
+        "size",
+        "steps",
+        "actions",
+        "status",
+        "lockdown_policies",
+        "lockdown",
     ]
 
-    individual_status = [
-        'mh'
-    ]
+    lockdown_policies = ["absent", "easy", "medium", "hard"]
+
+    individual_status = ["mh"]
 
     all_possible_features = [
-        'age_group__1',
-        'age_group__2',
-        'age_group__3',
-        'age_group__4',
-        'gender_f',
-        'gender_m',
-        'education_high',
-        'education_low',
-        'education_medium',
-        'unemployed_no',
-        'unemployed_yes',
-        'have_partner_no',
-        'have_partner_yes',
-        'depressed_no',
-        'depressed_yes',
-        'children_presence_no',
-        'children_presence_yes',
-        'housing_financial_difficulties_no',
-        'housing_financial_difficulties_yes',
-        'selfrated_health_average',
-        'selfrated_health_good',
-        'selfrated_health_poor',
-        'critical_job_no',
-        'critical_job_yes'
+        "age_group__1",
+        "age_group__2",
+        "age_group__3",
+        "age_group__4",
+        "gender_f",
+        "gender_m",
+        "education_high",
+        "education_low",
+        "education_medium",
+        "unemployed_no",
+        "unemployed_yes",
+        "have_partner_no",
+        "have_partner_yes",
+        "depressed_no",
+        "depressed_yes",
+        "children_presence_no",
+        "children_presence_yes",
+        "housing_financial_difficulties_no",
+        "housing_financial_difficulties_yes",
+        "selfrated_health_average",
+        "selfrated_health_good",
+        "selfrated_health_poor",
+        "critical_job_no",
+        "critical_job_yes",
     ]
 
     all_possible_actions = [
-        'work_from_home',
-        'maintain_physical_distance',
-        'stay_at_home',
-        'exercise',
-        'socialise',
-        'travel',
-        'seek_help',
-        'negative_coping',
-        'positive_coping',
-        'socialise_online'
+        "work_from_home",
+        "maintain_physical_distance",
+        "stay_at_home",
+        "exercise",
+        "socialise",
+        "travel",
+        "seek_help",
+        "negative_coping",
+        "positive_coping",
+        "socialise_online",
     ]
 
     @staticmethod
@@ -104,15 +104,12 @@ class Hypothesis:
         response.raise_for_status()
         data = response.json()
         # extract '.csv.gz' file paths
-        file_paths = [
-            item['path'] for item in data['payload']['tree']['items']
-        ]
+        file_paths = [item["path"] for item in data["payload"]["tree"]["items"]]
 
         return file_paths
 
     @staticmethod
-    def filter_dates(file_list: List,
-                     time_period: Tuple[str, str]) -> List[str]:
+    def filter_dates(file_list: List, time_period: Tuple[str, str]) -> List[str]:
         """
         Select dates within the interval defined by `time_period`
 
@@ -128,18 +125,18 @@ class Hypothesis:
             ValueError: if the time_period is not within the
             range of dates in the file
         """
-        start = datetime.strptime(time_period[0], '%Y-%m-%d')
-        end = datetime.strptime(time_period[1], '%Y-%m-%d')
+        start = datetime.strptime(time_period[0], "%Y-%m-%d")
+        end = datetime.strptime(time_period[1], "%Y-%m-%d")
 
         # regular expression to extract dates from string
-        pattern = re.compile(r'(\d{4}-\d{2}-\d{2})')
+        pattern = re.compile(r"(\d{4}-\d{2}-\d{2})")
 
         all_dates = []
 
         for file in file_list:
             match = pattern.search(file)
             if match:
-                date = datetime.strptime(match.group(1), '%Y-%m-%d')
+                date = datetime.strptime(match.group(1), "%Y-%m-%d")
                 all_dates.append(date)
 
         if not all_dates:
@@ -157,10 +154,11 @@ class Hypothesis:
 
         # Filtering the dates now that we know they're within the range
         filtered_paths = [
-            file for file in file_list
-            if start <= datetime.strptime(
-                pattern.search(file).group(1), '%Y-%m-%d'
-            ) <= end
+            file
+            for file in file_list
+            if start
+            <= datetime.strptime(pattern.search(file).group(1), "%Y-%m-%d")
+            <= end
         ]
 
         return filtered_paths
@@ -180,12 +178,12 @@ class Hypothesis:
         """
         start_date = datetime.strptime(start, date_format)
         end_date = start_date + timedelta(days=steps)
-        return (start_date.strftime(date_format),
-                end_date.strftime(date_format))
+        return (start_date.strftime(date_format), end_date.strftime(date_format))
 
     @classmethod
-    def get_covid_data(cls, time_period: Tuple[str, str],
-                       location: str) -> pd.DataFrame:
+    def get_covid_data(
+        cls, time_period: Tuple[str, str], location: str
+    ) -> pd.DataFrame:
         """
         Download and filter COVID-19 test data from the RIVM website.
 
@@ -203,9 +201,10 @@ class Hypothesis:
         df_gzip = []
         message = "Downloading COVID-19 data from RIVM"
         for date in tqdm(filtered_dates, desc=message):
-            full_url = cls.RIVM_URL + date.split('/')[-1]
-            df = pd.read_csv(full_url, compression="gzip",
-                             header=0, sep=",", quotechar='"')
+            full_url = cls.RIVM_URL + date.split("/")[-1]
+            df = pd.read_csv(
+                full_url, compression="gzip", header=0, sep=",", quotechar='"'
+            )
             if not isinstance(df, pd.DataFrame):
                 raise ValueError(
                     f"Data retrieved from {cls.RIVM_URL}"
@@ -215,20 +214,21 @@ class Hypothesis:
 
         df_tests = pd.concat(df_gzip, ignore_index=True)
 
-        df_tests['Date_of_statistics'] = pd.to_datetime(
-            df_tests['Date_of_statistics']
-        )
+        df_tests["Date_of_statistics"] = pd.to_datetime(df_tests["Date_of_statistics"])
 
-        mask = (df_tests['Date_of_statistics'] >= time_period[0]) & \
-               (df_tests['Date_of_statistics'] <= time_period[1]) & \
-               (df_tests['Security_region_name'] == location)
+        mask = (
+            (df_tests["Date_of_statistics"] >= time_period[0])
+            & (df_tests["Date_of_statistics"] <= time_period[1])
+            & (df_tests["Security_region_name"] == location)
+        )
         df_filtered = df_tests.loc[mask].reset_index(drop=True)
 
         return df_filtered
 
     @classmethod
-    def get_positive_cases(cls, steps, time_period: Tuple[str, str],
-                           location: str) -> pd.Series:
+    def get_positive_cases(
+        cls, steps, time_period: Tuple[str, str], location: str
+    ) -> pd.Series:
         """
         Get an array of daily positive COVID-19 cases for
         a specific time period and location.
@@ -250,17 +250,15 @@ class Hypothesis:
         # and multiple days after a particular day
         # as there were corrections. We select the most reliable records:
         # sort dataframe based on date of report
-        sorted_df = df_filtered.sort_values(by="Date_of_report",
-                                            ascending=False)
+        sorted_df = df_filtered.sort_values(by="Date_of_report", ascending=False)
         # get the most recent data
-        agg_df = sorted_df.groupby('Date_of_statistics').first().reset_index()
-        daily_positive_cases = agg_df['Tested_positive']
+        agg_df = sorted_df.groupby("Date_of_statistics").first().reset_index()
+        daily_positive_cases = agg_df["Tested_positive"]
 
         # match the length of the positives by day with the n of steps
         if len(daily_positive_cases) < steps:
             # if there are fewer data than steps
-            daily_positive_cases = cls.adjust_cases(steps,
-                                                    daily_positive_cases)
+            daily_positive_cases = cls.adjust_cases(steps, daily_positive_cases)
         else:
             # otherwise match the n of steps
             # this prevents problems when there is more data than steps
@@ -291,14 +289,14 @@ class Hypothesis:
             n_values = pd.Series([daily_positive_cases.iloc[-1]] * n_times)
 
             positive_cases = pd.concat(
-                [daily_positive_cases, n_values],
-                ignore_index=True
+                [daily_positive_cases, n_values], ignore_index=True
             )
         return positive_cases
 
     @staticmethod
-    def scale_cases_to_population(daily_positive_cases: pd.Series,
-                                  real_size: int, sim_size: int):
+    def scale_cases_to_population(
+        daily_positive_cases: pd.Series, real_size: int, sim_size: int
+    ):
         """
         We compute the number of new positives in day _i_
         for our simulated population as `new_cases_sim` = (n/N)*M where
@@ -323,18 +321,21 @@ class Hypothesis:
         max_scaled_case = daily_positive_cases.max() * sim_size
 
         if max_scaled_case < real_size:
-            message = f"Given sim_size={sim_size}, " \
-                      f"real_size={real_size}, " \
-                      f"and max daily cases={daily_positive_cases.max()}," \
-                      f"the scaling might result in all zeros."
+            message = (
+                f"Given sim_size={sim_size}, "
+                f"real_size={real_size}, "
+                f"and max daily cases={daily_positive_cases.max()},"
+                f"the scaling might result in all zeros."
+            )
             warnings.warn(message)
 
         new_cases = (daily_positive_cases * sim_size) / real_size
         return new_cases.astype("int")
 
     @classmethod
-    def read_hypotheses(cls, dir_params: str, policies: Set[str],
-                        data_type: str) -> Dict[str, pd.DataFrame]:
+    def read_hypotheses(
+        cls, dir_params: str, policies: Set[str], data_type: str
+    ) -> Dict[str, pd.DataFrame]:
         """
         Read in CSV matrices for either actions or lockdowns.
 
@@ -350,33 +351,29 @@ class Hypothesis:
         """
 
         # Ensure valid data type
-        if data_type not in ['actions', 'lockdown']:
-            raise ValueError("data_type should be either"
-                             "'actions' or 'lockdown'.")
+        if data_type not in ["actions", "lockdown"]:
+            raise ValueError("data_type should be either" "'actions' or 'lockdown'.")
 
         file_patterns = {
-            'actions': 'actions_effects_on_mh_%s.csv',
-            'lockdown': 'lockdown_%s.csv'
+            "actions": "actions_effects_on_mh_%s.csv",
+            "lockdown": "lockdown_%s.csv",
         }
 
         data_dfs = {}
 
         for policy in policies:
-            fpath_params = os.path.join(
-                dir_params, file_patterns[data_type] % policy
-            )
+            fpath_params = os.path.join(dir_params, file_patterns[data_type] % policy)
 
-            df = pd.read_csv(fpath_params, delimiter=';', decimal=".")
+            df = pd.read_csv(fpath_params, delimiter=";", decimal=".")
 
             for col in df.columns:
                 if col != "actions":
                     df[col] = df[col].astype(float)
 
             # sort rows
-            df['actions'] = df['actions'].astype('category')
-            df['actions'] = df['actions']\
-                .cat.set_categories(cls.all_possible_actions)
-            df = df.sort_values(by='actions', ignore_index=True)
+            df["actions"] = df["actions"].astype("category")
+            df["actions"] = df["actions"].cat.set_categories(cls.all_possible_actions)
+            df = df.sort_values(by="actions", ignore_index=True)
 
             # Convert dataframe column names and cols to lowercase
             df.columns = df.columns.str.lower()
@@ -411,7 +408,7 @@ class Hypothesis:
         features = []
         for key, value in params_individual.items():
             if isinstance(value[0][0], str):
-                features += [key + '_' + v for v in value[0]]
+                features += [key + "_" + v for v in value[0]]
             else:
                 features += [key]
         return features
@@ -433,23 +430,24 @@ class Hypothesis:
 
         # Check if the files exist
         if not os.path.exists(fpath_params_individual):
-            raise FileNotFoundError(f"'{PARAMS_INDIVIDUAL}' \
-            file is missing in the directory '{dir_params}'")
+            raise FileNotFoundError(
+                f"'{PARAMS_INDIVIDUAL}' \
+            file is missing in the directory '{dir_params}'"
+            )
 
         actions = cls.all_possible_actions
         lockdown_policies = cls.lockdown_policies
         status = cls.individual_status
-        columns = ['actions', 'baseline']
+        columns = ["actions", "baseline"]
         columns += cls._get_one_hot_encoded_features(fpath_params_individual)
         df = pd.DataFrame(0, index=range(len(actions)), columns=columns)
-        df['actions'] = actions
+        df["actions"] = actions
 
-        output_fpaths = ['lockdown_%s.csv' % lockdown for
-                         lockdown in lockdown_policies]
-        output_fpaths += ['actions_effects_on_%s.csv' % s for s in status]
+        output_fpaths = ["lockdown_%s.csv" % lockdown for lockdown in lockdown_policies]
+        output_fpaths += ["actions_effects_on_%s.csv" % s for s in status]
         output_fpaths = [os.path.join(dir_params, fp) for fp in output_fpaths]
         for fp in output_fpaths:
-            df.to_csv(fp, sep=';', index=False)
+            df.to_csv(fp, sep=";", index=False)
 
     @classmethod
     def validate_param_file(cls, dir_params: str) -> None:
@@ -466,41 +464,57 @@ class Hypothesis:
         path_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
 
         # check if all hypothesis files exist
-        fnames = ["actions_effects_on_%s_%s.csv" % (status, policy)
-                  for status in Hypothesis.individual_status
-                  for policy in Hypothesis.lockdown_policies]
-        fnames += ["lockdown_%s.csv" %
-                   lockdown for lockdown in cls.lockdown_policies]
+        fnames = [
+            "actions_effects_on_%s_%s.csv" % (status, policy)
+            for status in Hypothesis.individual_status
+            for policy in Hypothesis.lockdown_policies
+        ]
+        fnames += ["lockdown_%s.csv" % lockdown for lockdown in cls.lockdown_policies]
         fpaths = [os.path.join(dir_params, fn) for fn in fnames]
         fexist = [os.path.isfile(fp) for fp in fpaths]
         if not all(fexist):
-            raise ValueError("Hypothesis file(s) not found: %s." % ", ".join(
-                [fnames[i] for i in range(len(fnames)) if not fexist[i]]
-            ))
+            raise ValueError(
+                "Hypothesis file(s) not found: %s."
+                % ", ".join([fnames[i] for i in range(len(fnames)) if not fexist[i]])
+            )
 
         # check if all hypothesis files contain all the required agent features
         required_features = ["actions", "baseline"]
         required_features += cls._get_one_hot_encoded_features(path_individual)
-        hypothesis_data = [pd.read_csv(fp, sep=";", decimal=",")
-                           for fp in fpaths]
+        hypothesis_data = [pd.read_csv(fp, sep=";", decimal=",") for fp in fpaths]
         missing_features = []
         for hd in hypothesis_data:
             # lower case labels
-            missing_features.append(set([f.lower() for f in required_features])
-                                    - set([c.lower() for c in hd.columns]))
+            missing_features.append(
+                set([f.lower() for f in required_features])
+                - set([c.lower() for c in hd.columns])
+            )
 
         if any(missing_features):
-            raise ValueError("Missing features:\n%s" % "\n".join(
-                ["%s - %s" % (fnames[i], ", ".join(missing_features[i]))
-                 for i in range(len(fnames)) if missing_features[i]]
-            ))
+            raise ValueError(
+                "Missing features:\n%s"
+                % "\n".join(
+                    [
+                        "%s - %s" % (fnames[i], ", ".join(missing_features[i]))
+                        for i in range(len(fnames))
+                        if missing_features[i]
+                    ]
+                )
+            )
 
         # check if all hypothesis files contain hypotheses of all actions
         required_actions = cls.all_possible_actions
-        missing_actions = [set(required_actions) - set(hd["actions"])
-                           for hd in hypothesis_data]
+        missing_actions = [
+            set(required_actions) - set(hd["actions"]) for hd in hypothesis_data
+        ]
         if any(missing_actions):
-            raise ValueError("Missing actions:\n%s" % "\n".join(
-                ["%s - %s" % (fnames[i], ", ".join(missing_actions[i]))
-                 for i in range(len(fnames)) if missing_actions[i]]
-            ))
+            raise ValueError(
+                "Missing actions:\n%s"
+                % "\n".join(
+                    [
+                        "%s - %s" % (fnames[i], ", ".join(missing_actions[i]))
+                        for i in range(len(fnames))
+                        if missing_actions[i]
+                    ]
+                )
+            )
