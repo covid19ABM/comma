@@ -22,7 +22,7 @@ class Model:
             seed_value = np.random.SeedSequence(seed)
             self.rng = np.random.default_rng(seed_value)
         else:
-            self.rng = np.random.default_rng()
+            self.rng = np.random.default_rng(12345)
 
     def setup(self, size: int, dir_params: str,
               use_ipf: bool = False) -> None:
@@ -114,7 +114,7 @@ class Model:
                            agent.covid_status == 0]
 
         # make some of them positive (selected randomly)
-        random_rng = np.random.default_rng()
+        random_rng = np.random.default_rng(21345)
         newly_infected_agents = random_rng.choice(
             negative_agents,
             new_infected,
@@ -130,10 +130,9 @@ class Model:
         for agent in self.agents:
             if agent.covid_status == 0:
                 # choose actions based on lockdown
-                actions, action_probs = \
-                    agent.choose_actions_on_lockdown(
-                        lockdown,
-                        rng=self.rng
+                actions, _ = agent.choose_actions_on_lockdown(
+                    lockdown,
+                    rng=self.rng
                     )
                 # take those actions, and compute their effect on mental health
                 agent.take_actions(
@@ -143,10 +142,9 @@ class Model:
             else:
                 # positive agents stay at home
                 lockdown_updated = agent.modify_policy_when_infected(lockdown)
-                actions, action_probs = \
-                    agent.choose_actions_on_lockdown(
-                        lockdown_updated,
-                        rng=self.rng
+                actions, _ = agent.choose_actions_on_lockdown(
+                    lockdown_updated,
+                    rng=self.rng
                     )
                 # depending on lockdown staying at home
                 # has certain consequences on mental health
@@ -181,7 +179,7 @@ class Model:
                 mu, sigma = 0.002, 0.0005
                 # this is the baseline effect when no action is taken
                 # or when action effects are canceled out
-                update_rng = np.random.default_rng()
+                update_rng = np.random.default_rng(82356)
                 baseline = update_rng.normal(mu, sigma)
                 new_status = (lockdown, agent.id, delta_mh,
                               (last_status + delta_mh) - baseline,
