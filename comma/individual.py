@@ -286,7 +286,7 @@ class Individual:
             columns=Hypothesis.all_possible_features,
             fill_value=0
         )
-        _features.drop(categorical_cols.columns, axis=1, inplace=True)
+        _features = _features.drop(categorical_cols.columns, axis=1)
         _features = pd.concat([_features, encoded_cols], axis=1)
 
         # Add 'baseline' column filled with ones
