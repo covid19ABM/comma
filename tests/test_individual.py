@@ -1,9 +1,9 @@
 import pytest
-
 from comma.hypothesis import Hypothesis
 from comma.individual import Individual
 import numpy as np
 from pathlib import Path
+
 
 class TestIndividual:
 
@@ -24,7 +24,7 @@ class TestIndividual:
 
     @pytest.fixture
     def expected_status(self):
-        return np.array(-18.080000000000002)
+        return np.array(-12.510000000000002)
 
     @pytest.fixture
     def lockdown(self):
@@ -60,8 +60,12 @@ class TestIndividual:
             'critical_job_yes'
         ]
 
+    @pytest.fixture
+    def seed(self):
+        return np.random.SeedSequence(0)
+
     def test_take_actions(self, dir_params, expected_actions,
-                          expected_status, lockdown):
+                          expected_status, lockdown, seed):
         """
         Test for the `take_actions` method of the individual class.
 
@@ -70,7 +74,7 @@ class TestIndividual:
         - Correct actions are chosen based on input.
         - Status after action is as expected.
         """
-        np.random.seed(0)
+
         # specify the actions
         actions = np.array([False, True, True, True, True,
                             False, True, True, False, False])
@@ -81,7 +85,8 @@ class TestIndividual:
             set([lockdown]),
             "actions"
         )
-        individual = Individual.populate(1, dir_params)
+        individual = Individual.populate(1, dir_params,
+                                         rng=np.random.default_rng(seed))
         individual[0].take_actions(actions, actions_effects[lockdown])
 
         individual[0].chosen_actions = actions
@@ -93,7 +98,7 @@ class TestIndividual:
         assert np.all(actual_status == expected_status), \
             'status after action taken should be equal to 0.'
 
-    def test_choose_actions_on_lockdown(self, dir_params, lockdown):
+    def test_choose_actions_on_lockdown(self, dir_params, lockdown, seed):
         """
         Unit test for the `choose_actions_on_lockdown`
         method of the `Individual` class.
@@ -115,7 +120,10 @@ class TestIndividual:
         individual = Individual.populate(1, dir_params)
 
         actions, action_probs = individual[0].\
-            choose_actions_on_lockdown(current_lockdown[lockdown])
+            choose_actions_on_lockdown(
+            current_lockdown[lockdown],
+            rng=np.random.default_rng(seed)
+        )
 
         assert isinstance(actions, np.ndarray), \
             'actions should be a numpy array'
@@ -132,7 +140,7 @@ class TestIndividual:
         assert len(action_probs) == len(actions), \
             'action_probs and actions should have the same length'
 
-    def test_populate(self, dir_params, expected_cols):
+    def test_populate(self, dir_params, expected_cols, seed):
         """
         Unit test for the `populate` method of the `Individual` class.
 
@@ -141,7 +149,8 @@ class TestIndividual:
         """
 
         # Populate with one individual for the test
-        individuals = Individual.populate(1, dir_params)
+        individuals = Individual.populate(1, dir_params,
+                                          rng=np.random.default_rng(seed))
 
         assert list(individuals[0]._features.index) == expected_cols, \
             'Columns in Individual._features are incorrect'
@@ -152,7 +161,7 @@ class TestIndividual:
                 (individual.get_features() == 1)
             ), 'Values in Individual._features should be either 0 or 1'
 
-    def test_populate_ipf(self, dir_params, expected_cols):
+    def test_populate_ipf(self, dir_params, expected_cols, seed):
         """
         Unit test for the `populate_ipf` method of the `Individual` class.
 
@@ -162,7 +171,8 @@ class TestIndividual:
         """
 
         # Call populate_ipf for testing
-        df = Individual.populate_ipf(1, dir_params)
+
+        df = Individual.populate_ipf(1, dir_params, rng=np.random.default_rng(seed))
 
         assert list(df[
                         0].get_features().index) == expected_cols, \
@@ -173,7 +183,7 @@ class TestIndividual:
         ).all(), 'Values in the dataframe returned ' \
                  'by populate_ipf should be either 0 or 1'
 
-    def test_actions_when_positive(self, dir_params, lockdown):
+    def test_actions_when_positive(self, dir_params, lockdown, seed):
         """
         Test that modify_policy_when_infected returns 'stay at home' action
         """
@@ -182,7 +192,8 @@ class TestIndividual:
             set([lockdown]),
             'lockdown'
         )
-        agent = Individual.populate_ipf(1, dir_params)
+        agent = Individual.populate_ipf(1, dir_params,
+                                        rng=np.random.default_rng(seed))
         lockdown_new = agent[0].modify_policy_when_infected(policy[lockdown])
         _, action_probs = agent[0].choose_actions_on_lockdown(lockdown_new)
         action_out = agent[0].get_actions()

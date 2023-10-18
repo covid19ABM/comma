@@ -11,13 +11,18 @@ from typing import List
 class Model:
     cumulative_status = dict()
 
-    def __init__(self) -> None:
+    def __init__(self, seed=None) -> None:
         self.agents: list = None
         self.simulation_id: int = None
         self.current_step: int = 0  # keep track of the current simulation step
         self.lockdown_status: dict = {}
         self.dir_params: str = None
         self.date_format = "%Y-%m-%d"
+        if seed is not None:
+            seed_value = np.random.SeedSequence(seed)
+            self.rng = np.random.default_rng(seed_value)
+        else:
+            self.rng = np.random.default_rng()
 
     def setup(self, size: int, dir_params: str,
               use_ipf: bool = False) -> None:
@@ -34,9 +39,17 @@ class Model:
         self.dir_params = dir_params
         Hypothesis.validate_param_file(dir_params)
         if use_ipf:
-            self.agents = Individual.populate_ipf(size, dir_params)
+            self.agents = Individual.populate_ipf(
+                size,
+                dir_params,
+                rng=self.rng
+            )
         else:
-            self.agents = Individual.populate(size, dir_params)
+            self.agents = Individual.populate(
+                size,
+                dir_params,
+                rng=self.rng
+            )
 
     def update_covid_counter(self):
         """
@@ -101,7 +114,8 @@ class Model:
                            agent.covid_status == 0]
 
         # make some of them positive (selected randomly)
-        newly_infected_agents = np.random.choice(
+        random_rng = np.random.default_rng()
+        newly_infected_agents = random_rng.choice(
             negative_agents,
             new_infected,
             replace=False
@@ -117,16 +131,23 @@ class Model:
             if agent.covid_status == 0:
                 # choose actions based on lockdown
                 actions, action_probs = \
-                    agent.choose_actions_on_lockdown(lockdown)
+                    agent.choose_actions_on_lockdown(
+                        lockdown,
+                        rng=self.rng
+                    )
                 # take those actions, and compute their effect on mental health
                 agent.take_actions(
-                    actions=actions, action_effects=action_effects
+                    actions=actions,
+                    action_effects=action_effects
                 )
             else:
                 # positive agents stay at home
                 lockdown_updated = agent.modify_policy_when_infected(lockdown)
                 actions, action_probs = \
-                    agent.choose_actions_on_lockdown(lockdown_updated)
+                    agent.choose_actions_on_lockdown(
+                        lockdown_updated,
+                        rng=self.rng
+                    )
                 # depending on lockdown staying at home
                 # has certain consequences on mental health
                 agent.take_actions(
@@ -160,7 +181,8 @@ class Model:
                 mu, sigma = 0.002, 0.0005
                 # this is the baseline effect when no action is taken
                 # or when action effects are canceled out
-                baseline = np.random.normal(mu, sigma)
+                update_rng = np.random.default_rng()
+                baseline = update_rng.normal(mu, sigma)
                 new_status = (lockdown, agent.id, delta_mh,
                               (last_status + delta_mh) - baseline,
                               agent.covid_status,
@@ -200,7 +222,7 @@ class Model:
 
     def run(self, steps: int, lockdown_policy: list,
             out_path: str, starting_date='2021-02-05',
-            location='Groningen', real_pop_size=20336) -> None:
+            location='Groningen', real_pop_size=200336) -> None:
         """Run a simulation
 
         Args:
@@ -242,6 +264,7 @@ class Model:
             real_pop_size,
             len(self.agents)
         )
+        # print(f"scaled cases: {new_cases} \n cases: {positives}")
         # read hypotheses
         lockdown_matrices = Hypothesis.read_hypotheses(
             self.dir_params,

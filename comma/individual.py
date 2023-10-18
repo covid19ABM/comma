@@ -24,6 +24,7 @@ class Individual:
         self.covid_status: int = 0  # this tracks the positivity to COVID-19
         self.days_since_positive = np.nan  # n-day from first day of positivity
         self.recovery = np.nan  # recovery status
+        # this is useful for testing and reproducibility purposes
 
     def get_features(self) -> pd.Series:
         """
@@ -54,13 +55,16 @@ class Individual:
         return [action_name for action_name, action_was_taken in
                 zip(self.actions, self.chosen_actions) if action_was_taken]
 
-    def choose_actions_on_lockdown(self, lockdown: pd.DataFrame)\
-            -> Tuple[np.ndarray, np.ndarray]:
+    def choose_actions_on_lockdown(self, lockdown: pd.DataFrame,
+                                   rng=None) -> Tuple[np.ndarray, np.ndarray]:
         """
         Choose the actions to take based on current lockdown policy.
 
         Args:
             lockdown (pd.DataFrame): dataframe of a given lockdown
+            rng (np.random.Generator): optional. An instance of numpy random
+            generator. If not provided, a default random generator will be
+            used. This ensures reproducibility.
 
         Returns:
             actions (np.ndarray): array of booleans
@@ -73,13 +77,16 @@ class Individual:
         action_probs = np.asarray(
             action_probs.apply(lambda x: 1 / (1 + np.exp(-x)))
         )
-        actions = np.random.rand(n_actions) <= action_probs
+        # use the new random generator method of numpy
+        if rng is None:
+            rng = np.random.default_rng()
+        actions = rng.random(n_actions) <= action_probs
         self.chosen_actions = actions  # store the chosen action
 
         return actions, action_probs
 
     @staticmethod
-    def is_recovered(n_days):
+    def is_recovered(n_days, rng=None):
         """
         Determine if an individual is recovered based on
         the number of days since testing positive.
@@ -94,6 +101,9 @@ class Individual:
 
         Args:
             n_days (int): Number of days since tested positive.
+            rng (np.random.Generator): optional. An instance of numpy random
+            generator. If not provided, a default random generator will be
+            used. This ensures reproducibility.
         Returns:
             recovery (bool): True if recovered, False otherwise.
         """
@@ -102,7 +112,10 @@ class Individual:
             recovery = 0
         else:
             recovery_prob = gamma.cdf(n_days, a=5, scale=3)
-            recovery = np.random.uniform() <= recovery_prob
+            # use the new generator method of numpy
+            if rng is None:
+                rng = np.random.default_rng()
+            recovery = rng.uniform() <= recovery_prob
         return recovery
 
     @staticmethod
@@ -153,7 +166,8 @@ class Individual:
         self._status = result
 
     @staticmethod
-    def sampling_from_ipf(size: int, dir_params: str) -> pd.DataFrame:
+    def sampling_from_ipf(size: int, dir_params: str,
+                          rng=None) -> pd.DataFrame:
         """
         Sample from IPF distribution saved
         as `weights.csv` in the parameters folder
@@ -162,6 +176,9 @@ class Individual:
         ----------
         size (int): size of data sample
         dir_params (str): path to the parameters folder
+        rng (np.random.Generator): optional. An instance of numpy random
+            generator. If not provided, a default random generator will be
+            used. This ensures reproducibility.
 
         Returns
         -------
@@ -173,13 +190,16 @@ class Individual:
         df_weights = pd.read_csv(fpath_weights, sep=",", index_col=0)
         weights = df_weights["weight"] / df_weights["weight"].sum()
         indices = df_weights.index
-        sample_indices = np.random.choice(indices, size, p=weights)
+        # use the new random method of numpy
+        if rng is None:
+            rng = np.random.default_rng()
+        sample_indices = rng.choice(indices, size, p=weights)
         sample = df_weights.loc[sample_indices].drop(["weight"], axis=1)
         sample = sample.reset_index(drop=True)
         return sample
 
     @staticmethod
-    def populate_ipf(size: int, dir_params: str) -> List:
+    def populate_ipf(size: int, dir_params: str, rng=None) -> List:
         """
         Create a population of individual agents
         with the given weights obtained via IPF
@@ -187,6 +207,9 @@ class Individual:
         Args:
             size (int): size of data sample.
             dir_params (str): path to parameters folder.
+            rng (np.random.Generator): optional. An instance of numpy random
+            generator. If not provided, a default random generator will be
+            used. This ensures reproducibility.
 
         Returns:
             List[Individual]: A list containing instances of
@@ -195,7 +218,7 @@ class Individual:
         """
         _features = pd.DataFrame()
 
-        sample = Individual.sampling_from_ipf(size, dir_params)
+        sample = Individual.sampling_from_ipf(size, dir_params, rng)
 
         # one-hot encoding
         encoded_columns = pd.get_dummies(sample).reindex(
@@ -212,7 +235,7 @@ class Individual:
                 tqdm(range(size), desc="Populating individuals", unit="i")]
 
     @staticmethod
-    def populate(size: int, dir_params: str) -> List:
+    def populate(size: int, dir_params: str, rng=None) -> List:
         """
         Create a population of individual agents
         with the given feature parameters.
@@ -223,6 +246,9 @@ class Individual:
             feature parameter file.
             #from_scratch (bool, optional): flag of creating hypothesis
             from scratch or reading from files. Defaults to False.
+            rng (np.random.Generator): optional. An instance of numpy random
+            generator. If not provided, a default random generator will be
+            used. This ensures reproducibility.
 
         Returns:
             list[Individual]: a list of Individual agents
@@ -237,7 +263,10 @@ class Individual:
 
         _features = pd.DataFrame()
         for feature, distribution in features.items():
-            _features[feature] = np.random.choice(
+            # new numpy random method
+            if rng is None:
+                rng = np.random.default_rng()
+            _features[feature] = rng.choice(
                 distribution[0], size, p=distribution[1]
             )
 
