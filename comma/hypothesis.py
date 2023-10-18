@@ -1,6 +1,6 @@
 """Hypothesis class definition"""
 import warnings
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import os
 import pandas as pd
@@ -118,15 +118,15 @@ class Hypothesis:
 
         Args:
 
-        file_list (List): list of file paths
-        time_period (Tuple): time interval of the time t0 -> t1
+            file_list (List): list of file paths
+            time_period (Tuple): time interval of the time t0 -> t1
 
         Returns:
-        filtered_paths (List): list of filtered paths
+            filtered_paths (List): list of filtered paths
 
         Raises:
-        ValueError: if the time_period is not within the
-        range of dates in the file
+            ValueError: if the time_period is not within the
+            range of dates in the file
         """
         start = datetime.strptime(time_period[0], '%Y-%m-%d')
         end = datetime.strptime(time_period[1], '%Y-%m-%d')
@@ -164,6 +164,24 @@ class Hypothesis:
         ]
 
         return filtered_paths
+
+    @staticmethod
+    def compute_time_period(start: str, steps: int, date_format: str) -> tuple:
+        """
+        Compute time period based on a starting date and number of steps
+
+        Args:
+            start (str): Start date
+            steps (int): Number of steps
+            date_format (str): Format of the date string
+
+        Returns:
+            tuple: A tuple containing the start and end date
+        """
+        start_date = datetime.strptime(start, date_format)
+        end_date = start_date + timedelta(days=steps)
+        return (start_date.strftime(date_format),
+                end_date.strftime(date_format))
 
     @classmethod
     def get_covid_data(cls, time_period: Tuple[str, str],

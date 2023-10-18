@@ -2,7 +2,6 @@
 """
 from comma.individual import Individual
 from comma.hypothesis import Hypothesis
-from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
@@ -102,8 +101,11 @@ class Model:
                            agent.covid_status == 0]
 
         # make some of them positive (selected randomly)
-        newly_infected_agents = np.random.choice(negative_agents,
-                                                 new_infected, replace=False)
+        newly_infected_agents = np.random.choice(
+            negative_agents,
+            new_infected,
+            replace=False
+        )
 
         # mark selected agents as infected (covid_status = 1)
         # and update counter of positive days for positive people
@@ -128,12 +130,13 @@ class Model:
                 # depending on lockdown staying at home
                 # has certain consequences on mental health
                 agent.take_actions(
-                    actions=actions, action_effects=action_effects
+                    actions=actions,
+                    action_effects=action_effects
                 )
 
     def update(self, lockdown: str, step: int) -> None:
         """
-        It updates mental health status at every step given actions
+        Update mental health status at every step given actions
 
         Args:
             lockdown (str): lockdown type
@@ -167,7 +170,7 @@ class Model:
 
     def report(self, out_path: str) -> None:
         """
-        It Collects data recorded at the end of the simulation
+        Collect data recorded at the end of the simulation
         and exports it as csv file.
 
         Args:
@@ -221,19 +224,25 @@ class Model:
                              "must be equal to the number of steps")
 
         # compute time_period
-        start_date = datetime.strptime(starting_date, self.date_format)
-        end_date = start_date + timedelta(days=steps)
-        time_period = (start_date.strftime(self.date_format),
-                       end_date.strftime(self.date_format))
-
-        # get new positive cases
-        positives = Hypothesis.get_positive_cases(steps,
-                                                  time_period,
-                                                  location)
-        new_cases = Hypothesis.scale_cases_to_population(
-            positives, real_pop_size, len(self.agents)
+        time_period = Hypothesis.compute_time_period(
+            starting_date,
+            steps,
+            self.date_format
         )
 
+        # get new positive cases
+        positives = Hypothesis.get_positive_cases(
+            steps,
+            time_period,
+            location
+        )
+        # scale them to the size of the simulated population
+        new_cases = Hypothesis.scale_cases_to_population(
+            positives,
+            real_pop_size,
+            len(self.agents)
+        )
+        # read hypotheses
         lockdown_matrices = Hypothesis.read_hypotheses(
             self.dir_params,
             set(lockdown_policy),
@@ -246,6 +255,7 @@ class Model:
             "actions"
         )
 
+        # start the simulation
         for step, current_lockdown in tqdm(enumerate(lockdown_policy),
                                            total=steps,
                                            desc="Running simulation"):
