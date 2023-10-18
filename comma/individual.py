@@ -7,6 +7,7 @@ import json
 import numpy as np
 import os
 import pandas as pd
+import random
 from scipy.stats import gamma  # for the "recovery" curve
 from typing import List, Tuple
 from tqdm import tqdm
@@ -79,7 +80,8 @@ class Individual:
         )
         # use the new random generator method of numpy
         if rng is None:
-            rng = np.random.default_rng()
+            seed = random.randint(1, 3)
+            rng = np.random.default_rng(seed)
         actions = rng.random(n_actions) <= action_probs
         self.chosen_actions = actions  # store the chosen action
 
@@ -114,7 +116,8 @@ class Individual:
             recovery_prob = gamma.cdf(n_days, a=5, scale=3)
             # use the new generator method of numpy
             if rng is None:
-                rng = np.random.default_rng()
+                seed = random.randint(1, 3)
+                rng = np.random.default_rng(seed)
             recovery = rng.uniform() <= recovery_prob
         return recovery
 
@@ -192,7 +195,8 @@ class Individual:
         indices = df_weights.index
         # use the new random method of numpy
         if rng is None:
-            rng = np.random.default_rng()
+            seed = random.randint(1, 3)
+            rng = np.random.default_rng(seed)
         sample_indices = rng.choice(indices, size, p=weights)
         sample = df_weights.loc[sample_indices].drop(["weight"], axis=1)
         sample = sample.reset_index(drop=True)
@@ -265,7 +269,8 @@ class Individual:
         for feature, distribution in features.items():
             # new numpy random method
             if rng is None:
-                rng = np.random.default_rng()
+                seed = random.randint(1, 3)
+                rng = np.random.default_rng(seed)
             _features[feature] = rng.choice(
                 distribution[0], size, p=distribution[1]
             )
