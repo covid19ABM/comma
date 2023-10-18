@@ -7,7 +7,7 @@ import json
 import numpy as np
 import os
 import pandas as pd
-from scipy.stats import gamma  # for the "negativisation" curve
+from scipy.stats import gamma  # for the "recovery" curve
 from typing import List, Tuple
 from tqdm import tqdm
 

@@ -9,6 +9,16 @@ from comma.hypothesis import Hypothesis
 class TestHypothesis:
 
     @pytest.fixture
+    def setup_time_period(self):
+        data = {
+            "starting_date": "2020-01-01",
+            "steps": 5,
+            "date_format": "%Y-%m-%d",
+            "expected_result": ("2020-01-01", "2020-01-06")
+        }
+        return data
+
+    @pytest.fixture
     def mock_df(self):
         return pd.DataFrame({
             'Version': [2],
@@ -157,5 +167,16 @@ class TestHypothesis:
         out = Hypothesis.adjust_cases(steps, less_positive_cases)
         assert all(out == expected), f"Expected {expected}, but got {out}"
 
+    def test_compute_time_period(self, setup_time_period):
+        starting_date = setup_time_period['starting_date']
+        steps = setup_time_period['steps']
+        date_format = setup_time_period['date_format']
+        expected_result = setup_time_period['expected_result']
 
+        out = Hypothesis.compute_time_period(
+            starting_date,
+            steps,
+            date_format
+        )
 
+        assert out == expected_result
