@@ -18,6 +18,7 @@ Features
 - Comma now integrates positivity to COVID-19 in the model `Commit [2ff9a2c] in PR #73 <https://github.com/covid19ABM/comma/pull/73/commits/2ff9a2c736a8b2a9c9235cea6a4c8d090c7d27dd>`_ by @n400peanuts
 - New documentation about the implementation of the positivity to COVID-19 `PR #48 <https://github.com/covid19ABM/comma/commit/37372a3c46202d650297a285f091810914caddb1>`_ by @n400peanuts
 - Models can be set with a specific seed to ensure reproducibility  `Commit [3a9419] in PR #73 <https://github.com/covid19ABM/comma/pull/73/commits/3a9419446e502b50e8cc667e4ff9737ea622e871>`_ by @n400peanuts
+- Code formatted with Black
 
 Tests
 ^^^^^

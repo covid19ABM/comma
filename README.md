@@ -15,6 +15,7 @@
 [![github license badge](https://img.shields.io/github/license/covid19ABM/comma)](https://github.com/covid19ABM/comma)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/7777/badge)](https://www.bestpractices.dev/projects/7777)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=covid19ABM_comma&metric=coverage)](https://sonarcloud.io/summary/new_code?id=covid19ABM_comma)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # Why?[![](https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/pin.svg)](#why)
 This project aims at understanding the full spectrum of impacts the lockdown policies had during the COVID-19 pandemic, specifically on non-COVID-19-related health outcomes, such as mental health. Although lockdowns reduced disease transmission and mortality, they also potentially exacerbated mental health issues. By using `comma` you can simulate real-world scenarios, and estimate/compare the effects of lockdown policies on the mental health of an a-priori defined population across time.
