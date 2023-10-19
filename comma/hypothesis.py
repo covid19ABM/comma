@@ -352,7 +352,8 @@ class Hypothesis:
 
         # Ensure valid data type
         if data_type not in ["actions", "lockdown"]:
-            raise ValueError("data_type should be either" "'actions' or 'lockdown'.")
+            raise ValueError("data_type should be either"
+                             "'actions' or 'lockdown'.")
 
         file_patterns = {
             "actions": "actions_effects_on_mh_%s.csv",

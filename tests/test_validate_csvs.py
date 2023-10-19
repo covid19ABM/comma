@@ -50,7 +50,9 @@ class TestCSVIntegrity:
 
     def test_input_example_matrices(self, initial_csv_data):
         for file in initial_csv_data["csv_files"][1:]:
-            df = pd.read_csv(os.path.join(initial_csv_data["directory"], file), sep=";")
+            df = pd.read_csv(os.path.join(
+                initial_csv_data["directory"], file), sep=";"
+            )
             df.columns = df.columns.str.lower()
             # Check for the same number of columns
             assert (
@@ -83,7 +85,7 @@ class TestCSVIntegrity:
                     if col_df != col_base
                 ]
                 raise AssertionError(
-                    f"{file} has different column " f"order at indices: {diff_order}."
+                    f"{file} has different column order at indices: {diff_order}"
                 )
 
             # Check for the same "actions" entries
