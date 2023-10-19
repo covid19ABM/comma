@@ -98,13 +98,13 @@ class TestModel:
                 # by setting a tolerance
                 if not np.isclose(expected_value, actual_value, atol=0.2):
                     differences.append(
-                        f"{col}: Expected={expected_value}, " f"Actual={actual_value}"
+                        f"{col}: Expected={expected_value}, Actual={actual_value}"
                     )
             else:
                 # other type of data check for exact value
                 if expected_value != actual_value:
                     differences.append(
-                        f"{col}: Expected={expected_value}, " f"Actual={actual_value}"
+                        f"{col}: Expected={expected_value}, Actual={actual_value}"
                     )
 
         return differences
@@ -128,7 +128,7 @@ class TestModel:
             if differences:
                 difference_message = ", ".join(differences)
                 assert False, (
-                    f"Row {idx} is different. " f"Differences: {difference_message}"
+                    f"Row {idx} is different. Differences: {difference_message}"
                 )
 
     @pytest.mark.filterwarnings("ignore:Given sim_size")
@@ -149,5 +149,5 @@ class TestModel:
             if differences:
                 difference_message = ", ".join(differences)
                 assert False, (
-                    f"Row {idx} is different. " f"Differences: {difference_message}"
+                    f"Row {idx} is different. Differences: {difference_message}"
                 )

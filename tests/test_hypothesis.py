@@ -152,7 +152,7 @@ class TestHypothesis:
                 daily_positive_cases, real_size, sim_size
             )
             # is there warning there?
-            assert len(w) == 1, f"Expected a warning, but got" f"{len(w)} warnings"
+            assert len(w) == 1, f"Expected warning, but got {len(w)} warnings"
 
     def test_no_scaling_warning(self):
         # Tests the warning of scale_cases_to_population function

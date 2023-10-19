@@ -196,8 +196,8 @@ class TestIndividual:
         _, action_probs = agent[0].choose_actions_on_lockdown(lockdown_new)
         action_out = agent[0].get_actions()
         assert action_out[0] == "stay_at_home", (
-            f"Expected 'stay at home' " f"got {action_out[0]}"
+            f"Expected 'stay at home' got {action_out[0]}"
         )
         assert action_probs.round()[2] == 1, (
-            f"Expected Probability ~ 1 " f"got {action_probs.round()[2]}"
+            f"Expected Probability ~ 1 got {action_probs.round()[2]}"
         )
