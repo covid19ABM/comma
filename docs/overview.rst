@@ -10,7 +10,7 @@ Project status
 ~~~~~~~~~~~~~~
 
 |Python package| |pages-build-deployment| |Docs| |Quality Gate Status|
-|github license badge| |OpenSSF Best Practices| |Coverage|
+|github license badge| |OpenSSF Best Practices| |Coverage| |Black|
 
 ~~~~~~~~~~~~~~~~~
 Table of contents
@@ -118,6 +118,8 @@ Directory <https://research-software-directory.org/projects/covid-19-mitigation-
    :target: https://github.com/covid19ABM/comma
 .. |OpenSSF Best Practices| image:: https://www.bestpractices.dev/projects/7777/badge
    :target: https://www.bestpractices.dev/projects/7777
+.. |Black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
 .. |image2| image:: ../_static/pin.svg
    :target: #why
 .. |image3| image:: _static/pin.svg
