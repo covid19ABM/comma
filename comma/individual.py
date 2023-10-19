@@ -1,25 +1,22 @@
 """Individual agent class definition
 """
 
-from comma.hypothesis import PARAMS_INDIVIDUAL, \
-    PARAMS_IPF_WEIGHTS, Hypothesis
+from comma.hypothesis import PARAMS_INDIVIDUAL, PARAMS_IPF_WEIGHTS, Hypothesis
 import json
 import numpy as np
 import os
 import pandas as pd
-import random
 from scipy.stats import gamma  # for the "recovery" curve
 from typing import List, Tuple
 from tqdm import tqdm
 
 
 class Individual:
-
     def __init__(self, id: int, dir_params: str, features):
         self.id: int = id
         self.dir_params = dir_params
         self.chosen_actions = None
-        self._status: float = .0
+        self._status: float = 0.0
         self._features = features
         self.actions = Hypothesis.all_possible_actions
         self.covid_status: int = 0  # this tracks the positivity to COVID-19
@@ -53,11 +50,15 @@ class Individual:
         Returns:
             actions (list): list of actions taken
         """
-        return [action_name for action_name, action_was_taken in
-                zip(self.actions, self.chosen_actions) if action_was_taken]
+        return [
+            action_name
+            for action_name, action_was_taken in zip(self.actions, self.chosen_actions)
+            if action_was_taken
+        ]
 
-    def choose_actions_on_lockdown(self, lockdown: pd.DataFrame,
-                                   rng=None) -> Tuple[np.ndarray, np.ndarray]:
+    def choose_actions_on_lockdown(
+        self, lockdown: pd.DataFrame, rng=None
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Choose the actions to take based on current lockdown policy.
 
@@ -75,9 +76,7 @@ class Individual:
         n_actions, _ = params_lockdown.shape
         action_probs = params_lockdown.dot(self.get_features())
         # apply the sigmoid function
-        action_probs = np.asarray(
-            action_probs.apply(lambda x: 1 / (1 + np.exp(-x)))
-        )
+        action_probs = np.asarray(action_probs.apply(lambda x: 1 / (1 + np.exp(-x))))
         # use the new random generator method of numpy
         if rng is None:
             rng = np.random.default_rng(12345)
@@ -133,23 +132,20 @@ class Individual:
         """
 
         # Set betas to 0 in all columns except actions and baseline
-        columns_to_update = lockdown.columns.difference(
-            ['actions', 'baseline']
-        )
+        columns_to_update = lockdown.columns.difference(["actions", "baseline"])
         lockdown[columns_to_update] = 0
 
         # set baseline beta to -5 (v. unlikely)
-        lockdown['baseline'] = -5
+        lockdown["baseline"] = -5
         # however for 'stay at home' set beta to 5 (v. likely)
-        if 'actions' in lockdown.columns:
-            lockdown.loc[lockdown['actions'] == 'stay_at_home', 'baseline'] = 5
+        if "actions" in lockdown.columns:
+            lockdown.loc[lockdown["actions"] == "stay_at_home", "baseline"] = 5
         else:
-            lockdown.iat[2, lockdown.columns.get_loc('baseline')] = 5
+            lockdown.iat[2, lockdown.columns.get_loc("baseline")] = 5
 
         return lockdown
 
-    def take_actions(self, actions: pd.Series,
-                     action_effects: pd.DataFrame) -> None:
+    def take_actions(self, actions: pd.Series, action_effects: pd.DataFrame) -> None:
         """
         Update status by taking the given actions.
 
@@ -167,8 +163,7 @@ class Individual:
         self._status = result
 
     @staticmethod
-    def sampling_from_ipf(size: int, dir_params: str,
-                          rng=None) -> pd.DataFrame:
+    def sampling_from_ipf(size: int, dir_params: str, rng=None) -> pd.DataFrame:
         """
         Sample from IPF distribution saved
         as `weights.csv` in the parameters folder
@@ -223,17 +218,18 @@ class Individual:
 
         # one-hot encoding
         encoded_columns = pd.get_dummies(sample).reindex(
-            columns=Hypothesis.all_possible_features,
-            fill_value=0
+            columns=Hypothesis.all_possible_features, fill_value=0
         )
         _features = pd.concat([_features, encoded_columns], axis=1)
 
         # Add 'baseline' column filled with ones if this is not present yet
-        if 'baseline' not in _features.columns:
+        if "baseline" not in _features.columns:
             _features.insert(0, "baseline", 1)
 
-        return [Individual(i, dir_params, _features.iloc[i]) for i in
-                tqdm(range(size), desc="Populating individuals", unit="i")]
+        return [
+            Individual(i, dir_params, _features.iloc[i])
+            for i in tqdm(range(size), desc="Populating individuals", unit="i")
+        ]
 
     @staticmethod
     def populate(size: int, dir_params: str, rng=None) -> List:
@@ -254,8 +250,8 @@ class Individual:
         Returns:
             list[Individual]: a list of Individual agents
         """
-        assert size > 0, 'Size must be positive!'
-        assert isinstance(size, int), 'Size must be integer!'
+        assert size > 0, "Size must be positive!"
+        assert isinstance(size, int), "Size must be integer!"
         assert os.path.isdir(dir_params), "Given folder doesn't exist!"
 
         fpath_params_individual = os.path.join(dir_params, PARAMS_INDIVIDUAL)
@@ -281,10 +277,9 @@ class Individual:
             # when creating the dummy variables
 
         # one-hot encoding
-        categorical_cols = _features.select_dtypes(include=['object'])
+        categorical_cols = _features.select_dtypes(include=["object"])
         encoded_cols = pd.get_dummies(categorical_cols).reindex(
-            columns=Hypothesis.all_possible_features,
-            fill_value=0
+            columns=Hypothesis.all_possible_features, fill_value=0
         )
         _features = _features.drop(categorical_cols.columns, axis=1)
         _features = pd.concat([_features, encoded_cols], axis=1)
@@ -292,5 +287,7 @@ class Individual:
         # Add 'baseline' column filled with ones
         _features.insert(0, "baseline", 1)
 
-        return [Individual(i, dir_params, _features.iloc[i]) for i in
-                tqdm(range(size), desc="Populating individuals", unit="i")]
+        return [
+            Individual(i, dir_params, _features.iloc[i])
+            for i in tqdm(range(size), desc="Populating individuals", unit="i")
+        ]
