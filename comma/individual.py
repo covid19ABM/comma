@@ -79,7 +79,7 @@ class Individual:
         action_probs = np.asarray(action_probs.apply(lambda x: 1 / (1 + np.exp(-x))))
         # use the new random generator method of numpy
         if rng is None:
-            rng = np.random.default_rng(12345)
+            rng = np.random.default_rng(None)
         actions = rng.random(n_actions) <= action_probs
         self.chosen_actions = actions  # store the chosen action
 
@@ -114,7 +114,7 @@ class Individual:
             recovery_prob = gamma.cdf(n_days, a=5, scale=3)
             # use the new generator method of numpy
             if rng is None:
-                rng = np.random.default_rng(12345)
+                rng = np.random.default_rng(None)
             recovery = rng.uniform() <= recovery_prob
         return recovery
 
@@ -130,20 +130,20 @@ class Individual:
             actions_probs (np.ndarray): array of probability
 
         """
-
+        lockdown_ = lockdown.copy()
         # Set betas to 0 in all columns except actions and baseline
-        columns_to_update = lockdown.columns.difference(["actions", "baseline"])
-        lockdown[columns_to_update] = 0
+        columns_to_update = lockdown_.columns.difference(["actions", "baseline"])
+        lockdown_[columns_to_update] = 0
 
         # set baseline beta to -5 (v. unlikely)
-        lockdown["baseline"] = -5
+        lockdown_["baseline"] = -5
         # however for 'stay at home' set beta to 5 (v. likely)
-        if "actions" in lockdown.columns:
-            lockdown.loc[lockdown["actions"] == "stay_at_home", "baseline"] = 5
+        if "actions" in lockdown_.columns:
+            lockdown_.loc[lockdown_["actions"] == "stay_at_home", "baseline"] = 5
         else:
-            lockdown.iat[2, lockdown.columns.get_loc("baseline")] = 5
+            lockdown_.iat[2, lockdown_.columns.get_loc("baseline")] = 5
 
-        return lockdown
+        return lockdown_
 
     def take_actions(self, actions: pd.Series, action_effects: pd.DataFrame) -> None:
         """
@@ -188,7 +188,7 @@ class Individual:
         indices = df_weights.index
         # use the new random method of numpy
         if rng is None:
-            rng = np.random.default_rng(12345)
+            rng = np.random.default_rng(None)
         sample_indices = rng.choice(indices, size, p=weights)
         sample = df_weights.loc[sample_indices].drop(["weight"], axis=1)
         sample = sample.reset_index(drop=True)
@@ -264,7 +264,7 @@ class Individual:
             if rng is None:
                 # quality gate complains about security if
                 # I don't use a large range
-                rng = np.random.default_rng(12345)
+                rng = np.random.default_rng(None)
             _features[feature] = rng.choice(
                 distribution[0], size, p=distribution[1]
             )
