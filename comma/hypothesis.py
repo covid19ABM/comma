@@ -6,11 +6,11 @@ import os
 import pandas as pd
 import re
 import requests
-from typing import List, Tuple, Set, Dict
 from tqdm import tqdm
 
 PARAMS_INDIVIDUAL = "params_individual.json"
 PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
+date_pattern = re.compile(r"(\d{4}-\d{2}-\d{2})")
 
 
 class Hypothesis:
@@ -87,7 +87,7 @@ class Hypothesis:
     ]
 
     @staticmethod
-    def get_file_paths(url: str) -> List:
+    def get_file_paths(url: str) -> list:
         """
         Extract file paths from url
 
@@ -99,17 +99,19 @@ class Hypothesis:
         """
 
         response = requests.get(url)
-        # Will raise an HTTPError
-        # if the HTTP request was unsuccessful
         response.raise_for_status()
         data = response.json()
         # extract '.csv.gz' file paths
-        file_paths = [item["path"] for item in data["payload"]["tree"]["items"]]
+        file_paths = [
+            item["path"]
+            for item in data["payload"]["tree"]["items"]
+            if item["path"].endswith(".csv.gz")
+        ]
 
         return file_paths
 
     @staticmethod
-    def filter_dates(file_list: List, time_period: Tuple[str, str]) -> List[str]:
+    def filter_dates(file_list: list, time_period: tuple[str, str]) -> list[str]:
         """
         Select dates within the interval defined by `time_period`
 
@@ -128,13 +130,10 @@ class Hypothesis:
         start = datetime.strptime(time_period[0], "%Y-%m-%d")
         end = datetime.strptime(time_period[1], "%Y-%m-%d")
 
-        # regular expression to extract dates from string
-        pattern = re.compile(r"(\d{4}-\d{2}-\d{2})")
-
-        all_dates = []
+        all_dates: list[datetime] = []
 
         for file in file_list:
-            match = pattern.search(file)
+            match = date_pattern.search(file)
             if match:
                 date = datetime.strptime(match.group(1), "%Y-%m-%d")
                 all_dates.append(date)
@@ -144,7 +143,7 @@ class Hypothesis:
 
         min_date = min(all_dates)
         max_date = max(all_dates)
-
+        # TO-DO: return list of non available dates
         if start < min_date or end > max_date:
             raise ValueError(
                 f"time_period ({time_period[0]} - {time_period[1]}) "
@@ -157,7 +156,7 @@ class Hypothesis:
             file
             for file in file_list
             if start
-            <= datetime.strptime(pattern.search(file).group(1), "%Y-%m-%d")
+            <= datetime.strptime(date_pattern.search(file).group(1), "%Y-%m-%d")
             <= end
         ]
 
@@ -182,7 +181,7 @@ class Hypothesis:
 
     @classmethod
     def get_covid_data(
-        cls, time_period: Tuple[str, str], location: str
+        cls, time_period: tuple[str, str], location: str
     ) -> pd.DataFrame:
         """
         Download and filter COVID-19 test data from the RIVM website.
@@ -227,7 +226,7 @@ class Hypothesis:
 
     @classmethod
     def get_positive_cases(
-        cls, steps, time_period: Tuple[str, str], location: str
+        cls, steps, time_period: tuple[str, str], location: str
     ) -> pd.Series:
         """
         Get an array of daily positive COVID-19 cases for
@@ -283,6 +282,7 @@ class Hypothesis:
             pd.Series: Modified series with length equal to steps
 
         """
+        # return the average between the two most useful datapoints
         n_times = steps - len(daily_positive_cases)
 
         if n_times > 0:
@@ -334,8 +334,8 @@ class Hypothesis:
 
     @classmethod
     def read_hypotheses(
-        cls, dir_params: str, policies: Set[str], data_type: str
-    ) -> Dict[str, pd.DataFrame]:
+        cls, dir_params: str, policies: set[str], data_type: str
+    ) -> dict[str, pd.DataFrame]:
         """
         Read in CSV matrices for either actions or lockdowns.
 
@@ -352,8 +352,7 @@ class Hypothesis:
 
         # Ensure valid data type
         if data_type not in ["actions", "lockdown"]:
-            raise ValueError("data_type should be either"
-                             "'actions' or 'lockdown'.")
+            raise ValueError("data_type should be either" "'actions' or 'lockdown'.")
 
         file_patterns = {
             "actions": "actions_effects_on_mh_%s.csv",
@@ -389,7 +388,7 @@ class Hypothesis:
         return data_dfs
 
     @staticmethod
-    def _get_one_hot_encoded_features(fpath_params_individual: str) -> List:
+    def _get_one_hot_encoded_features(fpath_params_individual: str) -> list:
         """
         One-hot encode categorical features in the
         `params_individual.json` file and return the
