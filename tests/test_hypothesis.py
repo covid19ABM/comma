@@ -131,9 +131,10 @@ class TestHypothesis:
         # trying to get data for an unknown location
         # should raise an error
         with pytest.raises(ValueError):
-            Hypothesis.get_positive_cases(
-                10, ("2023-01-01", "2023-01-03"), "Los Angeles"
-            )
+            start = "2023-01-01"
+            steps = 2
+            hypothesis_instance = Hypothesis(start, steps)
+            hypothesis_instance.get_positive_cases("Los Angeles")
 
     def test_scaling(self):
         # Tests the scale_cases_to_population function

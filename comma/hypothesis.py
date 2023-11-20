@@ -233,10 +233,7 @@ class Hypothesis:
 
         return df_filtered
 
-    @classmethod
-    def get_positive_cases(
-        cls, steps, time_period: tuple[str, str], location: str
-    ) -> pd.Series:
+    def get_positive_cases(self, location: str) -> pd.Series:
         """
         Get an array of daily positive COVID-19 cases for
         a specific time period and location.
@@ -249,7 +246,7 @@ class Hypothesis:
         daily_positive_cases (pandas.Series): Daily positive cases.
 
         """
-        df_filtered = cls.get_covid_data(time_period, location)
+        df_filtered = self.get_covid_data(self.time_period, location)
         # Check if the filtered dataframe is empty after filtering by location
         if df_filtered.empty:
             raise ValueError(f"No data available for location: {location}")
@@ -264,9 +261,9 @@ class Hypothesis:
         daily_positive_cases = agg_df["Tested_positive"]
 
         # match the length of the positives by day with the n of steps
-        if len(daily_positive_cases) < steps:
+        if len(daily_positive_cases) < self.steps:
             # if there are fewer data than steps
-            daily_positive_cases = cls.adjust_cases(steps, daily_positive_cases)
+            daily_positive_cases = cls.adjust_cases(self.steps, daily_positive_cases)
         else:
             # otherwise match the n of steps
             # this prevents problems when there is more data than steps
