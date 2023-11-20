@@ -246,9 +246,7 @@ class Model:
         hypothesis = Hypothesis(starting_date, steps)
 
         # get new positive cases
-        positives = hypothesis.get_positive_cases(
-            steps, hypothesis.time_period, location
-        )
+        positives = hypothesis.get_positive_cases(location)
         # scale them to the size of the simulated population
         new_cases = hypothesis.scale_cases_to_population(
             positives, real_pop_size, len(self.agents)
