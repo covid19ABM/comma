@@ -22,7 +22,6 @@ class Model:
         else:
             self.rng = np.random.default_rng(None)
 
-        Hypothesis.validate_param_file(self.dir_params)
         if use_ipf:
             self.agents = Individual.populate_ipf(size, self.dir_params, self.rng)
         else:
@@ -243,6 +242,7 @@ class Model:
             )
         # compute time_period
         hypothesis = Hypothesis(starting_date, steps)
+        hypothesis.validate_param_file(self.dir_params)
 
         # get new positive cases
         positives = hypothesis.get_positive_cases(location)

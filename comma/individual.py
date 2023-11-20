@@ -21,7 +21,6 @@ class Individual:
         self.covid_status: int = 0  # this tracks the positivity to COVID-19
         self.days_since_positive = np.nan  # n-day from first day of positivity
         self.recovery = np.nan  # recovery status
-        # this is useful for testing and reproducibility purposes
 
     def get_features(self) -> pd.Series:
         """
