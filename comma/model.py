@@ -15,7 +15,7 @@ class Model:
         self.current_step: int = 0  # keep track of the current simulation step
         self.lockdown_status: dict = {}
         self.dir_params: str = dir_params
-        self.date_format = "%Y-%m-%d"
+        # self.date_format = "%Y-%m-%d"
         self.cumulative_status = dict()
         if seed is not None:
             seed_value = np.random.SeedSequence(seed)
@@ -242,25 +242,25 @@ class Model:
                 "The length of the lockdown list "
                 "must be equal to the number of steps"
             )
-
         # compute time_period
-        time_period = Hypothesis.compute_time_period(
-            starting_date, steps, self.date_format
-        )
+        hypothesis = Hypothesis(starting_date, steps)
+        hypothesis.compute_time_period()
 
         # get new positive cases
-        positives = Hypothesis.get_positive_cases(steps, time_period, location)
+        positives = hypothesis.get_positive_cases(
+            steps, hypothesis.time_period, location
+        )
         # scale them to the size of the simulated population
-        new_cases = Hypothesis.scale_cases_to_population(
+        new_cases = hypothesis.scale_cases_to_population(
             positives, real_pop_size, len(self.agents)
         )
         # print(f"scaled cases: {new_cases} \n cases: {positives}")
         # read hypotheses
-        lockdown_matrices = Hypothesis.read_hypotheses(
+        lockdown_matrices = hypothesis.read_hypotheses(
             self.dir_params, set(lockdown_policy), "lockdown"
         )
 
-        actions_effects_matrices = Hypothesis.read_hypotheses(
+        actions_effects_matrices = hypothesis.read_hypotheses(
             self.dir_params, set(lockdown_policy), "actions"
         )
 

@@ -86,6 +86,12 @@ class Hypothesis:
         "socialise_online",
     ]
 
+    def __init__(self, start: str, steps: int):
+        self.start = start
+        self.steps = steps
+        self.date_format = "%Y-%m-%d"
+        self.time_period: tuple[str, str]
+
     @staticmethod
     def get_file_paths(url: str) -> list:
         """
@@ -162,8 +168,7 @@ class Hypothesis:
 
         return filtered_paths
 
-    @staticmethod
-    def compute_time_period(start: str, steps: int, date_format: str) -> tuple:
+    def compute_time_period(self) -> tuple:
         """
         Compute time period based on a starting date and number of steps
 
@@ -175,9 +180,12 @@ class Hypothesis:
         Returns:
             tuple: A tuple containing the start and end date
         """
-        start_date = datetime.strptime(start, date_format)
-        end_date = start_date + timedelta(days=steps)
-        return (start_date.strftime(date_format), end_date.strftime(date_format))
+        start_date = datetime.strptime(self.start, self.date_format)
+        end_date = start_date + timedelta(days=self.steps)
+        self.time_period = (
+            start_date.strftime(self.date_format),
+            end_date.strftime(self.date_format),
+        )
 
     @classmethod
     def get_covid_data(

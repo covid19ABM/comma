@@ -89,16 +89,20 @@ class TestHypothesis:
         mock_df,
     ):
         # Test that the whole data extraction
-        time_period = ("2022-01-01", "2022-01-3")
         location = "Groningen"
+        start = "2022-01-01"
+        steps = 2
 
         # mock responses
         mocked_get_file_paths.return_value = ["some_path"]
         mocked_filter_dates.return_value = ["filtered_path"]
         mocked_read_csv.return_value = mock_df
 
-        hypothesis_instance = Hypothesis()
-        df = hypothesis_instance.get_covid_data(time_period, location)
+        hypothesis_instance = Hypothesis(start, steps)
+        hypothesis_instance.compute_time_period()
+        df = hypothesis_instance.get_covid_data(
+            hypothesis_instance.time_period, location
+        )
         formatted_date = df.iloc[0]["Date_of_statistics"].strftime("%Y-%m-%d")
         assert not df.empty
         assert df.iloc[0]["Version"] == 2
@@ -112,7 +116,7 @@ class TestHypothesis:
         # assert mock methods
         mocked_get_file_paths.assert_called_once()
         mocked_filter_dates.assert_called_once_with(
-            mocked_get_file_paths.return_value, time_period
+            mocked_get_file_paths.return_value, hypothesis_instance.time_period
         )
         mocked_read_csv.assert_called_once_with(
             "https://github.com/mzelst/covid-19/raw/"
@@ -176,11 +180,11 @@ class TestHypothesis:
         assert all(out == expected), f"Expected {expected}, but got {out}"
 
     def test_compute_time_period(self, setup_time_period):
-        starting_date = setup_time_period["starting_date"]
+        start = setup_time_period["starting_date"]
         steps = setup_time_period["steps"]
-        date_format = setup_time_period["date_format"]
         expected_result = setup_time_period["expected_result"]
 
-        out = Hypothesis.compute_time_period(starting_date, steps, date_format)
+        hypothesis_instance = Hypothesis(start, steps)
+        hypothesis_instance.compute_time_period()
 
-        assert out == expected_result
+        assert hypothesis_instance.time_period == expected_result
