@@ -263,11 +263,11 @@ class Hypothesis:
         # match the length of the positives by day with the n of steps
         if len(daily_positive_cases) < self.steps:
             # if there are fewer data than steps
-            daily_positive_cases = cls.adjust_cases(self.steps, daily_positive_cases)
+            daily_positive_cases = self.adjust_cases(self.steps, daily_positive_cases)
         else:
             # otherwise match the n of steps
             # this prevents problems when there is more data than steps
-            daily_positive_cases = daily_positive_cases[:steps]
+            daily_positive_cases = daily_positive_cases[: self.steps]
         return daily_positive_cases
 
     @staticmethod
@@ -340,7 +340,7 @@ class Hypothesis:
 
     @classmethod
     def read_hypotheses(
-        cls, dir_params: str, policies: set[str], data_type: str
+        cls, dir_params: str, policies: set[str], type: str
     ) -> dict[str, pd.DataFrame]:
         """
         Read in CSV matrices for either actions or lockdowns.
@@ -348,7 +348,7 @@ class Hypothesis:
         Args:
             dir_params (str): path of the parameters folder
             policies (set): set object of either actions or lockdown list
-            data_type (str): either 'actions' or 'lockdown'
+            type (str): either 'actions' or 'lockdown'
 
         Returns:
             data_dfs (dict): A dictionary where the key is either an action
@@ -357,8 +357,8 @@ class Hypothesis:
         """
 
         # Ensure valid data type
-        if data_type not in ["actions", "lockdown"]:
-            raise ValueError("data_type should be either" "'actions' or 'lockdown'.")
+        if type not in ["actions", "lockdown"]:
+            raise ValueError("type should be either 'actions' or 'lockdown'")
 
         file_patterns = {
             "actions": "actions_effects_on_mh_%s.csv",
@@ -368,7 +368,7 @@ class Hypothesis:
         data_dfs = {}
 
         for policy in policies:
-            fpath_params = os.path.join(dir_params, file_patterns[data_type] % policy)
+            fpath_params = os.path.join(dir_params, file_patterns[type] % policy)
 
             df = pd.read_csv(fpath_params, delimiter=";", decimal=".")
 
