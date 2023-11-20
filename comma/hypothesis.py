@@ -259,15 +259,14 @@ class Hypothesis:
         # match the length of the positives by day with the n of steps
         if len(daily_positive_cases) < self.steps:
             # if there are fewer data than steps
-            daily_positive_cases = self.adjust_cases(self.steps, daily_positive_cases)
+            daily_positive_cases = self.adjust_cases(daily_positive_cases)
         else:
             # otherwise match the n of steps
             # this prevents problems when there is more data than steps
             daily_positive_cases = daily_positive_cases[: self.steps]
         return daily_positive_cases
 
-    @staticmethod
-    def adjust_cases(steps: int, daily_positive_cases: pd.Series) -> pd.Series:
+    def adjust_cases(self, daily_positive_cases: pd.Series) -> pd.Series:
         """
         Ensures the length of daily_positive_cases matches the given steps.
 
@@ -285,7 +284,7 @@ class Hypothesis:
 
         """
         # return the average between the two most useful datapoints
-        n_times = steps - len(daily_positive_cases)
+        n_times = self.steps - len(daily_positive_cases)
 
         if n_times > 0:
             n_values = pd.Series([daily_positive_cases.iloc[-1]] * n_times)

@@ -177,8 +177,10 @@ class TestHypothesis:
         # the number is repeated n times * steps
         less_positive_cases = pd.Series([846])
         steps = 2
+        start = "2023-01-01"
         expected = pd.Series([846, 846])
-        out = Hypothesis.adjust_cases(steps, less_positive_cases)
+        hypothesis_instance = Hypothesis(start, steps)
+        out = hypothesis_instance.adjust_cases(less_positive_cases)
         assert all(out == expected), f"Expected {expected}, but got {out}"
 
     def test_compute_time_period(self, setup_time_period):
