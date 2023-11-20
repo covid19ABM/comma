@@ -99,7 +99,7 @@ class TestHypothesis:
         mocked_read_csv.return_value = mock_df
 
         hypothesis_instance = Hypothesis(start, steps)
-        hypothesis_instance.compute_time_period()
+        # hypothesis_instance.compute_time_period()
         df = hypothesis_instance.get_covid_data(
             hypothesis_instance.time_period, location
         )
@@ -185,6 +185,5 @@ class TestHypothesis:
         expected_result = setup_time_period["expected_result"]
 
         hypothesis_instance = Hypothesis(start, steps)
-        hypothesis_instance.compute_time_period()
 
         assert hypothesis_instance.time_period == expected_result
