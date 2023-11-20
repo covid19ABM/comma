@@ -17,8 +17,9 @@ class TestModel:
 
     def setup_and_run_model(self, out_path):
         lockdown_pattern = self.setup_lockdown_pattern()
-        model = Model(self.seed)
-        model.setup(self.size, self.dir_parameters, use_ipf=True)
+        model = Model(
+            size=self.size, dir_params=self.dir_parameters, use_ipf=True, seed=self.seed
+        )
         model.run(self.steps, lockdown_pattern, out_path=out_path)
 
     @pytest.fixture(scope="class")
@@ -127,9 +128,9 @@ class TestModel:
 
             if differences:
                 difference_message = ", ".join(differences)
-                assert False, (
-                    f"Row {idx} is different. Differences: {difference_message}"
-                )
+                assert (
+                    False
+                ), f"Row {idx} is different. Differences: {difference_message}"
 
     @pytest.mark.filterwarnings("ignore:Given sim_size")
     def test_expected_output(self, expected_dataframe):
@@ -148,6 +149,6 @@ class TestModel:
 
             if differences:
                 difference_message = ", ".join(differences)
-                assert False, (
-                    f"Row {idx} is different. Differences: {difference_message}"
-                )
+                assert (
+                    False
+                ), f"Row {idx} is different. Differences: {difference_message}"

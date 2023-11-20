@@ -77,19 +77,17 @@ class TestIndividual:
         - Status after action is as expected.
         """
 
-        # specify the actions
-        actions = np.array(
-            [False, True, True, True, True, False, True, True, False, False]
-        )
-
         # specify the actions effects
         actions_effects = Hypothesis.read_hypotheses(
             dir_params, set([lockdown]), "actions"
         )
         individual = Individual.populate(1, dir_params, rng=np.random.default_rng(seed))
-        individual[0].take_actions(actions, actions_effects[lockdown])
+        # specify the actions
+        individual[0].chosen_actions = np.array(
+            [False, True, True, True, True, False, True, True, False, False]
+        )
+        individual[0].take_actions(actions_effects[lockdown])
 
-        individual[0].chosen_actions = actions
         actual_actions = individual[0].get_actions()
         actual_status = individual[0]._status
 
@@ -119,26 +117,21 @@ class TestIndividual:
         # Create an individual with id 0
         individual = Individual.populate(1, dir_params)
 
-        actions, action_probs = individual[0].choose_actions_on_lockdown(
+        individual[0].choose_actions_on_lockdown(
             current_lockdown[lockdown], rng=np.random.default_rng(seed)
         )
 
-        assert isinstance(actions, np.ndarray), "actions should be a numpy array"
         assert isinstance(
-            action_probs, np.ndarray
-        ), "action_probs should be a numpy array"
+            individual[0].chosen_actions, np.ndarray
+        ), "actions should be a numpy array"
 
-        assert len(actions) == 10, "actions array should have length 10"
+        assert (
+            len(individual[0].chosen_actions) == 10
+        ), "actions array should have length 10"
+
         assert np.all(
-            (actions == 0) | (actions == 1)
+            (individual[0].chosen_actions == 0) | (individual[0].chosen_actions == 1)
         ), "all actions should be False or True"
-
-        assert np.all(
-            (0 <= action_probs) & (action_probs <= 1)
-        ), "all action_probs should be between 0 and 1"
-        assert len(action_probs) == len(
-            actions
-        ), "action_probs and actions should have the same length"
 
     def test_populate(self, dir_params, expected_cols, seed):
         """
@@ -193,11 +186,8 @@ class TestIndividual:
         policy = Hypothesis.read_hypotheses(dir_params, set([lockdown]), "lockdown")
         agent = Individual.populate_ipf(1, dir_params, rng=np.random.default_rng(seed))
         lockdown_new = agent[0].modify_policy_when_infected(policy[lockdown])
-        _, action_probs = agent[0].choose_actions_on_lockdown(lockdown_new)
+        agent[0].choose_actions_on_lockdown(lockdown_new)
         action_out = agent[0].get_actions()
-        assert action_out[0] == "stay_at_home", (
-            f"Expected 'stay at home' got {action_out[0]}"
-        )
-        assert action_probs.round()[2] == 1, (
-            f"Expected Probability ~ 1 got {action_probs.round()[2]}"
-        )
+        assert (
+            action_out[0] == "stay_at_home"
+        ), f"Expected 'stay at home' got {action_out[0]}"
