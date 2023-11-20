@@ -46,34 +46,40 @@ class TestHypothesis:
     def test_filter_dates_within_range(self, file_list):
         # Test whether function correctly filter out dates
         # that are *clearly* within the bounds of `time_period`
-        time_period = ("2021-01-01", "2021-01-02")
+        start = "2021-01-01"
+        steps = 2
         expected_output = [
             "data-rivm/tests/rivm_daily_2021-01-01.csv.gz",
             "data-rivm/tests/rivm_daily_2021-01-02.csv.gz",
         ]
-        output = Hypothesis.filter_dates(file_list, time_period)
+        hypothesis_instace = Hypothesis(start, steps)
+        output = hypothesis_instace.filter_dates(file_list)
         assert output == expected_output
 
     def test_filter_dates_on_boundary(self, file_list):
         # Test whether function correctly includes
         # or excludes dates that are exactly on the edge
-        time_period = ("2021-01-16", "2021-02-28")
+        start = "2021-01-16"
+        steps = 43
         expected_output = [
             "data-rivm/tests/rivm_daily_2021-01-30.csv.gz",
             "data-rivm/tests/rivm_daily_2021-02-01.csv.gz",
             "data-rivm/tests/rivm_daily_2021-02-15.csv.gz",
             "data-rivm/tests/rivm_daily_2021-02-28.csv.gz",
         ]
-        output = Hypothesis.filter_dates(file_list, time_period)
+        hypothesis_instance = Hypothesis(start, steps)
+        output = hypothesis_instance.filter_dates(file_list)
         assert output == expected_output
 
     def test_range_error(self, file_list):
         # Test that values outside the bounds raise an error
-        time_period = ("2021-02-01", "2026-03-15")
+        start = "2021-02-01"
+        steps = 1860
+        hypothesis_instance = Hypothesis(start, steps)
         with pytest.raises(
             ValueError, match=r"time_period .* is outside available dates"
         ):
-            Hypothesis.filter_dates(file_list, time_period)
+            hypothesis_instance.filter_dates(file_list)
 
     @patch("comma.hypothesis.Hypothesis.get_file_paths")
     @patch("comma.hypothesis.Hypothesis.filter_dates")
@@ -99,10 +105,7 @@ class TestHypothesis:
         mocked_read_csv.return_value = mock_df
 
         hypothesis_instance = Hypothesis(start, steps)
-        # hypothesis_instance.compute_time_period()
-        df = hypothesis_instance.get_covid_data(
-            hypothesis_instance.time_period, location
-        )
+        df = hypothesis_instance.get_covid_data(location)
         formatted_date = df.iloc[0]["Date_of_statistics"].strftime("%Y-%m-%d")
         assert not df.empty
         assert df.iloc[0]["Version"] == 2
@@ -115,9 +118,7 @@ class TestHypothesis:
 
         # assert mock methods
         mocked_get_file_paths.assert_called_once()
-        mocked_filter_dates.assert_called_once_with(
-            mocked_get_file_paths.return_value, hypothesis_instance.time_period
-        )
+        mocked_filter_dates.assert_called_once_with(mocked_get_file_paths.return_value)
         mocked_read_csv.assert_called_once_with(
             "https://github.com/mzelst/covid-19/raw/"
             "master/data-rivm/tests/filtered_path",

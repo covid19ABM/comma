@@ -15,7 +15,6 @@ class Model:
         self.current_step: int = 0  # keep track of the current simulation step
         self.lockdown_status: dict = {}
         self.dir_params: str = dir_params
-        # self.date_format = "%Y-%m-%d"
         self.cumulative_status = dict()
         if seed is not None:
             seed_value = np.random.SeedSequence(seed)

@@ -117,8 +117,7 @@ class Hypothesis:
 
         return file_paths
 
-    @staticmethod
-    def filter_dates(file_list: list, time_period: tuple[str, str]) -> list[str]:
+    def filter_dates(self, file_list: list) -> list[str]:
         """
         Select dates within the interval defined by `time_period`
 
@@ -134,8 +133,8 @@ class Hypothesis:
             ValueError: if the time_period is not within the
             range of dates in the file
         """
-        start = datetime.strptime(time_period[0], "%Y-%m-%d")
-        end = datetime.strptime(time_period[1], "%Y-%m-%d")
+        start = datetime.strptime(self.time_period[0], "%Y-%m-%d")
+        end = datetime.strptime(self.time_period[1], "%Y-%m-%d")
 
         all_dates: list[datetime] = []
 
@@ -153,7 +152,7 @@ class Hypothesis:
         # TO-DO: return list of non available dates
         if start < min_date or end > max_date:
             raise ValueError(
-                f"time_period ({time_period[0]} - {time_period[1]}) "
+                f"time_period ({self.time_period[0]} - {self.time_period[1]}) "
                 f"is outside available dates that go from "
                 f"({min_date} to {max_date})"
             )
@@ -188,10 +187,7 @@ class Hypothesis:
             end_date.strftime(self.date_format),
         )
 
-    @classmethod
-    def get_covid_data(
-        cls, time_period: tuple[str, str], location: str
-    ) -> pd.DataFrame:
+    def get_covid_data(self, location: str) -> pd.DataFrame:
         """
         Download and filter COVID-19 test data from the RIVM website.
 
@@ -203,19 +199,19 @@ class Hypothesis:
         df_filtered (pandas.DataFrame): Filtered data.
         """
 
-        dates = cls.get_file_paths(cls.RIVM_URL)
-        filtered_dates = cls.filter_dates(dates, time_period)
+        dates = self.get_file_paths(self.RIVM_URL)
+        filtered_dates = self.filter_dates(dates)
 
         df_gzip = []
         message = "Downloading COVID-19 data from RIVM"
         for date in tqdm(filtered_dates, desc=message):
-            full_url = cls.RIVM_URL + date.split("/")[-1]
+            full_url = self.RIVM_URL + date.split("/")[-1]
             df = pd.read_csv(
                 full_url, compression="gzip", header=0, sep=",", quotechar='"'
             )
             if not isinstance(df, pd.DataFrame):
                 raise ValueError(
-                    f"Data retrieved from {cls.RIVM_URL}"
+                    f"Data retrieved from {self.RIVM_URL}"
                     f" is not a DataFrame but a {type(df)}"
                 )
             df_gzip.append(df)
@@ -225,8 +221,8 @@ class Hypothesis:
         df_tests["Date_of_statistics"] = pd.to_datetime(df_tests["Date_of_statistics"])
 
         mask = (
-            (df_tests["Date_of_statistics"] >= time_period[0])
-            & (df_tests["Date_of_statistics"] <= time_period[1])
+            (df_tests["Date_of_statistics"] >= self.time_period[0])
+            & (df_tests["Date_of_statistics"] <= self.time_period[1])
             & (df_tests["Security_region_name"] == location)
         )
         df_filtered = df_tests.loc[mask].reset_index(drop=True)
@@ -246,7 +242,7 @@ class Hypothesis:
         daily_positive_cases (pandas.Series): Daily positive cases.
 
         """
-        df_filtered = self.get_covid_data(self.time_period, location)
+        df_filtered = self.get_covid_data(location)
         # Check if the filtered dataframe is empty after filtering by location
         if df_filtered.empty:
             raise ValueError(f"No data available for location: {location}")
