@@ -91,6 +91,7 @@ class Hypothesis:
         self.steps = steps
         self.date_format = "%Y-%m-%d"
         self.time_period: tuple[str, str]
+        self.compute_time_period()
 
     @staticmethod
     def get_file_paths(url: str) -> list:

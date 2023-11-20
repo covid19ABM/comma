@@ -244,7 +244,6 @@ class Model:
             )
         # compute time_period
         hypothesis = Hypothesis(starting_date, steps)
-        hypothesis.compute_time_period()
 
         # get new positive cases
         positives = hypothesis.get_positive_cases(
