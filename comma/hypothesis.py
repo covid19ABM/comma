@@ -17,35 +17,27 @@ class Hypothesis:
     """
     The Hypothesis class is responsible for managing and validating
     hypotheses specified by the user.
-
-    Methods:
-        _get_one_hot_encoded_features():
-            One-hot encodes categorical features
-        create_empty_hypotheses():
-            Creates empty CSV files for storing hypotheses
-        validate_param_file():
-            Validates the files in the parameter folder
-
-    Usage:
-        Hypothesis.create_empty_hypotheses("/path/to/dir_params")
-        Hypothesis.validate_param_file("/path/to/dir_params")
     """
 
-    RIVM_URL = "https://github.com/mzelst/covid-19/raw/master/data-rivm/tests/"
+    def __init__(self, start: str, steps: int):
+        self.start = start
+        self.steps = steps
+        self.date_format = "%Y-%m-%d"
+        self.time_period: tuple[str, str]
+        self.compute_time_period()
+        self.RIVM_URL = "https://github.com/mzelst/covid-19/raw/master/data-rivm/tests/"
+        self.lockdown_policies = ["absent", "easy", "medium", "hard"]
+        self.individual_status = ["mh"]
+        self._required_params = [
+            "size",
+            "steps",
+            "actions",
+            "status",
+            "lockdown_policies",
+            "lockdown",
+        ]
 
-    _required_params = [
-        "size",
-        "steps",
-        "actions",
-        "status",
-        "lockdown_policies",
-        "lockdown",
-    ]
-
-    lockdown_policies = ["absent", "easy", "medium", "hard"]
-
-    individual_status = ["mh"]
-
+    # TO-DO: these two go into a config file
     all_possible_features = [
         "age_group__1",
         "age_group__2",
@@ -86,26 +78,15 @@ class Hypothesis:
         "socialise_online",
     ]
 
-    def __init__(self, start: str, steps: int):
-        self.start = start
-        self.steps = steps
-        self.date_format = "%Y-%m-%d"
-        self.time_period: tuple[str, str]
-        self.compute_time_period()
-
-    @staticmethod
-    def get_file_paths(url: str) -> list:
+    def get_file_paths(self) -> list:
         """
-        Extract file paths from url
-
-        Args:
-        url (str): website
+        Extract file paths from RIVM repository
 
         Returns:
         file_paths (list): list of '.csv.gz' file paths
         """
 
-        response = requests.get(url)
+        response = requests.get(self.RIVM_URL)
         response.raise_for_status()
         data = response.json()
         # extract '.csv.gz' file paths
@@ -124,7 +105,6 @@ class Hypothesis:
         Args:
 
             file_list (List): list of file paths
-            time_period (Tuple): time interval of the time t0 -> t1
 
         Returns:
             filtered_paths (List): list of filtered paths
@@ -172,11 +152,6 @@ class Hypothesis:
         """
         Compute time period based on a starting date and number of steps
 
-        Args:
-            start (str): Start date
-            steps (int): Number of steps
-            date_format (str): Format of the date string
-
         Returns:
             tuple: A tuple containing the start and end date
         """
@@ -192,14 +167,13 @@ class Hypothesis:
         Download and filter COVID-19 test data from the RIVM website.
 
         Args:
-        time_period (tuple): Start and end date ('YYYY-MM-DD', 'YYYY-MM-DD').
         location (str): Security region name. This is the name of the city.
 
         Returns:
         df_filtered (pandas.DataFrame): Filtered data.
         """
 
-        dates = self.get_file_paths(self.RIVM_URL)
+        dates = self.get_file_paths()
         filtered_dates = self.filter_dates(dates)
 
         df_gzip = []
@@ -235,7 +209,6 @@ class Hypothesis:
         a specific time period and location.
 
         Args:
-        time_period (tuple): Start and end date ('YYYY-MM-DD', 'YYYY-MM-DD').
         location (str): Security region name.
 
         Returns:
@@ -276,7 +249,6 @@ class Hypothesis:
         its length is equal to steps.
 
         Args:
-            steps (int): Desired length for daily_positive_cases
             daily_positive_cases (pd.Series): Series of positive cases per day
 
         Returns:
@@ -450,8 +422,7 @@ class Hypothesis:
         for fp in output_fpaths:
             df.to_csv(fp, sep=";", index=False)
 
-    @classmethod
-    def validate_param_file(cls, dir_params: str) -> None:
+    def validate_param_file(self, dir_params: str) -> None:
         """Validate files in the parameter folder.
 
         Args:
@@ -467,10 +438,10 @@ class Hypothesis:
         # check if all hypothesis files exist
         fnames = [
             "actions_effects_on_%s_%s.csv" % (status, policy)
-            for status in Hypothesis.individual_status
-            for policy in Hypothesis.lockdown_policies
+            for status in self.individual_status
+            for policy in self.lockdown_policies
         ]
-        fnames += ["lockdown_%s.csv" % lockdown for lockdown in cls.lockdown_policies]
+        fnames += ["lockdown_%s.csv" % lockdown for lockdown in self.lockdown_policies]
         fpaths = [os.path.join(dir_params, fn) for fn in fnames]
         fexist = [os.path.isfile(fp) for fp in fpaths]
         if not all(fexist):
@@ -481,7 +452,7 @@ class Hypothesis:
 
         # check if all hypothesis files contain all the required agent features
         required_features = ["actions", "baseline"]
-        required_features += cls._get_one_hot_encoded_features(path_individual)
+        required_features += self._get_one_hot_encoded_features(path_individual)
         hypothesis_data = [pd.read_csv(fp, sep=";", decimal=",") for fp in fpaths]
         missing_features = []
         for hd in hypothesis_data:
@@ -504,7 +475,7 @@ class Hypothesis:
             )
 
         # check if all hypothesis files contain hypotheses of all actions
-        required_actions = cls.all_possible_actions
+        required_actions = self.all_possible_actions
         missing_actions = [
             set(required_actions) - set(hd["actions"]) for hd in hypothesis_data
         ]
