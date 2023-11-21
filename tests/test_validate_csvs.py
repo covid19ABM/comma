@@ -24,9 +24,7 @@ class TestCSVIntegrity:
             )
         ]
 
-        if not list(directory.glob("lockdown*.csv")) + list(
-            directory.glob("actions*.csv")
-        ):
+        if not csv_files:
             raise ValueError(
                 f"No CSV files found in the directory '"
                 f"{str(directory.absolute())}'."
@@ -50,9 +48,7 @@ class TestCSVIntegrity:
 
     def test_input_example_matrices(self, initial_csv_data):
         for file in initial_csv_data["csv_files"][1:]:
-            df = pd.read_csv(os.path.join(
-                initial_csv_data["directory"], file), sep=";"
-            )
+            df = pd.read_csv(os.path.join(initial_csv_data["directory"], file), sep=";")
             df.columns = df.columns.str.lower()
             # Check for the same number of columns
             assert (

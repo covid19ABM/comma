@@ -5,42 +5,27 @@ from comma.hypothesis import Hypothesis
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
-from typing import List
 
 
 class Model:
-    cumulative_status = dict()
-
-    def __init__(self, seed=None) -> None:
-        self.agents: list = None
+    def __init__(
+        self, size: int, dir_params: str, use_ipf: bool = False, seed=None
+    ) -> None:
         self.simulation_id: int = None
         self.current_step: int = 0  # keep track of the current simulation step
         self.lockdown_status: dict = {}
-        self.dir_params: str = None
-        self.date_format = "%Y-%m-%d"
+        self.dir_params: str = dir_params
+        self.cumulative_status = dict()
         if seed is not None:
             seed_value = np.random.SeedSequence(seed)
             self.rng = np.random.default_rng(seed_value)
         else:
             self.rng = np.random.default_rng(None)
 
-    def setup(self, size: int, dir_params: str, use_ipf: bool = False) -> None:
-        """Setup the model with input parameters.
-
-        Args:
-            size (int): size of the population
-            dir_params (str): dir to the folder
-            containing hypothesis and parameter files.
-            use_ipf (bool): If true, use the populate_ipf()
-            method to populate the agents If false,
-            use the standard populate method.
-        """
-        self.dir_params = dir_params
-        Hypothesis.validate_param_file(dir_params)
         if use_ipf:
-            self.agents = Individual.populate_ipf(size, dir_params, rng=self.rng)
+            self.agents = Individual.populate_ipf(size, self.dir_params, self.rng)
         else:
-            self.agents = Individual.populate(size, dir_params, rng=self.rng)
+            self.agents = Individual.populate(size, self.dir_params, self.rng)
 
     def update_covid_counter(self):
         """
@@ -53,7 +38,7 @@ class Model:
             if agent.covid_status == 1:
                 agent.days_since_positive += 1
 
-    def get_recovered_individuals(self) -> List[int]:
+    def get_recovered_individuals(self) -> list[int]:
         """
         Get the indices of agents who are recovered from COVID-19
 
@@ -69,9 +54,7 @@ class Model:
         ]
         recovered = []
         for i in positives:
-            days_positive = self.agents[i].days_since_positive
-
-            if self.agents[i].is_recovered(days_positive):
+            if self.agents[i].is_recovered():
                 recovered.append(i)
 
         return recovered
@@ -119,17 +102,15 @@ class Model:
         for agent in self.agents:
             if agent.covid_status == 0:
                 # choose actions based on lockdown
-                actions, _ = agent.choose_actions_on_lockdown(lockdown, rng=self.rng)
+                agent.choose_actions_on_lockdown(lockdown, rng=self.rng)
                 # take those actions, and compute their effect on mental health
             else:
                 # positive agents stay at home
                 lockdown_updated = agent.modify_policy_when_infected(lockdown)
-                actions, _ = agent.choose_actions_on_lockdown(
-                    lockdown_updated, rng=self.rng
-                )
+                agent.choose_actions_on_lockdown(lockdown_updated, rng=self.rng)
                 # depending on lockdown staying at home
                 # has certain consequences on mental health
-            agent.take_actions(actions, action_effects)
+            agent.take_actions(action_effects)
 
     def update(self, lockdown: str, step: int) -> None:
         """
@@ -259,25 +240,23 @@ class Model:
                 "The length of the lockdown list "
                 "must be equal to the number of steps"
             )
-
         # compute time_period
-        time_period = Hypothesis.compute_time_period(
-            starting_date, steps, self.date_format
-        )
+        hypothesis = Hypothesis(starting_date, steps)
+        hypothesis.validate_param_file(self.dir_params)
 
         # get new positive cases
-        positives = Hypothesis.get_positive_cases(steps, time_period, location)
+        positives = hypothesis.get_positive_cases(location)
         # scale them to the size of the simulated population
-        new_cases = Hypothesis.scale_cases_to_population(
+        new_cases = hypothesis.scale_cases_to_population(
             positives, real_pop_size, len(self.agents)
         )
         # print(f"scaled cases: {new_cases} \n cases: {positives}")
         # read hypotheses
-        lockdown_matrices = Hypothesis.read_hypotheses(
+        lockdown_matrices = hypothesis.read_hypotheses(
             self.dir_params, set(lockdown_policy), "lockdown"
         )
 
-        actions_effects_matrices = Hypothesis.read_hypotheses(
+        actions_effects_matrices = hypothesis.read_hypotheses(
             self.dir_params, set(lockdown_policy), "actions"
         )
 

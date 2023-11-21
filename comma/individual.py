@@ -7,7 +7,6 @@ import numpy as np
 import os
 import pandas as pd
 from scipy.stats import gamma  # for the "recovery" curve
-from typing import List, Tuple
 from tqdm import tqdm
 
 
@@ -22,7 +21,6 @@ class Individual:
         self.covid_status: int = 0  # this tracks the positivity to COVID-19
         self.days_since_positive = np.nan  # n-day from first day of positivity
         self.recovery = np.nan  # recovery status
-        # this is useful for testing and reproducibility purposes
 
     def get_features(self) -> pd.Series:
         """
@@ -43,7 +41,7 @@ class Individual:
         """
         return self._status
 
-    def get_actions(self) -> List[str]:
+    def get_actions(self) -> list[str]:
         """
         Get the current actions chosen by the agent
 
@@ -58,7 +56,7 @@ class Individual:
 
     def choose_actions_on_lockdown(
         self, lockdown: pd.DataFrame, rng=None
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray]:
         """
         Choose the actions to take based on current lockdown policy.
 
@@ -83,10 +81,9 @@ class Individual:
         actions = rng.random(n_actions) <= action_probs
         self.chosen_actions = actions  # store the chosen action
 
-        return actions, action_probs
+    # return actions, action_probs
 
-    @staticmethod
-    def is_recovered(n_days, rng=None):
+    def is_recovered(self, rng=None):
         """
         Determine if an individual is recovered based on
         the number of days since testing positive.
@@ -108,10 +105,10 @@ class Individual:
             recovery (bool): True if recovered, False otherwise.
         """
 
-        if n_days <= 10:
+        if self.days_since_positive <= 10:
             recovery = 0
         else:
-            recovery_prob = gamma.cdf(n_days, a=5, scale=3)
+            recovery_prob = gamma.cdf(self.days_since_positive, a=5, scale=3)
             # use the new generator method of numpy
             if rng is None:
                 rng = np.random.default_rng(None)
@@ -145,7 +142,7 @@ class Individual:
 
         return lockdown_
 
-    def take_actions(self, actions: pd.Series, action_effects: pd.DataFrame) -> None:
+    def take_actions(self, action_effects: pd.DataFrame) -> None:
         """
         Update status by taking the given actions.
 
@@ -158,7 +155,7 @@ class Individual:
             but does not return anything.
         """
         params_status = action_effects
-        result = params_status.dot(self.get_features()).dot(actions)
+        result = params_status.dot(self.get_features()).dot(self.chosen_actions)
 
         self._status = result
 
@@ -195,7 +192,7 @@ class Individual:
         return sample
 
     @staticmethod
-    def populate_ipf(size: int, dir_params: str, rng=None) -> List:
+    def populate_ipf(size: int, dir_params: str, rng=None) -> list:
         """
         Create a population of individual agents
         with the given weights obtained via IPF
@@ -232,7 +229,7 @@ class Individual:
         ]
 
     @staticmethod
-    def populate(size: int, dir_params: str, rng=None) -> List:
+    def populate(size: int, dir_params: str, rng=None) -> list:
         """
         Create a population of individual agents
         with the given feature parameters.
@@ -265,9 +262,7 @@ class Individual:
                 # quality gate complains about security if
                 # I don't use a large range
                 rng = np.random.default_rng(None)
-            _features[feature] = rng.choice(
-                distribution[0], size, p=distribution[1]
-            )
+            _features[feature] = rng.choice(distribution[0], size, p=distribution[1])
 
             # Define all possible columns (including those not in the sample)
             # When the sample size is too small,
