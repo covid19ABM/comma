@@ -5,6 +5,22 @@ All notable changes to the codebase are documented in this file.
    :depth: 1
 
 ~~~~~~~~~
+1.1.1
+~~~~~~~~~
+
+Released on November 21, 2023
+
+Main changes
+-------------
+
+Refactor
+^^^^^^^^
+
+- refactor: hypothesis class focuses now on data validation and preparation for the model `PR #75 <https://github.com/covid19ABM/comma/pull/75>`_ by @n400peanuts
+- refactor: model class now requires only initialisation and run, no more setup() `PR #75 <https://github.com/covid19ABM/comma/pull/75>`_ by @n400peanuts
+- refactor: individual class better interacts with the model and hypothesis class `PR #75 <https://github.com/covid19ABM/comma/pull/75>`_ by @n400peanuts
+
+~~~~~~~~~
 1.1.0
 ~~~~~~~~~
 
