@@ -25,7 +25,9 @@ class Hypothesis:
         self.date_format = "%Y-%m-%d"
         self.time_period: tuple[str, str]
         self.compute_time_period()
-        self.RIVM_URL = "https://github.com/mzelst/covid-19/raw/master/data-rivm/tests/"
+        self.RIVM_URL = (
+            "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.json"
+        )
         self.lockdown_policies = ["absent", "easy", "medium", "hard"]
         self.individual_status = ["mh"]
         self._required_params = [
@@ -78,75 +80,21 @@ class Hypothesis:
         "socialise_online",
     ]
 
-    def get_file_paths(self) -> list:
+    def download_covid_data(self) -> pd.DataFrame:
         """
-        Extract file paths from RIVM repository
+        Download COVID-19 data from RIVM
 
         Returns:
-        file_paths (list): list of '.csv.gz' file paths
+        - df (pd.Dataframe): A DataFrame containing the downloaded data.
         """
 
         response = requests.get(self.RIVM_URL)
-        response.raise_for_status()
-        data = response.json()
-        # extract '.csv.gz' file paths
-        file_paths = [
-            item["path"]
-            for item in data["payload"]["tree"]["items"]
-            if item["path"].endswith(".csv.gz")
-        ]
-
-        return file_paths
-
-    def filter_dates(self, file_list: list) -> list[str]:
-        """
-        Select dates within the interval defined by `time_period`
-
-        Args:
-
-            file_list (List): list of file paths
-
-        Returns:
-            filtered_paths (List): list of filtered paths
-
-        Raises:
-            ValueError: if the time_period is not within the
-            range of dates in the file
-        """
-        start = datetime.strptime(self.time_period[0], "%Y-%m-%d")
-        end = datetime.strptime(self.time_period[1], "%Y-%m-%d")
-
-        all_dates: list[datetime] = []
-
-        for file in file_list:
-            match = date_pattern.search(file)
-            if match:
-                date = datetime.strptime(match.group(1), "%Y-%m-%d")
-                all_dates.append(date)
-
-        if not all_dates:
-            raise ValueError("Dates provided are not within the list")
-
-        min_date = min(all_dates)
-        max_date = max(all_dates)
-        # TO-DO: return list of non available dates
-        if start < min_date or end > max_date:
-            raise ValueError(
-                f"time_period ({self.time_period[0]} - {self.time_period[1]}) "
-                f"is outside available dates that go from "
-                f"({min_date} to {max_date})"
+        if response.status_code != 200:
+            raise Exception(
+                "Failed to download data: HTTP status code:", response.status_code
             )
-
-        # Filtering the dates now that we know they're within the range
-        filtered_paths = [
-            file
-            for file in file_list
-            if start
-            <= datetime.strptime(date_pattern.search(file).group(1), "%Y-%m-%d")
-            <= end
-        ]
-
-        return filtered_paths
+        df = pd.DataFrame(response.json())
+        return df
 
     def compute_time_period(self) -> tuple:
         """
@@ -162,63 +110,94 @@ class Hypothesis:
             end_date.strftime(self.date_format),
         )
 
-    def get_covid_data(self, location: str) -> pd.DataFrame:
+    def get_covid_data(self, municipality_code: str, cache=False) -> pd.DataFrame:
         """
         Download and filter COVID-19 test data from the RIVM website.
 
         Args:
-        location (str): Security region name. This is the name of the city.
+        municipality_code (str): also known as Gemeentecode
+        cache (bool): If True, saves the downloaded data to
+        a CSV file for future use.
+
 
         Returns:
-        df_filtered (pandas.DataFrame): Filtered data.
+        filtered_data (pd.DataFrame). The COVID-19 data filtered
         """
+        folder_path = "data"
+        start = self.time_period[0]
+        end = self.time_period[1]
 
-        dates = self.get_file_paths()
-        filtered_dates = self.filter_dates(dates)
-
-        df_gzip = []
-        message = "Downloading COVID-19 data from RIVM"
-        for date in tqdm(filtered_dates, desc=message):
-            full_url = self.RIVM_URL + date.split("/")[-1]
-            df = pd.read_csv(
-                full_url, compression="gzip", header=0, sep=",", quotechar='"'
-            )
-            if not isinstance(df, pd.DataFrame):
-                raise ValueError(
-                    f"Data retrieved from {self.RIVM_URL}"
-                    f" is not a DataFrame but a {type(df)}"
-                )
-            df_gzip.append(df)
-
-        df_tests = pd.concat(df_gzip, ignore_index=True)
-
-        df_tests["Date_of_statistics"] = pd.to_datetime(df_tests["Date_of_statistics"])
-
-        mask = (
-            (df_tests["Date_of_statistics"] >= self.time_period[0])
-            & (df_tests["Date_of_statistics"] <= self.time_period[1])
-            & (df_tests["Security_region_name"] == location)
+        csv_file_path = os.path.join(
+            folder_path, f"COVID19_{municipality_code}_data_{start}_{end}.csv"
         )
-        df_filtered = df_tests.loc[mask].reset_index(drop=True)
 
-        return df_filtered
+        # check that the file already exists
+        if os.path.exists(csv_file_path):
+            print(f"Data already exists: {csv_file_path}.")
+            return pd.read_csv(csv_file_path)
 
-    def get_positive_cases(self, location: str) -> pd.Series:
+        # fetch the data
+        print("Downloading COVID-19 data from RIVM")
+        data = self.download_covid_data()
+        print("Data fetched")
+
+        # filter by municipality code
+        filtered_data = data[data["Municipality_code"] == municipality_code].copy()
+
+        # are dates available compatible with start/end dates?
+        available_start = pd.to_datetime(data["Date_of_report"].min())
+        available_end = pd.to_datetime(data["Date_of_report"].max())
+
+        if (
+            pd.to_datetime(start) < available_start
+            or pd.to_datetime(end) > available_end
+        ):
+            raise ValueError(
+                f"time_period ({self.time_period[0]} - {self.time_period[1]}) "
+                f"is outside available dates that go from "
+                f"({available_start} to {available_end})"
+            )
+
+        # filter by dates
+        start_date = pd.to_datetime(start)
+        end_date = pd.to_datetime(end)
+        filtered_data["Date_of_report"] = pd.to_datetime(
+            filtered_data["Date_of_report"]
+        )
+
+        filtered_data = filtered_data[
+            (filtered_data["Date_of_report"] >= start_date)
+            & (filtered_data["Date_of_report"] <= end_date)
+        ]
+
+        if cache:
+            if not os.path.exists(folder_path):
+                os.makedirs(folder_path)
+            filtered_data.to_csv(csv_file_path, index=False)
+            print("CSV file saved at:", csv_file_path)
+
+        return filtered_data
+
+    def get_positive_cases(self, municipality_code: str, cache=False) -> pd.Series:
         """
         Get an array of daily positive COVID-19 cases for
-        a specific time period and location.
+        a specific time period and municipality_code.
 
         Args:
-        location (str): Security region name.
+        municipality_code (str): also known as Gementecode
+        cache(boolean): Do you want to save COVID-19 data
+            i.e., to avoid to download twice?
 
         Returns:
         daily_positive_cases (pandas.Series): Daily positive cases.
 
         """
-        df_filtered = self.get_covid_data(location)
-        # Check if the filtered dataframe is empty after filtering by location
+        df_filtered = self.get_covid_data(municipality_code, cache)
+
+        # Check if the filtered dataframe is empty
+        # after filtering by municipality_code
         if df_filtered.empty:
-            raise ValueError(f"No data available for location: {location}")
+            raise ValueError(f"No data available for municipality: {municipality_code}")
 
         # positive cases were reported multiple times
         # and multiple days after a particular day
@@ -226,8 +205,8 @@ class Hypothesis:
         # sort dataframe based on date of report
         sorted_df = df_filtered.sort_values(by="Date_of_report", ascending=False)
         # get the most recent data
-        agg_df = sorted_df.groupby("Date_of_statistics").first().reset_index()
-        daily_positive_cases = agg_df["Tested_positive"]
+        agg_df = sorted_df.groupby("Date_of_publication").first().reset_index()
+        daily_positive_cases = agg_df["Total_reported"]
 
         # match the length of the positives by day with the n of steps
         if len(daily_positive_cases) < self.steps:
@@ -279,7 +258,7 @@ class Hypothesis:
 
         Args:
             daily_positive_cases(pd.Series): Daily positive cases
-            real_size(int): Size of the original population location
+            real_size(int): Size of the original population
             sim_size(int): Size of the simulated population
 
         Returns:
@@ -302,7 +281,18 @@ class Hypothesis:
             )
             warnings.warn(message)
 
-        new_cases = (daily_positive_cases * sim_size) / real_size
+        cumulative_cases = (daily_positive_cases * sim_size) / real_size
+        # note that RIVM gives us the cumulative cases
+        # so we need to compute the difference between day2 and day1
+        # to get new cases
+        new_cases = pd.Series(
+            [cumulative_cases[0]]
+            + [
+                cumulative_cases[case + 1] - cumulative_cases[case]
+                for case in range(len(cumulative_cases) - 1)
+            ]
+        )
+
         return new_cases.astype("int")
 
     @classmethod
