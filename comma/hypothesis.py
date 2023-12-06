@@ -6,7 +6,6 @@ import os
 import pandas as pd
 import re
 import requests
-from tqdm import tqdm
 
 PARAMS_INDIVIDUAL = "params_individual.json"
 PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
