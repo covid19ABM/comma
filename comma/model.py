@@ -81,12 +81,13 @@ class Model:
             for i in recovered_idx:
                 # if recovered reset their covid status
                 self.agents[i].covid_status = 0
+                self.agents[i].long_covid = 0
                 # and reset the counter
                 self.agents[i].days_since_positive = 0
 
         # extract agents who are negative
         negative_agents = [agent for agent in self.agents if agent.covid_status == 0]
-
+        # print(f"left: {len(negative_agents)}")
         # make some of them positive (selected randomly)
         random_rng = np.random.default_rng(None)
         newly_infected_agents = random_rng.choice(
@@ -214,8 +215,9 @@ class Model:
         lockdown_policy: list,
         out_path: str,
         starting_date="2021-02-05",
-        location="Groningen",
+        municipality_code="GM0014",
         real_pop_size=200336,
+        cache=False,
     ) -> None:
         """Run a simulation
 
@@ -226,11 +228,18 @@ class Model:
 
             out_path(str): File path of the output file
 
-            location(str): Security region name. This is the name of the city.
+            municipality_code(str): Also known as Gemeentecode.
+            Municipal classification based on the zip code of
+            the place of residence of the people who tested
+            positive for SARS-CoV-2, coded according to CBS.
 
             starting_date(str): start date ('YYYY-MM-DD')
 
-            real_pop_size(int): Real size of the population of location
+            real_pop_size(int): Real size of the population
+            of the relative municipality_code
+
+            cache(boolean): Do you want to save COVID-19 data
+            i.e., to avoid to download twice?
         """
         if steps <= 1:
             raise ValueError("Steps must be more than 1")
@@ -245,7 +254,7 @@ class Model:
         hypothesis.validate_param_file(self.dir_params)
 
         # get new positive cases
-        positives = hypothesis.get_positive_cases(location)
+        positives = hypothesis.get_positive_cases(municipality_code, cache)
         # scale them to the size of the simulated population
         new_cases = hypothesis.scale_cases_to_population(
             positives, real_pop_size, len(self.agents)
@@ -264,7 +273,7 @@ class Model:
         for step, current_lockdown in tqdm(
             enumerate(lockdown_policy), total=steps, desc="Running simulation"
         ):
-            # print(f'new cases: {new_cases[step]}, day: {step}')
+            # print(f"new cases: {new_cases[step]}, day: {step}")
             self.simulation_id = step
             self.lockdown_status[step] = current_lockdown
             new_infected = new_cases[step]
