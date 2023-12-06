@@ -191,3 +191,21 @@ class TestIndividual:
         assert (
             action_out[0] == "stay_at_home"
         ), f"Expected 'stay at home' got {action_out[0]}"
+
+    def test_long_covid(self, dir_params):
+        """
+        Test over a large number of instances that proportions
+        are always ~ 20%
+        """
+        num_agents = 10000
+        long_covid_cases = 0
+        agents = Individual.populate_ipf(num_agents, dir_params)
+
+        for agent in agents:
+            if agent.is_long_covid():
+                long_covid_cases += 1
+
+        proportion = long_covid_cases / num_agents
+        expected = 0.20
+        error_margin = 0.01
+        assert proportion == pytest.approx(expected, abs=error_margin)
