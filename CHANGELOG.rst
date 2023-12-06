@@ -5,6 +5,39 @@ All notable changes to the codebase are documented in this file.
    :depth: 1
 
 ~~~~~~~~~
+1.1.2
+~~~~~~~~~
+Released on December 6, 2023
+
+Main changes
+-------------
+
+Features
+^^^^^^^^
+
+In `PR #76 <https://github.com/covid19ABM/comma/pull/76>`_ by @n400peanuts:
+
+- Integration of the long covid type of situation in the individual class
+- Addition of the `get_covid_status` among the methods in the individual class
+- `is_recovered()` method now has been adjusted to integrate long-covid type of recovery
+- Change of the data repository to the RIVM website (cumulative positive tests) in the hypothesis class
+- Issue about having an additional method to work out positive cases for days that are not in data -- solved, this is integrated into the RIVM data already
+- Hypothesis class does not require anymore the following methods: `get_file_paths()` and `filter_dates`
+- Hypothesis class now has adjusted methods for `get_covid_data()` and `get_positive_cases()` to account for the RIVM cumulative tests data
+- Model class now accounts for municipality_code rather than 'location'
+
+Tests
+^^^^^
+
+In `PR #76 <https://github.com/covid19ABM/comma/pull/76>`_ by @n400peanuts:
+
+- Added test for long covid with `test_long_covid`
+- Added test for testing positivity to COVID with `test_positivity`
+- tests `test_filter_dates_on_boundary`, `test_filter_dates_within_range` and `file_list` have all been removed, as the new data collection from RIVM does not require anymore the functions `filter_dates`
+- tests `test_range_error` and `test_get_covid_data` have been changed to include the new RIVM website and type of data
+- tests `test_scaling` and `test_location_not_in_dataset` changed to include the new RIVM website and type of data
+
+~~~~~~~~~
 1.1.1
 ~~~~~~~~~
 
