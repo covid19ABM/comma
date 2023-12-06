@@ -35,7 +35,7 @@ With that said, below we delve into how we measure and apply positivity to COVID
 Step 1: Compute new COVID-19 positive cases in the population
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We extract data from the `RIVM github repository <https://github.com/mzelst/covid-19/raw/master/data-rivm/tests/>`_.
+We use the cumulative number of positive tests released in the `RIVM dashboard <https://data.rivm.nl/covid-19/>`_.
 We select a period of time and a location and we compute the number of new cases in the simulated population
 as:
 
