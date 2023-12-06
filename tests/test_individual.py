@@ -192,14 +192,16 @@ class TestIndividual:
             action_out[0] == "stay_at_home"
         ), f"Expected 'stay at home' got {action_out[0]}"
 
-    def test_long_covid(self, dir_params):
+    def test_long_covid(self, dir_params, seed):
         """
         Test over a large number of instances that proportions
         are always ~ 20%
         """
         num_agents = 10000
         long_covid_cases = 0
-        agents = Individual.populate_ipf(num_agents, dir_params)
+        agents = Individual.populate_ipf(
+            num_agents, dir_params, rng=np.random.default_rng(seed)
+        )
 
         for agent in agents:
             if agent.is_long_covid():
