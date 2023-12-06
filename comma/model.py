@@ -81,6 +81,7 @@ class Model:
             for i in recovered_idx:
                 # if recovered reset their covid status
                 self.agents[i].covid_status = 0
+                self.agents[i].long_covid = 0
                 # and reset the counter
                 self.agents[i].days_since_positive = 0
 

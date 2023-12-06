@@ -19,6 +19,7 @@ class Individual:
         self._features = features
         self.actions = Hypothesis.all_possible_actions
         self.covid_status: int = 0  # this tracks the positivity to COVID-19
+        self.long_covid: int = 0  # is this a long covid case?
         self.days_since_positive = np.nan  # n-day from first day of positivity
         self.recovery = np.nan  # recovery status
 
@@ -40,6 +41,15 @@ class Individual:
             float: the current status of the agent
         """
         return self._status
+
+    def get_covid_status(self) -> float:
+        """
+        Get the current agent covid status
+
+        Returns:
+            pd.Series: the current covid status of the agent
+        """
+        return self.covid_status
 
     def get_actions(self) -> list[str]:
         """
@@ -83,6 +93,25 @@ class Individual:
 
     # return actions, action_probs
 
+    def is_long_covid(self):
+        """
+        Determine if this is a Long covid case.
+
+        This method decides whether an agent is
+        considered to be a long COVID case, based on
+        a set of probability (currently set to 20% chance)
+
+        Returns:
+            bool: True if long COVID, False otherwise
+
+        """
+        rng = np.random.default_rng(None)
+
+        if self.long_covid == 0 and rng.random() < 0.20:
+            self.long_covid = 1
+
+        return self.long_covid == 1
+
     def is_recovered(self, rng=None):
         """
         Determine if an individual is recovered based on
@@ -106,13 +135,19 @@ class Individual:
         """
 
         if self.days_since_positive <= 10:
-            recovery = 0
+            return 0
+
+        if rng is None:
+            rng = np.random.default_rng(None)
+
+        if self.is_long_covid():
+            # long covid recovery
+            recovery_prob = gamma.cdf(self.days_since_positive, a=7, scale=10)
         else:
+            # standard recovery
             recovery_prob = gamma.cdf(self.days_since_positive, a=5, scale=3)
-            # use the new generator method of numpy
-            if rng is None:
-                rng = np.random.default_rng(None)
-            recovery = rng.uniform() <= recovery_prob
+
+        recovery = rng.uniform() <= recovery_prob
         return recovery
 
     @staticmethod

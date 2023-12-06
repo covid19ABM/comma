@@ -152,3 +152,23 @@ class TestModel:
                 assert (
                     False
                 ), f"Row {idx} is different. Differences: {difference_message}"
+
+    def test_positivity(self):
+        # test that positive agents have their covid status changed accordingly
+        model = Model(size=self.size, dir_params=self.dir_parameters, seed=self.seed)
+        negative_agents = [agent for agent in model.agents if agent.covid_status == 0]
+        new_infected = 1
+        random_rng = np.random.default_rng(self.seed)
+        newly_infected_agents = random_rng.choice(
+            negative_agents, new_infected, replace=False
+        )
+
+        # mark selected agents as infected (covid_status = 1)
+        # and update counter of positive days for positive people
+        for agent in newly_infected_agents:
+            agent.covid_status = 1
+            agent.days_since_positive = 1
+
+        actual = [agent.get_covid_status() for agent in negative_agents]
+        expected = [0, 1]
+        assert expected == actual
