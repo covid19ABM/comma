@@ -1,11 +1,3 @@
-actions;baseline;age_group__1;age_group__2;age_group__3;age_group__4;gender_M;gender_F;education_Low;education_Medium;education_High;Unemployed_yes;Unemployed_no;Have_partner_yes;Have_partner_no;Depressed_yes;Depressed_no;Children_presence_yes;Children_presence_no;housing_financial_difficulties_yes;housing_financial_difficulties_no;selfrated_health_good;selfrated_health_average;selfrated_health_poor;critical_job_yes;critical_job_no
-work_from_home;-4.49;0.52;0;0.41;0.26;0.06;0.0;0.66;0;-0.16;-0.34;0;0.3;0;1.78;0;-0.36;0;1.13;0;-0.23;0;0.53;0.0;0
-maintain_physical_distance;-4.62;0.48;0;0.38;0.3;0.0;0.02;0.67;0;-0.06;-0.49;0;0.37;0;1.83;0;-0.39;0;1.09;0;-0.27;0;0.56;-0.06;0
-stay_at_home;-4.11;0.33;0;0.24;-0.28;0.84;0.0;0.08;0;-0.3;1.7;0;-0.44;0;1.15;0;0.89;0;0.41;0;-1.17;0;1.1;0.29;0
-exercise;-5.0;0.52;0;0.27;0.31;0.15;0.0;0.8;0;0.11;-0.27;0;0.26;0;1.8;0;-0.23;0;1.18;0;-0.35;0;0.54;0.03;0
-socialise;-4.51;0.52;0;0.41;0.26;0.07;0.0;0.65;0;-0.14;-0.34;0;0.3;0;1.77;0;-0.36;0;1.13;0;-0.23;0;0.53;-0.02;0
-travel;0.0;0.0;0;0.0;0.0;0.0;0.0;0.0;0;0.0;0.0;0;0.0;0;0.0;0;0.0;0;0.0;0;0.0;0;0.0;0.0;0
-seek_help;-4.69;0.48;0;0.33;0.25;0.05;0.0;0.59;0;-0.09;-0.36;0;0.34;0;1.67;0;-0.38;0;1.06;0;-0.24;0;0.56;0.0;0
-negative_coping;-4.81;0.5;0;0.25;0.26;0.14;0.0;0.79;0;0.03;-0.34;0;0.22;0;1.82;0;-0.26;0;1.21;0;-0.35;0;0.54;0.06;0
-positive_coping;-3.98;0.51;0;-0.1;-1.03;-0.06;0.0;0.28;0;-0.12;0.64;0;-0.23;0;1.56;0;0.34;0;0.22;0;-0.96;0;0.95;-0.12;0
-socialise_online;0.0;0.0;0;0.0;0.0;0.0;0.0;0.0;0;0.0;0.0;0;0.0;0;0.0;0;0.0;0;0.0;0;0.0;0;0.0;0.0;0
+version https://git-lfs.github.com/spec/v1
+oid sha256:28b777b669cb411da17f1b773f7e87dbf652568dea64ff9078b77036380675d6
+size 1557
