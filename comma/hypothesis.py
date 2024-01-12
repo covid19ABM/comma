@@ -389,8 +389,7 @@ class Hypothesis:
                 features += [key]
         return features
 
-    @classmethod
-    def create_empty_hypotheses(cls, dir_params: str) -> None:
+    def create_empty_hypotheses(self, dir_params: str) -> None:
         """
         Create empty CSV files for storing hypotheses on
         the impact of actions and lockdown policies on different agent statuses
@@ -411,11 +410,11 @@ class Hypothesis:
             file is missing in the directory '{dir_params}'"
             )
 
-        actions = cls.all_possible_actions
-        lockdown_policies = cls.lockdown_policies
-        status = cls.individual_status
+        actions = self.all_possible_actions
+        lockdown_policies = self.lockdown_policies
+        status = self.individual_status
         columns = ["actions", "baseline"]
-        columns += cls._get_one_hot_encoded_features(fpath_params_individual)
+        columns += self._get_one_hot_encoded_features(fpath_params_individual)
         df = pd.DataFrame(0, index=range(len(actions)), columns=columns)
         df["actions"] = actions
 
@@ -456,7 +455,7 @@ class Hypothesis:
         # check if all hypothesis files contain all the required agent features
         required_features = ["actions", "baseline"]
         required_features += self._get_one_hot_encoded_features(path_individual)
-        hypothesis_data = [pd.read_csv(fp, sep=";", decimal=",") for fp in fpaths]
+        hypothesis_data = [pd.read_csv(fp, sep=",", decimal=".") for fp in fpaths]
         missing_features = []
         for hd in hypothesis_data:
             # lower case labels
