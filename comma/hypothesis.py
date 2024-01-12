@@ -27,7 +27,7 @@ class Hypothesis:
         self.RIVM_URL = (
             "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.json"
         )
-        self.lockdown_policies = ["absent", "easy", "medium", "hard"]
+        self.lockdown_policies = ["easy", "hard"]
         self.individual_status = ["mh"]
         self._required_params = [
             "size",
@@ -49,34 +49,48 @@ class Hypothesis:
         "education_high",
         "education_low",
         "education_medium",
+        "education_unknown",
         "unemployed_no",
         "unemployed_yes",
         "have_partner_no",
         "have_partner_yes",
+        "have_partner_unknown",
         "depressed_no",
         "depressed_yes",
+        "depressed_unknown",
         "children_presence_no",
         "children_presence_yes",
+        "children_presence_unknown",
         "housing_financial_difficulties_no",
         "housing_financial_difficulties_yes",
+        "housing_financial_difficulties_unknown",
         "selfrated_health_average",
         "selfrated_health_good",
         "selfrated_health_poor",
+        "selfrated_health_unknown",
         "critical_job_no",
         "critical_job_yes",
+        "critical_job_unknown",
+        "bmi_underweight",
+        "bmi_overweight",
+        "bmi_normal",
+        "bmi_obese",
+        "bmi_unknown",
+        "livesalone_yes",
+        "livesalone_no",
+        "livesalone_unknown",
     ]
 
     all_possible_actions = [
         "work_from_home",
-        "maintain_physical_distance",
-        "stay_at_home",
+        "maintain_social_distance",
         "exercise",
-        "socialise",
-        "travel",
-        "seek_help",
-        "negative_coping",
+        "feel_socially_connected",
+        "seek_help_from_friends",
+        "heavy_drinking",
         "positive_coping",
-        "socialise_online",
+        "feel_isolated",
+        "be_sedentary",
     ]
 
     def download_covid_data(self) -> pd.DataFrame:
