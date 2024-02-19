@@ -169,11 +169,11 @@ class Individual:
 
         # set baseline beta to -5 (v. unlikely)
         lockdown_["baseline"] = -5
-        # however for 'stay at home' set beta to 5 (v. likely)
+        # however for 'be sedentary' set beta to 5 (v. likely)
         if "actions" in lockdown_.columns:
-            lockdown_.loc[lockdown_["actions"] == "stay_at_home", "baseline"] = 5
+            lockdown_.loc[lockdown_["actions"] == "be_sedentary", "baseline"] = 5
         else:
-            lockdown_.iat[2, lockdown_.columns.get_loc("baseline")] = 5
+            lockdown_.iat[8, lockdown_.columns.get_loc("baseline")] = 5
 
         return lockdown_
 
@@ -249,7 +249,9 @@ class Individual:
         sample = Individual.sampling_from_ipf(size, dir_params, rng)
 
         # one-hot encoding
-        encoded_columns = pd.get_dummies(sample).reindex(
+        encoded_columns = pd.get_dummies(sample)
+        encoded_columns.columns = map(str.lower, encoded_columns.columns)
+        encoded_columns = encoded_columns.reindex(
             columns=Hypothesis.all_possible_features, fill_value=0
         )
         _features = pd.concat([_features, encoded_columns], axis=1)

@@ -214,7 +214,7 @@ class Model:
         steps: int,
         lockdown_policy: list,
         out_path: str,
-        starting_date="2021-02-05",
+        starting_date="2021-02-01",
         municipality_code="GM0014",
         real_pop_size=200336,
         cache=False,

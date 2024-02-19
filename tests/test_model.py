@@ -13,7 +13,7 @@ class TestModel:
 
     def setup_lockdown_pattern(self):
         n = self.steps // 4
-        return ["absent"] * n + ["medium"] * n + ["hard"] * n + ["easy"] * n
+        return ["easy"] * n + ["easy"] * n + ["hard"] * n + ["hard"] * n
 
     def setup_and_run_model(self, out_path):
         lockdown_pattern = self.setup_lockdown_pattern()
@@ -34,36 +34,27 @@ class TestModel:
     def expected_dataframe(self):
         data = {
             "step_id": [0, 0, 1, 1, 2, 2, 3, 3],
-            "lockdown": [
-                "absent",
-                "absent",
-                "medium",
-                "medium",
-                "hard",
-                "hard",
-                "easy",
-                "easy",
-            ],
+            "lockdown": ["easy"] * 4 + ["hard"] * 4,
             "agent_id": [0, 1, 0, 1, 0, 1, 0, 1],
             "delta_mental_health": [
                 0.0,
                 0.0,
-                -30.8,
-                -20.15,
-                -8.18,
-                -11.83,
-                -28.95,
-                -11.77,
+                3.039,
+                -11.05,
+                9.309,
+                -4.98,
+                25.108,
+                -1.78,
             ],
             "cumulative_mental_health": [
-                -4.19,
-                -2.1699999999999995,
-                -34.992672937711895,
-                -22.322390655700346,
-                -43.17483742252662,
-                -34.15,
-                -72.13,
-                -45.93,
+                2.27,
+                -17.51,
+                5.308079438194754,
+                -28.5614933617474,
+                14.61636578316058,
+                -33.5437486469858,
+                39.72210177911623,
+                -35.326328846095,
             ],
             "covid_status": [0, 0, 0, 0, 0, 0, 0, 0],
             "days_since_first_infection": [
