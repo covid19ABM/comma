@@ -27,12 +27,14 @@
         [
             "low",
             "medium",
-            "high"
+            "high",
+            "unknown"
         ],
         [
-            0.11,
-            0.25,
-            0.64
+            0.08,
+            0.17,
+            0.45,
+            0.30
         ]
     ],
     "unemployed": [
@@ -48,63 +50,117 @@
     "have_partner": [
         [
             "yes",
-            "no"
+            "no",
+            "unknown"
         ],
         [
-            0.6,
-            0.4
+            0.33,
+            0.33,
+            0.34
         ]
     ],
     "depressed": [
         [
             "yes",
-            "no"
+            "no",
+            "unknown"
         ],
         [
             0.8,
-            0.2
+            0.1,
+            0.1
         ]
     ],
     "children_presence": [
         [
             "yes",
-            "no"
+            "no",
+            "unknown"
         ],
         [
-            0.42,
-            0.58
+            0.22,
+            0.58,
+            0.2
         ]
     ],
     "housing_financial_difficulties": [
         [
             "yes",
-            "no"
+            "no",
+            "unknown"
         ],
         [
-            0.79,
-            0.21
+            0.59,
+            0.21,
+            0.2
         ]
     ],
     "selfrated_health": [
         [
             "poor",
             "average",
-            "good"
+            "good",
+            "unknown"
         ],
         [
-            0.65,
+            0.25,
             0.20,
-            0.15
+            0.15,
+            0.4
         ]
     ],
     "critical_job": [
         [
             "yes",
-            "no"
+            "no",
+            "unknown"
         ],
         [
             0.2,
-            0.8
+            0.5,
+            0.3
+        ]
+    ],
+    "BMI": [
+        [
+            "underweight",
+            "normalweight",
+            "overweight",
+            "obese",
+            "unknown"
+        ],
+        [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+
+
+        ]
+    ],
+    "livesalone": [
+        [
+            "yes",
+            "no",
+            "unknown"
+        ],
+        [
+            0.33,
+            0.33,
+            0.34
+        ]
+    ],
+    "income_median": [
+        [
+            "above",
+            "below",
+            "unknown"
+        ],
+        [
+            0.33,
+            0.33,
+            0.34
         ]
     ]
 }
