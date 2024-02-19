@@ -124,16 +124,18 @@
     "BMI": [
         [
             "underweight",
-            "normal",
+            "normalweight",
             "overweight",
             "obese",
             "unknown"
         ],
         [
-            0.25,
-            0.25,
-            0.25,
-            0.25
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+
 
         ]
     ],
@@ -151,8 +153,8 @@
     ],
     "income_median": [
         [
-            "yes",
-            "no",
+            "above",
+            "below",
             "unknown"
         ],
         [

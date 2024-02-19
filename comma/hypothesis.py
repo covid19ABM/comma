@@ -72,13 +72,16 @@ class Hypothesis:
         "critical_job_yes",
         "critical_job_unknown",
         "bmi_underweight",
+        "bmi_normalweight",
         "bmi_overweight",
-        "bmi_normal",
         "bmi_obese",
         "bmi_unknown",
-        "livesalone_yes",
         "livesalone_no",
+        "livesalone_yes",
         "livesalone_unknown",
+        "income_median_above",
+        "income_median_below",
+        "income_median_unknown",
     ]
 
     all_possible_actions = [
@@ -340,7 +343,8 @@ class Hypothesis:
         for policy in policies:
             fpath_params = os.path.join(dir_params, file_patterns[type] % policy)
 
-            df = pd.read_csv(fpath_params, delimiter=";", decimal=".")
+            df = pd.read_csv(fpath_params, delimiter=",", decimal=".")
+            df.fillna(0, inplace=True)
 
             for col in df.columns:
                 if col != "actions":

@@ -58,7 +58,7 @@ class TestDataSamplingIPF:
 
     @pytest.fixture(scope="class")
     def BMI_names(self):
-        return ["underweight", "normal", "overweight", "obese", "unknown"]
+        return ["underweight", "normalweight", "overweight", "obese", "unknown"]
 
     @pytest.fixture(scope="class")
     def living_alone_names(self):
