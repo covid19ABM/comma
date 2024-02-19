@@ -11,11 +11,11 @@ from scipy.stats import chi2_contingency
 
 class TestDataSamplingIPF:
     # Define crosstabs of the original sample (i.e., truth).
-    # We have 43 crosstabs in total, however,
-    # they are ad-hoc combinations of 9 variables.
+    # We have >43 crosstabs in total, however,
+    # they are ad-hoc combinations of 13 variables.
     # It's sufficient to test whether the distribution
-    # of those 9 variables changes significantly than the
-    # original sample, rather than all 43 combinations.
+    # of those 13 variables changes significantly than the
+    # original sample, rather than all combinations.
     @pytest.fixture(scope="class")
     def gender_names(self):
         return ["m", "f"]
@@ -26,7 +26,7 @@ class TestDataSamplingIPF:
 
     @pytest.fixture(scope="class")
     def education_names(self):
-        return ["low", "middle", "high"]
+        return ["low", "middle", "high", "unknown"]
 
     @pytest.fixture(scope="class")
     def unemployed_names(self):
@@ -34,33 +34,45 @@ class TestDataSamplingIPF:
 
     @pytest.fixture(scope="class")
     def have_partner_names(self):
-        return ["yes", "no"]
+        return ["yes", "no", "unknown"]
 
     @pytest.fixture(scope="class")
     def depressed_names(self):
-        return ["yes", "no"]
+        return ["yes", "no", "unknown"]
 
     @pytest.fixture(scope="class")
     def children_presence_names(self):
-        return ["yes", "no"]
+        return ["yes", "no", "unknown"]
 
     @pytest.fixture(scope="class")
     def housing_financial_difficulties_names(self):
-        return ["yes", "no"]
+        return ["yes", "no", "unknown"]
 
     @pytest.fixture(scope="class")
     def selfrated_health_names(self):
-        return ["good", "average", "poor"]
+        return ["good", "average", "poor", "unknown"]
 
     @pytest.fixture(scope="class")
     def critical_job_names(self):
-        return ["yes", "no"]
+        return ["yes", "no", "unknown"]
+
+    @pytest.fixture(scope="class")
+    def BMI_names(self):
+        return ["underweight", "normalweight", "overweight", "obese", "unknown"]
+
+    @pytest.fixture(scope="class")
+    def living_alone_names(self):
+        return ["yes", "no", "unknown"]
+
+    @pytest.fixture(scope="class")
+    def income_median_names(self):
+        return ["below", "above", "unknown"]
 
     # define the cross table gender x education_level
     @pytest.fixture(scope="class")
     def gender(self, gender_names, education_names):
         return pd.DataFrame(
-            [[86, 238, 725], [106, 396, 1104]],
+            [[170, 382, 1047, 917], [269, 616, 1596, 916]],
             index=gender_names,
             columns=education_names,
         )
@@ -69,7 +81,12 @@ class TestDataSamplingIPF:
     @pytest.fixture(scope="class")
     def age_group(self, age_group_names, education_names):
         return pd.DataFrame(
-            [[6, 97, 539], [34, 161, 486], [109, 296, 596], [43, 80, 208]],
+            [
+                [9, 156, 774, 538],
+                [57, 236, 655, 332],
+                [199, 409, 789, 431],
+                [174, 197, 425, 532],
+            ],
             index=age_group_names,
             columns=education_names,
         )
@@ -78,7 +95,7 @@ class TestDataSamplingIPF:
     @pytest.fixture(scope="class")
     def education(self, education_names, unemployed_names):
         return pd.DataFrame(
-            [[10, 182], [31, 603], [65, 1764]],
+            [[36, 403], [67, 931], [118, 2525], [49, 1784]],
             index=education_names,
             columns=unemployed_names,
         )
@@ -87,16 +104,18 @@ class TestDataSamplingIPF:
     @pytest.fixture(scope="class")
     def have_partner(self, have_partner_names, depressed_names):
         return pd.DataFrame(
-            [[45, 2069], [21, 520]], index=have_partner_names, columns=depressed_names
+            [[126, 3689, 78], [65, 921, 24], [28, 966, 16]],
+            index=have_partner_names,
+            columns=depressed_names,
         )
 
     # Define the dataframe for Depressed x Children
     @pytest.fixture(scope="class")
-    def depressed(self, depressed_names, children_presence_names):
+    def depressed(self, depressed_names, critical_job_names):
         return pd.DataFrame(
-            [[27, 39], [1310, 1279]],
+            [[742, 958, 274], [869, 1255, 860], [334, 377, 244]],
             index=depressed_names,
-            columns=children_presence_names,
+            columns=critical_job_names,
         )
 
     # Define the dataframe for Children x Housing/Financial troubles
@@ -105,7 +124,7 @@ class TestDataSamplingIPF:
         self, children_presence_names, housing_financial_difficulties_names
     ):
         return pd.DataFrame(
-            [[292, 1045], [476, 842]],
+            [[450, 1347, 177], [835, 1922, 227], [269, 469, 217]],
             index=children_presence_names,
             columns=housing_financial_difficulties_names,
         )
@@ -114,7 +133,9 @@ class TestDataSamplingIPF:
     @pytest.fixture(scope="class")
     def unemployed(self, unemployed_names, have_partner_names):
         return pd.DataFrame(
-            [[70, 36], [2044, 505]], index=unemployed_names, columns=have_partner_names
+            [[183, 85, 2], [3710, 925, 1008]],
+            index=unemployed_names,
+            columns=have_partner_names,
         )
 
     # Define the dataframe for Housing/Financial trouble x Self-rated health
@@ -123,7 +144,7 @@ class TestDataSamplingIPF:
         self, housing_financial_difficulties_names, selfrated_health_names
     ):
         return pd.DataFrame(
-            [[874, 928, 85], [269, 436, 63]],
+            [[516, 860, 224, 6], [1605, 1902, 170, 6], [6, 15, 6, 597]],
             index=housing_financial_difficulties_names,
             columns=selfrated_health_names,
         )
@@ -132,7 +153,7 @@ class TestDataSamplingIPF:
     @pytest.fixture(scope="class")
     def critical_job(self, housing_financial_difficulties_names, critical_job_names):
         return pd.DataFrame(
-            [[304, 464], [808, 1079]],
+            [[508, 695, 351], [1260, 1629, 849], [177, 266, 178]],
             index=housing_financial_difficulties_names,
             columns=critical_job_names,
         )
@@ -141,9 +162,33 @@ class TestDataSamplingIPF:
     @pytest.fixture(scope="class")
     def selfrated_health(self, selfrated_health_names, critical_job_names):
         return pd.DataFrame(
-            [[471, 672], [571, 793], [70, 78]],
+            [[756, 999, 373], [917, 1211, 649], [95, 119, 183], [177, 261, 173]],
             index=selfrated_health_names,
             columns=critical_job_names,
+        )
+
+    @pytest.fixture(scope="class")
+    def BMI(self, BMI_names, gender_names):
+        return pd.DataFrame(
+            [[4, 71], [1169, 2113], [893, 972], [256, 427], [4, 4]],
+            index=BMI_names,
+            columns=gender_names,
+        )
+
+    @pytest.fixture(scope="class")
+    def living_alone(self, living_alone_names, depressed_names):
+        return pd.DataFrame(
+            [[3613, 244, 33], [280, 766, 22], [319, 318, 318]],
+            index=living_alone_names,
+            columns=depressed_names,
+        )
+
+    @pytest.fixture(scope="class")
+    def income_median(self, income_median_names, education_names):
+        return pd.DataFrame(
+            [[175, 306, 560, 291], [77, 253, 1062, 337], [187, 439, 1021, 1205]],
+            index=income_median_names,
+            columns=education_names,
         )
 
     @pytest.fixture(scope="class")
@@ -159,6 +204,9 @@ class TestDataSamplingIPF:
         housing_financial_difficulties,
         selfrated_health,
         critical_job,
+        BMI,
+        living_alone,
+        income_median,
     ):
         return {
             "original_gender": gender,
@@ -171,6 +219,9 @@ class TestDataSamplingIPF:
             "original_housing_financial_trouble": housing_financial_difficulties,
             "original_selfrated_health": selfrated_health,
             "original_critical_job": critical_job,
+            "original_bmi": BMI,
+            "original_living_alone": living_alone,
+            "original_income_median": income_median,
         }
 
     @staticmethod
@@ -196,7 +247,7 @@ class TestDataSamplingIPF:
     @pytest.mark.parametrize("time", range(100))
     def test_data_sampling_ipf(self, time, crosstabs_dict):
         """Test if the sampling result aligns to the cross-tabs"""
-        size = 2655  # This is the original sample size provided by Kristina
+        size = 5913  # This is the original sample size provided by Kristina
         dir_params = "./parameters"
         sample_set = Individual.sampling_from_ipf(size, dir_params)
         cols = sample_set.columns.tolist()

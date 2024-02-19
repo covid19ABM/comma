@@ -27,7 +27,7 @@ class Hypothesis:
         self.RIVM_URL = (
             "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_cumulatief.json"
         )
-        self.lockdown_policies = ["absent", "easy", "medium", "hard"]
+        self.lockdown_policies = ["easy", "hard"]
         self.individual_status = ["mh"]
         self._required_params = [
             "size",
@@ -49,34 +49,51 @@ class Hypothesis:
         "education_high",
         "education_low",
         "education_medium",
+        "education_unknown",
         "unemployed_no",
         "unemployed_yes",
         "have_partner_no",
         "have_partner_yes",
+        "have_partner_unknown",
         "depressed_no",
         "depressed_yes",
+        "depressed_unknown",
         "children_presence_no",
         "children_presence_yes",
+        "children_presence_unknown",
         "housing_financial_difficulties_no",
         "housing_financial_difficulties_yes",
+        "housing_financial_difficulties_unknown",
         "selfrated_health_average",
         "selfrated_health_good",
         "selfrated_health_poor",
+        "selfrated_health_unknown",
         "critical_job_no",
         "critical_job_yes",
+        "critical_job_unknown",
+        "bmi_underweight",
+        "bmi_normalweight",
+        "bmi_overweight",
+        "bmi_obese",
+        "bmi_unknown",
+        "livesalone_no",
+        "livesalone_yes",
+        "livesalone_unknown",
+        "income_median_above",
+        "income_median_below",
+        "income_median_unknown",
     ]
 
     all_possible_actions = [
         "work_from_home",
-        "maintain_physical_distance",
-        "stay_at_home",
+        "maintain_social_distance",
         "exercise",
-        "socialise",
-        "travel",
-        "seek_help",
-        "negative_coping",
+        "feel_socially_connected",
+        "seek_help_from_friends",
+        "heavy_drinking",
         "positive_coping",
-        "socialise_online",
+        "feel_isolated",
+        "be_sedentary",
     ]
 
     def download_covid_data(self) -> pd.DataFrame:
@@ -326,7 +343,8 @@ class Hypothesis:
         for policy in policies:
             fpath_params = os.path.join(dir_params, file_patterns[type] % policy)
 
-            df = pd.read_csv(fpath_params, delimiter=";", decimal=".")
+            df = pd.read_csv(fpath_params, delimiter=",", decimal=".")
+            df.fillna(0, inplace=True)
 
             for col in df.columns:
                 if col != "actions":
@@ -375,8 +393,7 @@ class Hypothesis:
                 features += [key]
         return features
 
-    @classmethod
-    def create_empty_hypotheses(cls, dir_params: str) -> None:
+    def create_empty_hypotheses(self, dir_params: str) -> None:
         """
         Create empty CSV files for storing hypotheses on
         the impact of actions and lockdown policies on different agent statuses
@@ -397,11 +414,11 @@ class Hypothesis:
             file is missing in the directory '{dir_params}'"
             )
 
-        actions = cls.all_possible_actions
-        lockdown_policies = cls.lockdown_policies
-        status = cls.individual_status
+        actions = self.all_possible_actions
+        lockdown_policies = self.lockdown_policies
+        status = self.individual_status
         columns = ["actions", "baseline"]
-        columns += cls._get_one_hot_encoded_features(fpath_params_individual)
+        columns += self._get_one_hot_encoded_features(fpath_params_individual)
         df = pd.DataFrame(0, index=range(len(actions)), columns=columns)
         df["actions"] = actions
 
@@ -442,7 +459,7 @@ class Hypothesis:
         # check if all hypothesis files contain all the required agent features
         required_features = ["actions", "baseline"]
         required_features += self._get_one_hot_encoded_features(path_individual)
-        hypothesis_data = [pd.read_csv(fp, sep=";", decimal=",") for fp in fpaths]
+        hypothesis_data = [pd.read_csv(fp, sep=",", decimal=".") for fp in fpaths]
         missing_features = []
         for hd in hypothesis_data:
             # lower case labels

@@ -14,18 +14,18 @@ class TestIndividual:
     def expected_actions(self):
         return np.array(
             [
-                "maintain_physical_distance",
-                "stay_at_home",
+                "maintain_social_distance",
                 "exercise",
-                "socialise",
-                "seek_help",
-                "negative_coping",
+                "feel_socially_connected",
+                "seek_help_from_friends",
+                "positive_coping",
+                "feel_isolated",
             ]
         )
 
     @pytest.fixture
     def expected_status(self):
-        return np.array(-12.510000000000002)
+        return np.array(7.5169999999999995)
 
     @pytest.fixture
     def lockdown(self):
@@ -44,21 +44,39 @@ class TestIndividual:
             "education_high",
             "education_low",
             "education_medium",
+            "education_unknown",
             "unemployed_no",
             "unemployed_yes",
             "have_partner_no",
             "have_partner_yes",
+            "have_partner_unknown",
             "depressed_no",
             "depressed_yes",
+            "depressed_unknown",
             "children_presence_no",
             "children_presence_yes",
+            "children_presence_unknown",
             "housing_financial_difficulties_no",
             "housing_financial_difficulties_yes",
+            "housing_financial_difficulties_unknown",
             "selfrated_health_average",
             "selfrated_health_good",
             "selfrated_health_poor",
+            "selfrated_health_unknown",
             "critical_job_no",
             "critical_job_yes",
+            "critical_job_unknown",
+            "bmi_underweight",
+            "bmi_normalweight",
+            "bmi_overweight",
+            "bmi_obese",
+            "bmi_unknown",
+            "livesalone_no",
+            "livesalone_yes",
+            "livesalone_unknown",
+            "income_median_above",
+            "income_median_below",
+            "income_median_unknown",
         ]
 
     @pytest.fixture
@@ -84,7 +102,7 @@ class TestIndividual:
         individual = Individual.populate(1, dir_params, rng=np.random.default_rng(seed))
         # specify the actions
         individual[0].chosen_actions = np.array(
-            [False, True, True, True, True, False, True, True, False, False]
+            [False, True, True, True, True, False, True, True, False]
         )
         individual[0].take_actions(actions_effects[lockdown])
 
@@ -126,8 +144,8 @@ class TestIndividual:
         ), "actions should be a numpy array"
 
         assert (
-            len(individual[0].chosen_actions) == 10
-        ), "actions array should have length 10"
+            len(individual[0].chosen_actions) == 9
+        ), "actions array should have length 9"
 
         assert np.all(
             (individual[0].chosen_actions == 0) | (individual[0].chosen_actions == 1)
@@ -181,7 +199,7 @@ class TestIndividual:
 
     def test_actions_when_positive(self, dir_params, lockdown, seed):
         """
-        Test that modify_policy_when_infected returns 'stay at home' action
+        Test that modify_policy_when_infected returns 'be sedentary' action
         """
         policy = Hypothesis.read_hypotheses(dir_params, set([lockdown]), "lockdown")
         agent = Individual.populate_ipf(1, dir_params, rng=np.random.default_rng(seed))
@@ -189,8 +207,8 @@ class TestIndividual:
         agent[0].choose_actions_on_lockdown(lockdown_new)
         action_out = agent[0].get_actions()
         assert (
-            action_out[0] == "stay_at_home"
-        ), f"Expected 'stay at home' got {action_out[0]}"
+            action_out[0] == "be_sedentary"
+        ), f"Expected 'be_sedentary' got {action_out[0]}"
 
     def test_long_covid(self, dir_params, seed):
         """

@@ -5,6 +5,19 @@ All notable changes to the codebase are documented in this file.
    :depth: 1
 
 ~~~~~~~~~
+1.1.3
+~~~~~~~~~
+Released on February 19, 2024
+
+Main changes
+-------------
+
+In `PR #78 <https://github.com/covid19ABM/comma/pull/78>`_ by @n400peanuts:
+
+New features in agents, new lockdown files. The rest of the code has been refactored for clarity and maintainance purposes.
+Tutorials have been edited to extensively show two different examples: hard vs easy lockdown.
+
+~~~~~~~~~
 1.1.2
 ~~~~~~~~~
 Released on December 6, 2023

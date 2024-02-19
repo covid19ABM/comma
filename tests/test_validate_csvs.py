@@ -30,7 +30,7 @@ class TestCSVIntegrity:
                 f"{str(directory.absolute())}'."
             )
 
-        first_df = pd.read_csv(os.path.join(directory, csv_files[0]), sep=";")
+        first_df = pd.read_csv(os.path.join(directory, csv_files[0]), sep=",")
 
         column_names = first_df.columns.str.lower()
         num_columns = len(column_names)
@@ -48,7 +48,7 @@ class TestCSVIntegrity:
 
     def test_input_example_matrices(self, initial_csv_data):
         for file in initial_csv_data["csv_files"][1:]:
-            df = pd.read_csv(os.path.join(initial_csv_data["directory"], file), sep=";")
+            df = pd.read_csv(os.path.join(initial_csv_data["directory"], file), sep=",")
             df.columns = df.columns.str.lower()
             # Check for the same number of columns
             assert (
