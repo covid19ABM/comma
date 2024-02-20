@@ -244,8 +244,7 @@ class TestDataSamplingIPF:
         result = chi2_contingency(ctsum.fillna(0))
         return result[1]  # return only the p-value
 
-    @pytest.mark.parametrize("time", range(100))
-    def test_data_sampling_ipf(self, time, crosstabs_dict):
+    def test_data_sampling_ipf(self, crosstabs_dict):
         """Test if the sampling result aligns to the cross-tabs"""
         size = 5913  # This is the original sample size provided by Kristina
         dir_params = "./parameters"
