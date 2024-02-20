@@ -25,7 +25,7 @@ class TestIndividual:
 
     @pytest.fixture
     def expected_status(self):
-        return np.array(7.5169999999999995)
+        return pytest.approx(7.5169999999999995)
 
     @pytest.fixture
     def lockdown(self):
