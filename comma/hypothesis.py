@@ -8,7 +8,7 @@ import re
 import requests
 
 PARAMS_INDIVIDUAL = "params_individual.json"
-PARAMS_IPF_WEIGHTS = "ipf_weights.csv"
+PARAMS_IPF_WEIGHTS = "ipf_weights.csv.zip"
 date_pattern = re.compile(r"(\d{4}-\d{2}-\d{2})")
 
 

@@ -213,7 +213,6 @@ class Individual:
         sample (pandas.dataFrame): dataframe containing the sampling
         """
         fpath_weights = os.path.join(dir_params, PARAMS_IPF_WEIGHTS)
-        assert os.path.isfile(fpath_weights)
 
         df_weights = pd.read_csv(fpath_weights, sep=",", index_col=0)
         weights = df_weights["weight"] / df_weights["weight"].sum()
