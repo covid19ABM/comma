@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "comma"
-version = "0.0.1"
+version = "1.1.2"
 description = "A package to run agent-based simulations to study mental health outcomes during covid-19 lockdowns"
 authors = [
     "Eva Viviani <e.viviani@esciencecenter.nl>",

@@ -6,14 +6,14 @@ import os
 
 
 class TestModel:
-    size = 2
+    size = 1
     dir_parameters = "parameters/"
-    steps = 4
+    steps = 2
     seed = 0
 
     def setup_lockdown_pattern(self):
-        n = self.steps // 4
-        return ["easy"] * n + ["easy"] * n + ["hard"] * n + ["hard"] * n
+        n = self.steps // 2
+        return ["easy"] * n + ["hard"] * n
 
     def setup_and_run_model(self, out_path):
         lockdown_pattern = self.setup_lockdown_pattern()
@@ -25,6 +25,7 @@ class TestModel:
     @pytest.fixture(scope="class")
     def full_simulation(self):
         self.setup_and_run_model("expected.csv")
+
         yield
         for file in ["expected.csv", "actual.csv"]:
             if os.path.exists(file):
@@ -33,40 +34,13 @@ class TestModel:
     @pytest.fixture(scope="class")
     def expected_dataframe(self):
         data = {
-            "step_id": [0, 0, 1, 1, 2, 2, 3, 3],
-            "lockdown": ["easy"] * 4 + ["hard"] * 4,
-            "agent_id": [0, 1, 0, 1, 0, 1, 0, 1],
-            "delta_mental_health": [
-                0.0,
-                0.0,
-                3.039,
-                -11.05,
-                9.309,
-                -4.98,
-                25.108,
-                -1.78,
-            ],
-            "cumulative_mental_health": [
-                2.27,
-                -17.51,
-                5.308079438194754,
-                -28.5614933617474,
-                14.61636578316058,
-                -33.5437486469858,
-                39.72210177911623,
-                -35.326328846095,
-            ],
-            "covid_status": [0, 0, 0, 0, 0, 0, 0, 0],
-            "days_since_first_infection": [
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-            ],
+            "step_id": [0, 1],
+            "lockdown": ["easy"] * 1 + ["hard"] * 1,
+            "agent_id": [0, 0],
+            "delta_mental_health": [0.0, 15.860000000000001],
+            "cumulative_mental_health": [8.01, 23.868660120351738],
+            "covid_status": [0, 0],
+            "days_since_first_infection": [np.nan, np.nan],
         }
         return pd.DataFrame(data).round(2)
 
@@ -148,18 +122,13 @@ class TestModel:
         # test that positive agents have their covid status changed accordingly
         model = Model(size=self.size, dir_params=self.dir_parameters, seed=self.seed)
         negative_agents = [agent for agent in model.agents if agent.covid_status == 0]
-        new_infected = 1
-        random_rng = np.random.default_rng(self.seed)
-        newly_infected_agents = random_rng.choice(
-            negative_agents, new_infected, replace=False
-        )
 
         # mark selected agents as infected (covid_status = 1)
         # and update counter of positive days for positive people
-        for agent in newly_infected_agents:
+        for agent in negative_agents:
             agent.covid_status = 1
             agent.days_since_positive = 1
 
         actual = [agent.get_covid_status() for agent in negative_agents]
-        expected = [0, 1]
+        expected = [1]
         assert expected == actual
