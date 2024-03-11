@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>comma.hypothesis &mdash; comma - COvid Mental-health Model with Agents 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="comma.individual" href="../individual/index.html" />
+    <link rel="prev" title="comma" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            comma - COvid Mental-health Model with Agents
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whatsnew.html">What’s new?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../probability_matrices.html">How does <cite>comma</cite> work?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../positivity_estimation.html">How agents become positive for COVID-19?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma.hypothesis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../individual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma.individual</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma.model</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">comma - COvid Mental-health Model with Agents</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma.hypothesis</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/comma/hypothesis/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-comma.hypothesis">
+<span id="comma-hypothesis"></span><h1><a class="reference internal" href="#module-comma.hypothesis" title="comma.hypothesis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">comma.hypothesis</span></code></a><a class="headerlink" href="#module-comma.hypothesis" title="Link to this heading"></a></h1>
+<p>Hypothesis class definition</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#comma.hypothesis.Hypothesis" title="comma.hypothesis.Hypothesis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Hypothesis</span></code></a></p></td>
+<td><p>The Hypothesis class is responsible for managing and validating</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#comma.hypothesis.PARAMS_INDIVIDUAL" title="comma.hypothesis.PARAMS_INDIVIDUAL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PARAMS_INDIVIDUAL</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#comma.hypothesis.PARAMS_IPF_WEIGHTS" title="comma.hypothesis.PARAMS_IPF_WEIGHTS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PARAMS_IPF_WEIGHTS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#comma.hypothesis.date_pattern" title="comma.hypothesis.date_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">date_pattern</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="comma.hypothesis.PARAMS_INDIVIDUAL">
+<span class="sig-prename descclassname"><span class="pre">comma.hypothesis.</span></span><span class="sig-name descname"><span class="pre">PARAMS_INDIVIDUAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'params_individual.json'</span></em><a class="headerlink" href="#comma.hypothesis.PARAMS_INDIVIDUAL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="comma.hypothesis.PARAMS_IPF_WEIGHTS">
+<span class="sig-prename descclassname"><span class="pre">comma.hypothesis.</span></span><span class="sig-name descname"><span class="pre">PARAMS_IPF_WEIGHTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ipf_weights.csv.zip'</span></em><a class="headerlink" href="#comma.hypothesis.PARAMS_IPF_WEIGHTS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="comma.hypothesis.date_pattern">
+<span class="sig-prename descclassname"><span class="pre">comma.hypothesis.</span></span><span class="sig-name descname"><span class="pre">date_pattern</span></span><a class="headerlink" href="#comma.hypothesis.date_pattern" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">comma.hypothesis.</span></span><span class="sig-name descname"><span class="pre">Hypothesis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#comma.hypothesis.Hypothesis" title="Link to this definition"></a></dt>
+<dd><p>The Hypothesis class is responsible for managing and validating
+hypotheses specified by the user.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.all_possible_features">
+<span class="sig-name descname"><span class="pre">all_possible_features</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['age_group__1',</span> <span class="pre">'age_group__2',</span> <span class="pre">'age_group__3',</span> <span class="pre">'age_group__4',</span> <span class="pre">'gender_f',</span> <span class="pre">'gender_m',...</span></em><a class="headerlink" href="#comma.hypothesis.Hypothesis.all_possible_features" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.all_possible_actions">
+<span class="sig-name descname"><span class="pre">all_possible_actions</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['work_from_home',</span> <span class="pre">'maintain_social_distance',</span> <span class="pre">'exercise',</span> <span class="pre">'feel_socially_connected',...</span></em><a class="headerlink" href="#comma.hypothesis.Hypothesis.all_possible_actions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.download_covid_data">
+<span class="sig-name descname"><span class="pre">download_covid_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#comma.hypothesis.Hypothesis.download_covid_data" title="Link to this definition"></a></dt>
+<dd><p>Download COVID-19 data from RIVM</p>
+<p>Returns:
+- df (pd.Dataframe): A DataFrame containing the downloaded data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.compute_time_period">
+<span class="sig-name descname"><span class="pre">compute_time_period</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#comma.hypothesis.Hypothesis.compute_time_period" title="Link to this definition"></a></dt>
+<dd><p>Compute time period based on a starting date and number of steps</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>tuple: A tuple containing the start and end date</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.get_covid_data">
+<span class="sig-name descname"><span class="pre">get_covid_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">municipality_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#comma.hypothesis.Hypothesis.get_covid_data" title="Link to this definition"></a></dt>
+<dd><p>Download and filter COVID-19 test data from the RIVM website.</p>
+<p>Args:
+municipality_code (str): also known as Gemeentecode
+cache (bool): If True, saves the downloaded data to
+a CSV file for future use.</p>
+<p>Returns:
+filtered_data (pd.DataFrame). The COVID-19 data filtered</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.get_positive_cases">
+<span class="sig-name descname"><span class="pre">get_positive_cases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">municipality_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#comma.hypothesis.Hypothesis.get_positive_cases" title="Link to this definition"></a></dt>
+<dd><p>Get an array of daily positive COVID-19 cases for
+a specific time period and municipality_code.</p>
+<p>Args:
+municipality_code (str): also known as Gementecode
+cache(boolean): Do you want to save COVID-19 data</p>
+<blockquote>
+<div><p>i.e., to avoid to download twice?</p>
+</div></blockquote>
+<p>Returns:
+daily_positive_cases (pandas.Series): Daily positive cases.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.adjust_cases">
+<span class="sig-name descname"><span class="pre">adjust_cases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">daily_positive_cases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#comma.hypothesis.Hypothesis.adjust_cases" title="Link to this definition"></a></dt>
+<dd><p>Ensures the length of daily_positive_cases matches the given steps.</p>
+<p>If the length of daily_positive_cases is less than the provided steps,
+(this might happen if there are missing data for some days in RIVM)
+this function will repeat the last row of daily_positive_cases until
+its length is equal to steps.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>daily_positive_cases (pd.Series): Series of positive cases per day</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.Series: Modified series with length equal to steps</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.scale_cases_to_population">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale_cases_to_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">daily_positive_cases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#comma.hypothesis.Hypothesis.scale_cases_to_population" title="Link to this definition"></a></dt>
+<dd><p>We compute the number of new positives in day _i_
+for our simulated population as <cite>new_cases_sim</cite> = (n/N)*M where
+N is the size of the simulated population, M is the size of the
+real population, n is the number of new positives reported
+on RIVM for that day.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>daily_positive_cases(pd.Series): Daily positive cases
+real_size(int): Size of the original population
+sim_size(int): Size of the simulated population</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.Series: Daily positive cases based on simulated population size</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.read_hypotheses">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_hypotheses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#comma.hypothesis.Hypothesis.read_hypotheses" title="Link to this definition"></a></dt>
+<dd><p>Read in CSV matrices for either actions or lockdowns.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dir_params (str): path of the parameters folder
+policies (set): set object of either actions or lockdown list
+type (str): either ‘actions’ or ‘lockdown’</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>data_dfs (dict): A dictionary where the key is either an action</dt><dd><p>effect or lockdown policy, and the value is a
+processed dataframe.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis._get_one_hot_encoded_features">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_get_one_hot_encoded_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpath_params_individual</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#comma.hypothesis.Hypothesis._get_one_hot_encoded_features" title="Link to this definition"></a></dt>
+<dd><p>One-hot encode categorical features in the
+<cite>params_individual.json</cite> file and return the
+feature list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fpath_params_individual (str): Path to the
+individual parameters JSON file.</p>
+</dd>
+<dt>Returns:</dt><dd><p>features (list): List of one-hot encoded features.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.create_empty_hypotheses">
+<span class="sig-name descname"><span class="pre">create_empty_hypotheses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#comma.hypothesis.Hypothesis.create_empty_hypotheses" title="Link to this definition"></a></dt>
+<dd><p>Create empty CSV files for storing hypotheses on
+the impact of actions and lockdown policies on different agent statuses</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dir_params (str): The directory of the folder that contains
+the agent and model parameter files.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None: This function does not return anything
+as it creates empty csv files int the specified directory</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="comma.hypothesis.Hypothesis.validate_param_file">
+<span class="sig-name descname"><span class="pre">validate_param_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#comma.hypothesis.Hypothesis.validate_param_file" title="Link to this definition"></a></dt>
+<dd><p>Validate files in the parameter folder.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dir_params (str): dir to the folder containing
+hypothesis and parameter files.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If any validation checks fail.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="comma" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../individual/index.html" class="btn btn-neutral float-right" title="comma.individual" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eva Viviani &lt;e.viviani@esciencecenter.nl&gt;, Ji Qi &lt;j.qi@esciencecenter.nl&gt;.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

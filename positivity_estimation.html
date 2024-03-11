@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How agents become positive for COVID-19? &mdash; comma - COvid Mental-health Model with Agents 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="How does comma work?" href="probability_matrices.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            comma - COvid Mental-health Model with Agents
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="probability_matrices.html">How does <cite>comma</cite> work?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How agents become positive for COVID-19?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-compute-new-covid-19-positive-cases-in-the-population">Step 1: Compute new COVID-19 positive cases in the population</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-set-the-actions-that-are-available-to-agents-when-positive">Step 2: Set the actions that are available to agents when positive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-set-how-long-agents-will-be-infectious-definition-of-recovery">Step 3: Set how long agents will be infectious / definition of recovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-recovery">Step 4: Recovery</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">comma - COvid Mental-health Model with Agents</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">How agents become positive for COVID-19?</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/positivity_estimation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="how-agents-become-positive-for-covid-19">
+<h1>How agents become positive for COVID-19?<a class="headerlink" href="#how-agents-become-positive-for-covid-19" title="Link to this heading"></a></h1>
+<p>In this document, we will consider the dynamics of how agents become positive for COVID-19 in our model.</p>
+<p>Before that, a foreword:</p>
+<p>The coronavirus pandemic from 2020 to 2023 made almost everyone globally realise the importance of
+understanding contagion processes. This led to a surge in modelling work highlighting contagion mechanisms.
+<em>Comma</em>, however, does not focus on this aspect; rather it addresses the mental health consequences of <em>testing</em>
+positive for COVID-19.</p>
+<p>This was a deliberate decision. We believe that there’s ample information out there that shows
+how COVID-19 spreads, and we aren’t keen to further explore this topic. More crucially, we can exploit public data for the Netherlands made available
+a posteriori and select specific time points, fully aware of the stage of the COVID-19 virus’s spread at those moments.</p>
+<p>Some caveats to bear in mind:</p>
+<p>1 - The statistics reflect only the recorded cases resulting from COVID-19 tests (any tests).
+A dip in testing numbers doesn’t necessarily indicate diminished contagion.
+Nonetheless, this is the metric according to which governments decided the type of lockdown to put in place.
+Since lockdowns – operationalised as restrictions on actions – are our independent variable, we prefer to focus on this metric only
+to measure the impact of a positive COVID-19 test on mental health.</p>
+<p>2 - A positive test implies that the only action available to the infected agent is ‘stay_at_home’, coherently with the
+isolation policy imposed by the Netherlands.</p>
+<p>3 - We do not model fatalities, i.e., all agents that get infected successfully recover.</p>
+<p>With that said, below we delve into how we measure and apply positivity to COVID-19 in the model.</p>
+<section id="step-1-compute-new-covid-19-positive-cases-in-the-population">
+<h2>Step 1: Compute new COVID-19 positive cases in the population<a class="headerlink" href="#step-1-compute-new-covid-19-positive-cases-in-the-population" title="Link to this heading"></a></h2>
+<p>We use the cumulative number of positive tests released in the <a class="reference external" href="https://data.rivm.nl/covid-19/">RIVM dashboard</a>.
+We select a period of time and a location and we compute the number of new cases in the simulated population
+as:</p>
+<div class="math notranslate nohighlight">
+\[cases = (n/N)*M\]</div>
+<p>where <span class="math notranslate nohighlight">\(N\)</span> is te size of the real population for that specific location,
+<span class="math notranslate nohighlight">\(M\)</span> is the size of the simulated population, <span class="math notranslate nohighlight">\(n\)</span> is the number of new positives reported on RIVM.
+Selection is done randomly.</p>
+<p>In the image below, we have selected 90 days from ‘2022-01-01’ to ‘2022-03-30’ in
+Groningen. We have simulated a population of 10000 individuals and we plotted how many people
+per day become positive, and conversely, how many stay negative.</p>
+<p>[<img alt="image1" src="https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/new_covid_cases.png" />]</p>
+</section>
+<section id="step-2-set-the-actions-that-are-available-to-agents-when-positive">
+<h2>Step 2: Set the actions that are available to agents when positive<a class="headerlink" href="#step-2-set-the-actions-that-are-available-to-agents-when-positive" title="Link to this heading"></a></h2>
+<p>Once infected, agents have no choice but to stay at home, regardless of the lockdown.
+Only when agents return negative (in step 3) they are allowed to choose from a different set of actions, depending on the lockdown.</p>
+</section>
+<section id="step-3-set-how-long-agents-will-be-infectious-definition-of-recovery">
+<h2>Step 3: Set how long agents will be infectious / definition of recovery<a class="headerlink" href="#step-3-set-how-long-agents-will-be-infectious-definition-of-recovery" title="Link to this heading"></a></h2>
+<p>Agents flagged as positive will remain positive for a number of days that is variable.
+The minimum duration is hard coded in the model as 10 days and the maximum depends on a gamma distribution that peaks ~ 10 days
+and is determined by the parameters: <span class="math notranslate nohighlight">\(a=5\)</span> and <span class="math notranslate nohighlight">\(scale=3\)</span>.
+The choice for this distribution is based on <a class="reference external" href="https://www.nature.com/articles/d41586-022-02026-x#ref-CR1">literature</a>.</p>
+<p>In addition, around <a class="reference external" href="https://www.rivm.nl/en/coronavirus-covid-19/long-covid">20%</a> of the infected population will stay positive for longer than 35 days.
+This is to simulate a Long COVID type of situation. For this subset of the population, we apply a different gamma distribution with <span class="math notranslate nohighlight">\(a=9\)</span> and <span class="math notranslate nohighlight">\(scale=\frac{70}{a-1}\)</span>.
+This ensures that the distribution peaks at around 70 days, with the inflection point (i.e., the earliest day to turn negative)
+around 35 days.</p>
+<p>[<img alt="image2" src="https://raw.githubusercontent.com/covid19ABM/comma/main/docs/img/gamma.png" />]</p>
+</section>
+<section id="step-4-recovery">
+<h2>Step 4: Recovery<a class="headerlink" href="#step-4-recovery" title="Link to this heading"></a></h2>
+<p>At the end of their positivity period, agents covid status is flagged to negative, this means that the agent has recovered from covid.
+Note that whenever their status is set to Negative, agents can be potentially re-infected.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="probability_matrices.html" class="btn btn-neutral float-left" title="How does comma work?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Eva Viviani &lt;e.viviani@esciencecenter.nl&gt;, Ji Qi &lt;j.qi@esciencecenter.nl&gt;.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

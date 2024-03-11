@@ -1,0 +1,202 @@
+:py:mod:`comma.hypothesis`
+==========================
+
+.. py:module:: comma.hypothesis
+
+.. autoapi-nested-parse::
+
+   Hypothesis class definition
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   comma.hypothesis.Hypothesis
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   comma.hypothesis.PARAMS_INDIVIDUAL
+   comma.hypothesis.PARAMS_IPF_WEIGHTS
+   comma.hypothesis.date_pattern
+
+
+.. py:data:: PARAMS_INDIVIDUAL
+   :value: 'params_individual.json'
+
+   
+
+.. py:data:: PARAMS_IPF_WEIGHTS
+   :value: 'ipf_weights.csv.zip'
+
+   
+
+.. py:data:: date_pattern
+
+   
+
+.. py:class:: Hypothesis(start: str, steps: int)
+
+
+   The Hypothesis class is responsible for managing and validating
+   hypotheses specified by the user.
+
+   .. py:attribute:: all_possible_features
+      :value: ['age_group__1', 'age_group__2', 'age_group__3', 'age_group__4', 'gender_f', 'gender_m',...
+
+      
+
+   .. py:attribute:: all_possible_actions
+      :value: ['work_from_home', 'maintain_social_distance', 'exercise', 'feel_socially_connected',...
+
+      
+
+   .. py:method:: download_covid_data() -> pandas.DataFrame
+
+      Download COVID-19 data from RIVM
+
+      Returns:
+      - df (pd.Dataframe): A DataFrame containing the downloaded data.
+
+
+   .. py:method:: compute_time_period() -> tuple
+
+      Compute time period based on a starting date and number of steps
+
+      Returns:
+          tuple: A tuple containing the start and end date
+
+
+   .. py:method:: get_covid_data(municipality_code: str, cache=False) -> pandas.DataFrame
+
+      Download and filter COVID-19 test data from the RIVM website.
+
+      Args:
+      municipality_code (str): also known as Gemeentecode
+      cache (bool): If True, saves the downloaded data to
+      a CSV file for future use.
+
+
+      Returns:
+      filtered_data (pd.DataFrame). The COVID-19 data filtered
+
+
+   .. py:method:: get_positive_cases(municipality_code: str, cache=False) -> pandas.Series
+
+      Get an array of daily positive COVID-19 cases for
+      a specific time period and municipality_code.
+
+      Args:
+      municipality_code (str): also known as Gementecode
+      cache(boolean): Do you want to save COVID-19 data
+          i.e., to avoid to download twice?
+
+      Returns:
+      daily_positive_cases (pandas.Series): Daily positive cases.
+
+
+
+   .. py:method:: adjust_cases(daily_positive_cases: pandas.Series) -> pandas.Series
+
+      Ensures the length of daily_positive_cases matches the given steps.
+
+      If the length of daily_positive_cases is less than the provided steps,
+      (this might happen if there are missing data for some days in RIVM)
+      this function will repeat the last row of daily_positive_cases until
+      its length is equal to steps.
+
+      Args:
+          daily_positive_cases (pd.Series): Series of positive cases per day
+
+      Returns:
+          pd.Series: Modified series with length equal to steps
+
+
+
+   .. py:method:: scale_cases_to_population(daily_positive_cases: pandas.Series, real_size: int, sim_size: int)
+      :staticmethod:
+
+      We compute the number of new positives in day _i_
+      for our simulated population as `new_cases_sim` = (n/N)*M where
+      N is the size of the simulated population, M is the size of the
+      real population, n is the number of new positives reported
+      on RIVM for that day.
+
+      Args:
+          daily_positive_cases(pd.Series): Daily positive cases
+          real_size(int): Size of the original population
+          sim_size(int): Size of the simulated population
+
+      Returns:
+          pd.Series: Daily positive cases based on simulated population size
+
+
+   .. py:method:: read_hypotheses(dir_params: str, policies: set[str], type: str) -> dict[str, pandas.DataFrame]
+      :classmethod:
+
+      Read in CSV matrices for either actions or lockdowns.
+
+      Args:
+          dir_params (str): path of the parameters folder
+          policies (set): set object of either actions or lockdown list
+          type (str): either 'actions' or 'lockdown'
+
+      Returns:
+          data_dfs (dict): A dictionary where the key is either an action
+                           effect or lockdown policy, and the value is a
+                           processed dataframe.
+
+
+   .. py:method:: _get_one_hot_encoded_features(fpath_params_individual: str) -> list
+      :staticmethod:
+
+      One-hot encode categorical features in the
+      `params_individual.json` file and return the
+      feature list.
+
+      Args:
+          fpath_params_individual (str): Path to the
+          individual parameters JSON file.
+
+      Returns:
+          features (list): List of one-hot encoded features.
+
+
+
+   .. py:method:: create_empty_hypotheses(dir_params: str) -> None
+
+      Create empty CSV files for storing hypotheses on
+      the impact of actions and lockdown policies on different agent statuses
+
+      Args:
+          dir_params (str): The directory of the folder that contains
+          the agent and model parameter files.
+      Returns:
+          None: This function does not return anything
+          as it creates empty csv files int the specified directory
+
+
+   .. py:method:: validate_param_file(dir_params: str) -> None
+
+      Validate files in the parameter folder.
+
+      Args:
+          dir_params (str): dir to the folder containing
+          hypothesis and parameter files.
+
+      Raises:
+          ValueError: If any validation checks fail.
+
+
+

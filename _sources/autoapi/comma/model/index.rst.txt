@@ -1,0 +1,104 @@
+:py:mod:`comma.model`
+=====================
+
+.. py:module:: comma.model
+
+.. autoapi-nested-parse::
+
+   Model class definition
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   comma.model.Model
+
+
+
+
+.. py:class:: Model(size: int, dir_params: str, use_ipf: bool = False, seed=None)
+
+
+   .. py:method:: update_covid_counter()
+
+      Update the days_since_positive counter
+      for agents with covid_status of 1.
+      Returns:
+          None. This function updates the agent's covid counter in place.
+
+
+   .. py:method:: get_recovered_individuals() -> list[int]
+
+      Get the indices of agents who are recovered from COVID-19
+
+      The function finds positive agents and checks if they are
+      recovered based on the number of days since they tested +ve.
+
+      Returns:
+          recovered (list): List of indices of recovered agents
+
+
+
+   .. py:method:: step(lockdown: pandas.DataFrame, action_effects: pandas.DataFrame, new_infected: int) -> None
+
+      Actions to be performed in each step.
+
+      Args:
+          lockdown (pd.DataFrame): lockdown dataframe
+          action_effects (pd.Dataframe): actions dataframe
+          new_infected (int): number of new infected
+      Returns:
+          actions: array of booleans
+          action_probs: array of probabilities
+
+
+   .. py:method:: update(lockdown: str, step: int) -> None
+
+      Update mental health status at every step given actions
+
+      Args:
+          lockdown (str): lockdown type
+          step (int): step of the simulation
+
+
+   .. py:method:: report(out_path: str) -> None
+
+      Collect data recorded at the end of the simulation
+      and exports it as csv file.
+
+      Args:
+          out_path (str): File path of the output file
+
+
+   .. py:method:: run(steps: int, lockdown_policy: list, out_path: str, starting_date='2021-02-01', municipality_code='GM0014', real_pop_size=200336, cache=False) -> None
+
+      Run a simulation
+
+      Args:
+          steps(int): Number of steps to run the simulation
+
+          lockdown_policy(str): Type of lockdown policy
+
+          out_path(str): File path of the output file
+
+          municipality_code(str): Also known as Gemeentecode.
+          Municipal classification based on the zip code of
+          the place of residence of the people who tested
+          positive for SARS-CoV-2, coded according to CBS.
+
+          starting_date(str): start date ('YYYY-MM-DD')
+
+          real_pop_size(int): Real size of the population
+          of the relative municipality_code
+
+          cache(boolean): Do you want to save COVID-19 data
+          i.e., to avoid to download twice?
+
+
+
